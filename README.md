@@ -1,29 +1,14 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+### VIRTUALENV ###
 
-### What is this repository for? ###
+* korzystamy z virtualenv
+* aby utrzymać jedno wspólne środowisko trackujemy plik requirements.txt który jest outputem dla polecenia pip freeze odpalonego po wejściu do środowiska
+* aby dociągnąć wszystkie paczki z pliku requirements.txt:
+* * wchodzimy do środowiska poleceniem source sciezka_do_folderu_ze_srodowiskiem/bin/activate
+* * wywoulujemy pip install -r requirements.txt
+* * jeśli zmieniamy jakoś środowisko (dodajemy/usuwamy jakąś paczkę), wykonajmy również polecenie pip freeze > requirements.txt
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* warto korzystać też z mkvirtualenv
 
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+* Póki co mamy tylko django tak na dobry start. 
