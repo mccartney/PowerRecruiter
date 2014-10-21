@@ -54,10 +54,6 @@ ROOT_URLCONF = 'power_recruiter.urls'
 
 WSGI_APPLICATION = 'power_recruiter.wsgi.application'
 
-TEMPLATE_DIRS = (
-	os.path.join(BASE_DIR, "power_recruiter/templates"),
-)
-
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
