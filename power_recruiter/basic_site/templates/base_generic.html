@@ -1,0 +1,24 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head lang="pl">
+        <meta charset="UTF-8">
+        <title>Power Recruiter</title>
+
+        <!-- JAVASCRIPT -->
+        <script src="{% static "foundation/js/vendor/modernizr.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+        <script src="{% static "foundation/js/foundation.min.js" %}"></script>
+
+        <!-- CSS -->
+        <link href="{% static "foundation/css/normalize.css" %}" rel="stylesheet"/>
+        <link href="{% static "foundation/css/foundation.min.css" %}" rel="stylesheet"/>
+    </head>
+    <body>
+        {% include "header.html" %}
+        {% block content %}
+        {% endblock %}
+
+        {% include "footer.html" %}
+    </body>
+</html>

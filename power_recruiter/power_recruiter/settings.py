@@ -24,9 +24,9 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
-
-STATIC_URL = '/static/'
+ALLOWED_HOSTS = [
+    '*'
+]
 
 # Application definition
 
@@ -37,6 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'foundation',
+    'jquery',
     'basic_site',
 )
 
@@ -86,3 +88,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
