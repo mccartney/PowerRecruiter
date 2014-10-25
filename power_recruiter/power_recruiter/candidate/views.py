@@ -4,9 +4,13 @@ import power_recruiter.candidate.models
 from django.shortcuts import redirect
 
 
-def attachment(request, id):
+def get_attachment(request, id):
     att = power_recruiter.candidate.models.Attachment.objects.get(pk=id)
     return redirect(att.file.url)
+
+
+def remove_attachment(request, id):
+    return HttpResponse(json.dumps(1), content_type="application.json")
 
 
 def candidate_json(request):
