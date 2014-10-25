@@ -8,10 +8,16 @@ class RecruitmentState(models.Model):
     def __unicode__(self):
         return self.name
 
+class SourceManager(models.Manager):
+    def create_source(self, name):
+        source = self.create(name=name)
+
+        return source
 
 class Source(models.Model):
     name = models.CharField(max_length=100, default='')
 
+    objects = SourceManager()
     def __unicode__(self):
         return self.name
 
@@ -30,10 +36,12 @@ class Communication(models.Model):
         return self.name
 
 class PersonManager(models.Manager):
-    def create_person(self, first_name, last_name):
-        person = self.create(first_name=first_name, last_name=last_name, date_created=datetime.datetime.now(), state=RecruitmentState.objects.get(pk=1), comm=Communication.objects.get(pk=1), source=Source.objects.get(pk=1), role=Role.objects.get(pk=1))
+    def create_person(self, first_name, last_name, source):
+        person = self.create(first_name=first_name, last_name=last_name, date_created=datetime.datetime.now(), state=RecruitmentState.objects.get(pk=1), comm=Communication.objects.get(pk=1), source=Source.objects.create_source(source), role=Role.objects.get(pk=1))
 
         return person
+
+
 class Person(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
