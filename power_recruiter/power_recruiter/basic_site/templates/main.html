@@ -1,12 +1,12 @@
 {% extends "base_generic.html" %}
 {% load staticfiles %}
 {% block content %}
-<table id="maintable" data-toggle="table" data-url="{% static "data1.json" %}" data-cache="false" data-sort-name="price" data-sort-order="desc">
+<table id="maintable" data-toggle="table" data-url="{% url 'json' %}" data-cache="false" data-sort-name="price" data-sort-order="desc">
     <thead>
         <tr>
-            <th data-field="id" data-sortable="true">Item ID</th>
-            <th data-field="name" data-sortable="true">Item Name</th>
-            <th data-field="price" data-sortable="true">Item Price</th>
+            <th data-field="id" data-sortable="true">ID</th>
+            <th data-field="cos" data-sortable="true">Item Name</th>
+            <th data-field="candidate" data-sortable="true">Item Price</th>
         </tr>
     </thead>
 </table>
