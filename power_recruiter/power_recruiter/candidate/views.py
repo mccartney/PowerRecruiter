@@ -33,3 +33,14 @@ def candidate_json(request):
             'caveats': p.caveats,
         })
     return HttpResponse(json.dumps(resp), content_type="application/json")
+
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def add_candidate(request):
+    args = json.loads(request.POST['args'])['args']
+    names = args[0].split(' ')
+    first_name = names[0]
+    last_name = names[len(names) - 1]
+    power_recruiter.candidate.models.Person.objects.create_person(first_name, last_name)
+    return HttpResponse(200, content_type="plain/text")
