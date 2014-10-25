@@ -9,4 +9,3 @@ urlpatterns = patterns(
     url(r'', include('power_recruiter.basic_site.urls')),
     url(r'^candidate/', include('power_recruiter.candidate.urls'))
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

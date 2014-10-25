@@ -1,8 +1,12 @@
 import json
+import logging
+import sys
+
 from django.http import HttpResponse
-import power_recruiter.candidate.models
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
+
+import power_recruiter.candidate.models
 
 
 def get_attachment(request, id):
@@ -22,18 +26,24 @@ def candidate_json(request):
             {
                 'display_name': a.name,
                 'pk': a.pk
-            } for a in power_recruiter.candidate.models.Attachment.objects.filter(person_id=p.pk)
+            } for a in
+            power_recruiter.candidate.models.Attachment.objects.filter(
+                person_id=p.pk
+            )
         ]
         source = p.source.name
         if 'http' in p.source.name:
             source = '<a href=' + p.source.name + '>'
             if 'linkedin' in p.source.name:
-                source += '<img style="width:50px; height:50px" src="http://www.socialtalent.co/wp-content/uploads/2014/07/LinkedIn_logo_initials.png">' + '</a>'
+                source += '<img style="width:50px; height:50px" ' \
+                          'src="http://www.socialtalent.co/wp-content/' \
+                          'uploads/2014/07/LinkedIn_logo_initials.png">'
             else:
                 if 'goldenline' in p.source.name:
-                     source += 'goldenLine' + '</a>'
+                    source += 'goldenLine'
                 else:
-                    source += 'link' + '</a>'
+                    source += 'link'
+            source += '</a>'
         resp.append({
             'id': p.pk,
             'candidate_name': p.first_name + ' ' + p.last_name,
@@ -45,8 +55,6 @@ def candidate_json(request):
         })
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
-import logging, logging.config
-import sys
 
 LOGGING = {
     'version': 1,
@@ -64,6 +72,7 @@ LOGGING = {
 
 logging.config.dictConfig(LOGGING)
 
+
 @csrf_exempt
 def add_candidate(request):
     args = []
@@ -72,5 +81,9 @@ def add_candidate(request):
     names = args[0].split(' ')
     first_name = names[0]
     last_name = names[len(names) - 1]
-    power_recruiter.candidate.models.Person.objects.create_person(first_name, last_name, args[2])
+    power_recruiter.candidate.models.Person.objects.create_person(
+        first_name,
+        last_name,
+        args[2]
+    )
     return HttpResponse(200, content_type="plain/text")
