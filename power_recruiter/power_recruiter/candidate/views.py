@@ -2,6 +2,7 @@ import json
 from django.http import HttpResponse
 import power_recruiter.candidate.models
 from django.shortcuts import redirect
+from django.views.decorators.csrf import csrf_exempt
 
 
 def get_attachment(request, id):
@@ -34,7 +35,6 @@ def candidate_json(request):
         })
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
-from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def add_candidate(request):
