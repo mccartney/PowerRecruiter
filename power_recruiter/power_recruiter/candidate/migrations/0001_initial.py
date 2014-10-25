@@ -14,6 +14,8 @@ class Migration(migrations.Migration):
             name='Attachment',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(default=b'', max_length=100)),
+                ('file', models.FileField(upload_to=b'attachments/')),
             ],
             options={
             },
@@ -23,15 +25,7 @@ class Migration(migrations.Migration):
             name='Communication',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name='InternetLocation',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(default=b'', max_length=100)),
             ],
             options={
             },
@@ -44,10 +38,8 @@ class Migration(migrations.Migration):
                 ('first_name', models.CharField(max_length=100)),
                 ('last_name', models.CharField(max_length=100)),
                 ('date_created', models.DateField()),
-                ('caveats', models.CharField(max_length=1000)),
-                ('attachments', models.ManyToManyField(to='candidate.Attachment')),
+                ('caveats', models.CharField(max_length=1000, blank=True)),
                 ('comm', models.ForeignKey(to='candidate.Communication')),
-                ('from_where', models.ForeignKey(to='candidate.InternetLocation')),
             ],
             options={
             },
@@ -57,6 +49,7 @@ class Migration(migrations.Migration):
             name='RecruitmentState',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(default=b'', max_length=100)),
             ],
             options={
             },
@@ -66,6 +59,17 @@ class Migration(migrations.Migration):
             name='Role',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(default=b'', max_length=100)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Source',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(default=b'', max_length=100)),
             ],
             options={
             },
@@ -79,8 +83,20 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='person',
+            name='source',
+            field=models.ForeignKey(to='candidate.Source'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='person',
             name='state',
             field=models.ForeignKey(to='candidate.RecruitmentState'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='attachment',
+            name='person',
+            field=models.ForeignKey(default=1, to='candidate.Person'),
             preserve_default=True,
         ),
     ]
