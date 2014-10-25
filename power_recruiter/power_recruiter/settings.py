@@ -88,6 +88,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
 # Jenkins config
 
 PROJECT_APPS = (
@@ -100,3 +101,6 @@ JENKINS_TASKS = (
 )
 
 PYLINT_RCFILE = '.pylintrc'
+
+MEDIA_ROOT = '/Users/fufu/zpp/power_recruiter/media'
+MEDIA_URL = '/media/'
