@@ -100,3 +100,5 @@ JENKINS_TASKS = (
 )
 
 PYLINT_RCFILE = '.pylintrc'
+MEDIA_ROOT = '/Users/fufu/zpp/power_recruiter/media'
+MEDIA_URL = '/media/'
