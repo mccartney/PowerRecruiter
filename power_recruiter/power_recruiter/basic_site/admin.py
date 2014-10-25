@@ -1,4 +1,4 @@
 from django.contrib import admin
-from basic_site.models import *
+from power_recruiter.basic_site.models import *
 
 # Register your models here.

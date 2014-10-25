@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'basic_site',
+    'power_recruiter.basic_site',
     'jquery',
     'bootstrap3'
 )

@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url
-from views.index import index
-from views.handler404 import handler404
+
+from power_recruiter.basic_site.views import index
+
 
 urlpatterns = patterns(
     '',
