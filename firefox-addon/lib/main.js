@@ -1,4 +1,12 @@
 function loadProfile(elem) {
+    var Request = require("sdk/request").Request;
+    Request({
+      url: "http://localhost:8000/candidate/add",
+      content: {'args':elem},
+      onComplete: function (response) {
+        console.log('load status: ' + response);
+      }
+    }).post();
     console.log(elem);
 }
 
