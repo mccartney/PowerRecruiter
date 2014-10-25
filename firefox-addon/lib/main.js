@@ -1,17 +1,28 @@
+function loadProfile(elem) {
+    console.log(elem);
+}
+
 var contextMenu = require('sdk/context-menu');
-var menuItem = contextMenu.Item({
+var linkedInMenuItem = contextMenu.Item({
   label: 'Load LinkedIn profile to PowerRecruiter',
   context: contextMenu.URLContext('https://www.linkedin.com/profile/*'),
   contentScript: 'self.on("click", function () {' +
-	    		 '    function getContentInContainer(matchClass) { ' +
-	        	 '        var elems = document.getElementsByTagName(\'*\'), i;' +
-	        	 '        for (i in elems) { ' +
-	             '            if((\' \' + elems[i].className + \' \').indexOf(\' \' + matchClass + \' \') ' +
-	             '              > -1) { ' +
-	             '                return elems[i].innerHTML; ' +
-	             '            }' +
-	             '        }' +
-	             '    }' +
-	             '    console.log(getContentInContainer(\'full-name\')) ' +
-                 '});'
+                 '    self.postMessage([document.getElementsByClassName(\'full-name\')[0].innerHTML, document.getElementsByClassName(\'profile-picture\')[0].getElementsByTagName(\'img\')[0].src, document.URL]' +
+                    ');' +
+                 '});',
+  onMessage: function(elem) {
+    loadProfile(elem);
+  }
+});
+
+var goldenLineMenuItem = contextMenu.Item({
+  label: 'Load GoldenLine profile to PowerRecruiter',
+  context: contextMenu.URLContext('http://www.goldenline.pl/*'),
+  contentScript: 'self.on("click", function () {' +
+                 '    self.postMessage([document.getElementsByClassName(\'nameSurname\')[0].innerHTML, document.getElementsByClassName(\'avatar\')[0].getElementsByTagName(\'img\')[0].src, document.URL]' +
+                    ');' +
+                 '});',
+  onMessage: function(elem) {
+    loadProfile(elem);
+  }
 });
