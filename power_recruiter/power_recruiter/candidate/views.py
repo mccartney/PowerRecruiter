@@ -42,7 +42,7 @@ def candidate_json(request):
             source += '</a>'
         resp.append({
             'id': p.pk,
-            'candidate_name': ''.join([p.first_name, p.last_name]),
+            'candidate_name': ''.join([p.first_name, ' ' ,p.last_name]),
             'source': source,
             'type': p.role.name,
             'comm': p.comm.name,
