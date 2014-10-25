@@ -2,23 +2,23 @@ from django.db import models
 
 
 class Attachment(models.Model):
-    pass
+    name = models.CharField(max_length=100, default='')
 
 
 class RecruitmentState(models.Model):
-    pass
+    name = models.CharField(max_length=100, default='')
 
 
 class InternetLocation(models.Model):
-    pass
+    name = models.CharField(max_length=100, default='')
 
 
 class Role(models.Model):
-    pass
+    name = models.CharField(max_length=100, default='')
 
 
 class Communication(models.Model):
-    pass
+    name = models.CharField(max_length=100, default='')
 
 
 class Person(models.Model):
