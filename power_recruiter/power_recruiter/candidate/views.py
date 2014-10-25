@@ -3,11 +3,20 @@ import logging
 import sys
 
 from django.http import HttpResponse
+import power_recruiter.candidate.models
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
-
+from django import forms
+from models import Attachment, Person
+from django.core.urlresolvers import reverse
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 import power_recruiter.candidate.models
 
+class UploadFileForm(forms.ModelForm):
+
+    class Meta:
+        model = Attachment
 
 def get_attachment(request, id):
     att = power_recruiter.candidate.models.Attachment.objects.get(pk=id)
@@ -24,30 +33,14 @@ def candidate_json(request):
     for p in persons:
         attachments = [
             {
-                'display_name': a.name,
+                'display_name': str(a),
                 'pk': a.pk
-            } for a in
-            power_recruiter.candidate.models.Attachment.objects.filter(
-                person_id=p.pk
-            )
+            } for a in power_recruiter.candidate.models.Attachment.objects.filter(person_id=p.pk)
         ]
-        source = p.source.name
-        if 'http' in p.source.name:
-            source = '<a href=' + p.source.name + '>'
-            if 'linkedin' in p.source.name:
-                source += '<img style="width:50px; height:50px" ' \
-                          'src="http://www.socialtalent.co/wp-content/' \
-                          'uploads/2014/07/LinkedIn_logo_initials.png">'
-            else:
-                if 'goldenline' in p.source.name:
-                    source += 'goldenLine'
-                else:
-                    source += 'link'
-            source += '</a>'
         resp.append({
             'id': p.pk,
             'candidate_name': p.first_name + ' ' + p.last_name,
-            'source': source,
+            'source': p.source.name,
             'type': p.role.name,
             'comm': p.comm.name,
             'attachments': attachments,
@@ -56,6 +49,19 @@ def candidate_json(request):
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
 
+def upload(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_file = Attachment(person = Person.objects.get(id=request.POST['person']), file = request.FILES['file'])
+            new_file.save()
+
+            return HttpResponseRedirect(reverse('upload'))
+    else:
+        form = UploadFileForm()
+
+    data = {'form': form}
+    return render_to_response('main.html', data, context_instance=RequestContext(request))
 LOGGING = {
     'version': 1,
     'handlers': {
@@ -87,3 +93,4 @@ def add_candidate(request):
         args[2]
     )
     return HttpResponse(200, content_type="plain/text")
+

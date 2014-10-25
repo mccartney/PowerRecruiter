@@ -35,3 +35,8 @@ body {
 .maintable-row-large td .innertd, .large-inner-div{
     height: auto;
 }
+
+.red-text{
+    color: #F00;
+    font-weight: normal;
+}

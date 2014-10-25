@@ -12,4 +12,26 @@
     </thead>
 </table>
 <script type="text/javascript" src="{% static "js/maintable.js" %}"></script>
+
+<link href="{% static 'dropzone/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
+
+<script>
+function attachmentsList(value) {
+    toReturn = '<form class="dropzone" action="{% url "upload" %}" method="post" enctype="multipart/form-data">';
+    toReturn += "{% csrf_token %}";
+    toReturn += '<span class="red-text">(drop here to upload)</span>';
+    toReturn += '<input type="hidden" name="person" value="1"></form>';
+    toReturn += '<div class="innertd">';
+    i = 0;
+    value.forEach(function(){
+        toReturn += '<a href="conditdate/attachment/' + value[i].pk + '">' + value[i].display_name + '</a><br>';
+        i++;
+    });
+    toReturn += "</div>";
+    return toReturn;
+}
+$('tr').click(function(){ console.log('dupa'); });
+</script>
+<script src="{% static 'dropzone/dropzone.js' %}"></script>
+
 {% endblock %}

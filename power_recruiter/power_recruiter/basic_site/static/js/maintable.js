@@ -74,14 +74,3 @@ function openLargeTd(element){
         element.find('td').addClass('td-with-bottom-bar-upsidedown');
     }
 }
-
-function attachmentsList(value) {
-        toReturn = '<div class="innertd">';
-        i = 0;
-        value.forEach(function(){
-            toReturn += '<a href="conditdate/attachment/' + value[i].pk + '">' + value[i].display_name + '</a><br>';
-            i++;
-        });
-        toReturn += "</div>";
-        return toReturn;
-}
