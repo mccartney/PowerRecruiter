@@ -1,6 +1,7 @@
 /**
  * Created by shadowsword on 25.10.14.
  */
+
 $(function () {
     currentlyOpened = null;
     currentlyOpenedId = null;
@@ -12,7 +13,6 @@ $(function () {
         if(!$element.hasClass('maintable-row-large')) {
             $element.addClass('maintable-row-large');
             currentlyOpenedId = $element.children().first().text();
-            console.log(currentlyOpenedId);
         }
         else{
             closedAll = true;
@@ -35,8 +35,9 @@ $(function () {
     //Open large view after sorting
     .on('sort.bs.table',function (e, name, order)  {
         if(currentlyOpened != null) {
-            console.log($("#maintable tr td[text='1']").text());
-            $("#maintable tr:first-child:contains(currentlyOpenedId)").addClass('maintable-row-large');
+            console.log(currentlyOpenedId == 1);
+            currentlyOpened = $('#maintable tr:has(td:textEquals("' + currentlyOpenedId + '"))');
+            currentlyOpened.addClass('maintable-row-large');
         }
     });
 });
