@@ -1,24 +1,32 @@
 from django.db import models
 
 
-class Attachment(models.Model):
-    name = models.CharField(max_length=100, default='')
-
-
 class RecruitmentState(models.Model):
     name = models.CharField(max_length=100, default='')
 
+    def __unicode__(self):
+        return self.name
 
-class InternetLocation(models.Model):
+
+class Source(models.Model):
     name = models.CharField(max_length=100, default='')
+
+    def __unicode__(self):
+        return self.name
 
 
 class Role(models.Model):
     name = models.CharField(max_length=100, default='')
 
+    def __unicode__(self):
+        return self.name
+
 
 class Communication(models.Model):
     name = models.CharField(max_length=100, default='')
+
+    def __unicode__(self):
+        return self.name
 
 
 class Person(models.Model):
@@ -27,8 +35,18 @@ class Person(models.Model):
     date_created = models.DateField()
 
     state = models.ForeignKey(RecruitmentState)
-    from_where = models.ForeignKey(InternetLocation)
+    source = models.ForeignKey(Source)
     role = models.ForeignKey(Role)
     comm = models.ForeignKey(Communication)
-    attachments = models.ManyToManyField(Attachment)
-    caveats = models.CharField(max_length=1000)
+    caveats = models.CharField(max_length=1000, blank=True)
+
+    def __unicode__(self):
+        return self.first_name + " " + self.last_name
+
+
+class Attachment(models.Model):
+    person = models.ForeignKey(Person, default=1)
+    name = models.CharField(max_length=100, default='')
+
+    def __unicode__(self):
+        return self.name
