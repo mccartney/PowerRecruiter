@@ -1,3 +1,3 @@
 #!/bin/bash
-pep8 power_recruiter/power_recruiter
+pep8 power_recruiter
 
