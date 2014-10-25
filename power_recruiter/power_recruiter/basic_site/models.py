@@ -16,6 +16,7 @@ class InternetLocation(models.Model):
 class Role(models.Model):
     pass
 
+
 class Communication(models.Model):
     pass
 
@@ -23,9 +24,9 @@ class Communication(models.Model):
 class Person(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    date_created = models.DateField
-    state = models.ForeignKey(RecruitmentState)
+    date_created = models.DateField()
 
+    state = models.ForeignKey(RecruitmentState)
     from_where = models.ForeignKey(InternetLocation)
     role = models.ForeignKey(Role)
     comm = models.ForeignKey(Communication)
