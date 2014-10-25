@@ -1,3 +1,3 @@
 #!/bin/bash
-pylint --rcfile=.pylintrc power_recruiter/power_recruiter
+pylint --rcfile=.pylintrc power_recruiter
 
