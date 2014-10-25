@@ -5,15 +5,16 @@
     <head lang="pl">
         <meta charset="UTF-8">
         <title>Power Recruiter</title>
-        {% bootstrap_css %}
 
         <!-- JAVASCRIPT -->
-        {% bootstrap_javascript %}
         <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+        {% bootstrap_javascript %}
+        <script type="text/javascript" src="{% static "bootstrap_table/bootstrap-table.js" %}"></script>
 
         <!-- CSS -->
         {% bootstrap_css %}
         <link href="{% static "css/style.css" %}" media="screen" rel="stylesheet">
+        <link href="{% static "bootstrap_table/bootstrap-table.css" %}" media="screen" rel="stylesheet">
 
     </head>
     <body>

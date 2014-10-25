@@ -5,3 +5,11 @@ body {
   padding: 40px 15px;
   text-align: center;
 }
+#maintable{
+    cursor: pointer;
+}
+
+.maintable-row-large td{
+    height: 100px;
+    background-color: #aaa !important;
+}
