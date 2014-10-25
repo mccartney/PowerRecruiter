@@ -5,7 +5,6 @@
 //textEquals jQuery selector
 $.expr[':'].textEquals = $.expr.createPseudo(function(arg) {
     return function( elem ) {
-        console.log(arg);
         return $(elem).text().match("^" + arg + "$");
     };
 });
