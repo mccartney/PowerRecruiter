@@ -1,10 +1,9 @@
 import json
 
 from django.http import HttpResponse
-from django.core import serializers
 
 from power_recruiter.candidate.models \
-    import Person, Attachment, Communication, Source, RecruitmentState, Role
+    import Person, Attachment
 
 
 def candidate_json(request):
