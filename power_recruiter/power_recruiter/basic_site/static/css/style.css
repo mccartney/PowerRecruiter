@@ -1,15 +1,37 @@
 body {
-  padding-top: 50px;
+    padding-top: 50px;
 }
 .starter-template {
-  padding: 40px 15px;
-  text-align: center;
+    padding: 40px 15px;
+    text-align: center;
 }
+
 #maintable{
     cursor: pointer;
+    table-layout:fixed;
+}
+
+.td-with-bottom-bar{
+   background-image: url("/static/img/table_bottom_bar.png");
+   background-position: bottom;
+   background-repeat: repeat-x;
+}
+
+.td-with-bottom-bar-upsidedown{
+   background-image: url("/static/img/table_bottom_bar_upsidedown.png");
+   background-position: bottom;
+   background-repeat: repeat-x;
+}
+
+.innertd{
+    height: 15px;
+    overflow: hidden;
 }
 
 .maintable-row-large td{
-    height: 100px;
-    background-color: #aaa !important;
+    background-color: #EAEAEA !important;
+}
+
+.maintable-row-large td .innertd, .large-inner-div{
+    height: auto;
 }
