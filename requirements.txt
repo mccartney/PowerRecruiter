@@ -1,5 +1,4 @@
 Django==1.7
-psycopg2==2.5.4
 wsgiref==0.1.2
 django-zurb-foundation==5.4.5
 django-jquery==1.9.1
