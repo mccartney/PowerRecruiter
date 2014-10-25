@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'power_recruiter.basic_site',
+    'power_recruiter.candidate',
     'jquery',
     'bootstrap3'
 )
