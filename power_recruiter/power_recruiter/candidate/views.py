@@ -22,7 +22,10 @@ def candidate_json(request):
             {
                 'display_name': a.name,
                 'pk': a.pk
-            } for a in power_recruiter.candidate.models.Attachment.objects.filter(person_id=p.pk)
+            } for a in
+            power_recruiter.candidate.models.Attachment.objects.filter(
+                person_id=p.pk
+            )
         ]
         resp.append({
             'id': p.pk,
@@ -42,5 +45,8 @@ def add_candidate(request):
     names = args[0].split(' ')
     first_name = names[0]
     last_name = names[len(names) - 1]
-    power_recruiter.candidate.models.Person.objects.create_person(first_name, last_name)
+    power_recruiter.candidate.models.Person.objects.create_person(
+        first_name,
+        last_name
+    )
     return HttpResponse(200, content_type="plain/text")
