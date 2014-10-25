@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'foundation',
     'jquery',
-    'basic_site',
+    'power_recruiter.basic_site',
 )
 
 MIDDLEWARE_CLASSES = (
