@@ -13,13 +13,11 @@ class RecruitmentState(models.Model):
 class SourceManager(models.Manager):
     def create_source(self, name):
         source = self.create(name=name)
-
         return source
 
 
 class Source(models.Model):
     name = models.CharField(max_length=100, default='')
-
     objects = SourceManager()
 
     def __unicode__(self):
