@@ -34,7 +34,7 @@
         "first_name": "Andrzej",
         "last_name": "Shadowsword",
         "date_created": "2014-04-01",
-        "state": 1,
+        "state": 5,
         "comm": 1,
         "source": 1,
         "caveats": "He knows how to turn on computer"
@@ -44,7 +44,7 @@
         "first_name": "Koń",
         "last_name": "",
         "date_created": "2014-04-01",
-        "state": 1,
+        "state": 3,
         "comm": 1,
         "source": 1,
         "caveats": "He's beggin' for a job"
@@ -54,7 +54,7 @@
         "first_name": "Bożena",
         "last_name": " ",
         "date_created": "2014-04-01",
-        "state": 1,
+        "state": 2,
         "comm": 1,
         "source": 1,
         "caveats": "bożenka z cyganem za rękę chadza"
@@ -64,7 +64,7 @@
         "first_name": "Wojtek",
         "last_name": "Kadłubek",
         "date_created": "2014-04-01",
-        "state": 1,
+        "state": 2,
         "comm": 1,
         "source": 1,
         "caveats": "Ma trudności z pisaniem na klawiaturze"
@@ -74,7 +74,7 @@
         "first_name": "Some Stupid",
         "last_name": "Guy",
         "date_created": "2014-04-01",
-        "state": 1,
+        "state": 3,
         "comm": 1,
         "source": 1,
         "caveats": ""
@@ -84,7 +84,7 @@
         "first_name": "Maciek",
         "last_name": "z klanu",
         "date_created": "2014-04-01",
-        "state": 1,
+        "state": 4,
         "comm": 1,
         "source": 1,
         "caveats": ""
@@ -94,7 +94,7 @@
         "first_name": "Hanka",
         "last_name": "z klanu",
         "date_created": "2014-04-01",
-        "state": 1,
+        "state": 4,
         "comm": 1,
         "source": 1,
         "caveats": ""
@@ -114,7 +114,7 @@
         "first_name": "Maciek",
         "last_name": "z klanu",
         "date_created": "2014-04-01",
-        "state": 1,
+        "state": 2,
         "comm": 1,
         "source": 1,
         "caveats": ""
@@ -124,7 +124,7 @@
         "first_name": "Łysy",
         "last_name": "",
         "date_created": "2014-04-01",
-        "state": 1,
+        "state": 5,
         "comm": 1,
         "source": 1,
         "caveats": "nie myje włosów"

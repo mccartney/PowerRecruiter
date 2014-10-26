@@ -29,6 +29,19 @@ def remove_attachment(request, id):
 
 def candidate_json(request):
     persons = power_recruiter.candidate.models.Person.objects.all()
+
+    if request.GET.get('Awaiting contact') == None:
+        pass
+    #    persons = persons.exclude(state_id=1)
+    #if not request.GET.get('Contact rejected', False):
+    #    persons = persons.exclude(state_id=2)
+    #if not request.GET.get('Awaiting meeting', False):
+    #    persons = persons.exclude(state_id=3)
+    #if not request.GET.get('Rejected', False):
+    #    persons = persons.exclude(state_id=4)
+    #if not request.GET.get('Hired', False):
+    #    persons = persons.exclude(state_id=5)
+
     resp = []
     for p in persons:
         attachments = [

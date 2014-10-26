@@ -6,10 +6,10 @@
 {% endfor %}
 <script>
     $('.stateCheckbox').change(function() {
-        url = {% url 'json' %};
+        url = {% url 'json' %} + '?dummy=1';
         $('.stateCheckbox').each(function(){
             if($(this).is(":checked")){
-                url += "&" + encodeURIComponent(this.name) + "=true";
+                url += "&" + encodeURIComponent(this.name) + "='True'";
             }
         });
         $("#maintable").attr("data-url", url);
