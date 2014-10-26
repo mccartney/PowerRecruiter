@@ -13,4 +13,28 @@
     </thead>
 </table>
 <script type="text/javascript" src="{% static "js/maintable.js" %}"></script>
+
+<link href="{% static 'dropzone/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
+<script src="{% static 'dropzone/dropzone.js' %}"></script>
+<script>
+function attachmentsList(value) {
+    toReturn = '<div class="innertd"><form id="my-awesome-dropzone" class="dropzone" action="{% url "upload" %}" method="post" enctype="multipart/form-data">drop file here to upload';
+    toReturn += "{% csrf_token %}";
+    toReturn += '<input type="hidden" name="person" value="1"></form>';
+    i = 0;
+    value.forEach(function(){
+        toReturn += '<a href="conditdate/attachment/' + value[i].pk + '">' + value[i].display_name + '</a><br>';
+        i++;
+    });
+    toReturn += "</div>";
+    return toReturn;
+}
+Dropzone.options.myAwesomeDropzone = {
+  init: function() {
+    this.on("addedfile", function(file) { window.setTimeout(reloadData, 1000); });
+  }
+};
+</script>
+
+
 {% endblock %}

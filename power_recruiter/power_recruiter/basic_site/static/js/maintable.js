@@ -1,11 +1,12 @@
 /**
  * Created by shadowsword on 25.10.14.
  */
+currentlyOpened = null;
+currentlyOpenedId = null;
+closedAll = false;
 
 $(function () {
-    currentlyOpened = null;
-    currentlyOpenedId = null;
-    closedAll = false;
+
 
     $('#maintable').bootstrapTable({})
     //Open or close large row view
@@ -39,15 +40,10 @@ $(function () {
     //Open large view after sorting
     .on('sort.bs.table',function (e, name, order) {
         addBottomBarToTd();
-        if(currentlyOpened != null) {
-            currentlyOpened = $('#maintable tr:has(td:textEquals("' + currentlyOpenedId + '"))');
-            openLargeTd(currentlyOpened);
-        }
     })
     .on('load-success.bs.table',function (e, name, order) {
         addBottomBarToTd();
      });
-
 });
 
 function addBottomBarToTd(){
@@ -64,7 +60,13 @@ function addBottomBarToTd(){
                 currentTr.find('td').addClass('td-with-bottom-bar');
             }
         });
+
+        if(currentlyOpened != null) {
+            currentlyOpened = $('#maintable tr:has(td:textEquals("' + currentlyOpenedId + '"))');
+            openLargeTd(currentlyOpened);
+        }
     });
+    Dropzone.discover();
 }
 
 function openLargeTd(element){
@@ -75,13 +77,6 @@ function openLargeTd(element){
     }
 }
 
-function attachmentsList(value) {
-        toReturn = '<div class="innertd">';
-        i = 0;
-        value.forEach(function(){
-            toReturn += '<a href="conditdate/attachment/' + value[i].pk + '">' + value[i].display_name + '</a><br>';
-            i++;
-        });
-        toReturn += "</div>";
-        return toReturn;
+function reloadData() {
+    $('#maintable').bootstrapTable('refresh', "{silent: true}");
 }

@@ -2,15 +2,24 @@ import json
 import logging
 import sys
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+import power_recruiter.candidate.models
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
+from django import forms
+from models import Attachment, Person
+from django.core.urlresolvers import reverse
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+import power_recruiter.candidate.models
 
-from power_recruiter.candidate.models import Attachment, Person
+class UploadFileForm(forms.ModelForm):
 
+    class Meta:
+        model = Attachment
 
 def get_attachment(request, id):
-    att = Attachment.objects.get(pk=id)
+    att = power_recruiter.candidate.models.Attachment.objects.get(pk=id)
     return redirect(att.file.url)
 
 
@@ -19,14 +28,14 @@ def remove_attachment(request, id):
 
 
 def candidate_json(request):
-    persons = Person.objects.all()
+    persons = power_recruiter.candidate.models.Person.objects.all()
     resp = []
     for p in persons:
         attachments = [
             {
-                'display_name': a.name,
+                'display_name': str(a),
                 'pk': a.pk
-            } for a in Attachment.objects.filter(person_id=p.pk)
+            } for a in power_recruiter.candidate.models.Attachment.objects.filter(person_id=p.pk)
         ]
         source = p.source.name
         if 'http' in p.source.name:
@@ -35,23 +44,37 @@ def candidate_json(request):
                 source += '<img style="width:38px; height:38px" ' \
                           'src="http://www.socialtalent.co/wp-content/' \
                           'uploads/2014/07/LinkedIn_logo_initials.png">'
-            elif 'goldenline' in p.source.name:
-                source += 'goldenLine'
             else:
-                source += 'link'
+                if 'goldenline' in p.source.name:
+                    source += 'goldenLine'
+                else:
+                    source += 'link'
             source += '</a>'
         resp.append({
             'id': p.pk,
-            'candidate_name': ''.join([p.first_name, ' ' ,p.last_name]),
+            'candidate_name': p.first_name + ' ' + p.last_name,
             'source': source,
             'type': p.role.name,
             'comm': p.comm.name,
-            'state' : p.state.name,
             'attachments': attachments,
             'caveats': p.caveats,
         })
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
+
+def upload(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_file = Attachment(person = Person.objects.get(id=request.POST['person']), file = request.FILES['file'])
+            new_file.save()
+
+            return HttpResponseRedirect(reverse('upload'))
+    else:
+        form = UploadFileForm()
+
+    data = {'form': form}
+    return render_to_response('main.html', data, context_instance=RequestContext(request))
 
 LOGGING = {
     'version': 1,
@@ -78,7 +101,7 @@ def add_candidate(request):
     names = args[0].split(' ')
     first_name = names[0]
     last_name = names[len(names) - 1]
-    Person.objects.create_person(
+    power_recruiter.candidate.models.Person.objects.create_person(
         first_name,
         last_name,
         args[2]
