@@ -78,7 +78,6 @@ def candidate_json(request):
             'id': p.pk,
             'candidate_name': p.first_name + ' ' + p.last_name,
             'source': source,
-            'type': p.role.name,
             'state' : state,
             'comm': p.comm.name,
             'attachments': attachments,
