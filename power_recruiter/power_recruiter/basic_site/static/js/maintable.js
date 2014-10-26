@@ -6,8 +6,6 @@ currentlyOpenedId = null;
 closedAll = false;
 
 $(function () {
-
-
     $('#maintable').bootstrapTable({})
     //Open or close large row view
     .on('click-row.bs.table', function (e, row, $element) {
@@ -48,24 +46,27 @@ $(function () {
 
 function addBottomBarToTd(){
     //Add bottom bar to tr
-    $("#maintable tr").each(function() {
-        haveBottomBar = false;
-        currentTr = $(this);
-        $(this).find('td div.innertd').each (function() {
-            oldHeight = $(this).css('height');
-            $(this).addClass('large-inner-div');
-            autoHeight = $(this).parent().height();
-            $(this).removeClass('large-inner-div');
-            if($(this).parent().height() < autoHeight){
-                currentTr.find('td').addClass('td-with-bottom-bar');
+    if(setAutosize()) {
+        $("#maintable tr").each(function () {
+            haveBottomBar = false;
+            currentTr = $(this);
+            $(this).find('td div.innertd').each(function () {
+                oldHeight = $(this).css('height');
+                $(this).addClass('large-inner-div');
+                autoHeight = $(this).parent().height();
+                $(this).removeClass('large-inner-div');
+                if ($(this).parent().height() < autoHeight) {
+                    currentTr.find('td').addClass('td-with-bottom-bar');
+                }
+            });
+            $(this).find('.personid').first().val(currentTr.children().first().text());
+            $(this).find('.caveatsArea').first().attr('id', "caveats-" + (currentTr.children().first().text()));
+            if (currentlyOpened != null) {
+                currentlyOpened = $('#maintable tr:has(td:textEquals("' + currentlyOpenedId + '"))');
+                openLargeTd(currentlyOpened);
             }
         });
-        $(this).find('.personid').first().val(currentTr.children().first().text());
-        if(currentlyOpened != null) {
-            currentlyOpened = $('#maintable tr:has(td:textEquals("' + currentlyOpenedId + '"))');
-            openLargeTd(currentlyOpened);
-        }
-    });
+    }
     Dropzone.discover();
 }
 
@@ -80,4 +81,22 @@ function openLargeTd(element){
 function reloadData() {
     $('#maintable').bootstrapTable('refresh', "{silent: true}");
     addBottomBarToTd();
+}
+
+function setAutosize(){
+    $(document).ready(function(){
+        $('textarea').autosize();
+    });
+    $('textarea').bind('input propertychange', function() {
+        id = $(this).attr('id').substr('caveats-'.length, $(this).attr('id').lenght);
+        content = $(this).val();
+        $.post( "/candidate/caveats/upload/", { id: id, caveats: content });
+    });
+    $('textarea').click(function(){
+        if($(this).parents('.maintable-row-large').length)
+        {
+            return false;
+        }
+    })
+    return true;
 }

@@ -62,3 +62,9 @@ body {
 .dz-default, .dz-preview{
     display: none !important;
 }
+
+.caveatsArea{
+    resize: none;
+    border: 0;
+    width: 160px;
+}

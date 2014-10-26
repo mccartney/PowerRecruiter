@@ -62,6 +62,16 @@ def candidate_json(request):
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
 
+@csrf_exempt
+def caveatsUpload(request):
+    if request.method == 'POST':
+        person = Person.objects.get(id=request.POST['id'])
+        person.caveats = request.POST['caveats']
+        person.save()
+        return HttpResponseRedirect(reverse('caveatsUpload'))
+    return HttpResponse("");
+
+
 def upload(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)

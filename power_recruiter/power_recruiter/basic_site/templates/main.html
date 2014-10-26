@@ -8,7 +8,8 @@
             <th data-field="candidate_name" data-sortable="true">Name</th>
             <th data-field="source" data-sortable="true">Source</th>
             <th data-field="state" data-sortable="true">State</th>
-            <th data-field="attachments" data-formatter="attachmentsList">Attachments</th>
+            <th data-field="attachments" data-formatter="attachmentsListFormatter">Attachments</th>
+            <th data-field="caveats" data-formatter="caveatsFormatter">Caveats</th>
         </tr>
     </thead>
 </table>
@@ -17,7 +18,7 @@
 <link href="{% static 'dropzone/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
 <script src="{% static 'dropzone/dropzone.js' %}"></script>
 <script>
-function attachmentsList(value) {
+function attachmentsListFormatter(value) {
     toReturn = '<div class="innertd"><form id="my-awesome-dropzone" class="dropzone" action="{% url "upload" %}" method="post" enctype="multipart/form-data">drop file here to upload';
     toReturn += "{% csrf_token %}";
     toReturn += '<input type="hidden" class="personid" name="person" value="'+ $() +'"></form>';
@@ -27,6 +28,11 @@ function attachmentsList(value) {
         i++;
     });
     toReturn += "</div>";
+    return toReturn;
+}
+
+function caveatsFormatter(value) {
+    toReturn = '<div class="innertd"><textarea class="caveatsArea">' + value + '</textarea></div>';
     return toReturn;
 }
 Dropzone.options.myAwesomeDropzone = {
