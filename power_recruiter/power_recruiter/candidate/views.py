@@ -46,6 +46,7 @@ def candidate_json(request):
             'source': source,
             'type': p.role.name,
             'comm': p.comm.name,
+            'state' : p.state.name,
             'attachments': attachments,
             'caveats': p.caveats,
         })
