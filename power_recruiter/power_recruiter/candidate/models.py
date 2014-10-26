@@ -46,8 +46,7 @@ class PersonManager(models.Manager):
             date_created=datetime.datetime.now(),
             state=RecruitmentState.objects.get(pk=1),
             comm=Communication.objects.get(pk=1),
-            source=Source.objects.create_source(source),
-            role=Role.objects.get(pk=1)
+            source=Source.objects.create_source(source)
         )
 
         return person
