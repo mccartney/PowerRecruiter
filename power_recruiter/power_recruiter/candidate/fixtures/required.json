@@ -29,5 +29,85 @@
         "source": 1,
         "caveats": "Good programmer!"
         }
+    },
+    {"pk": 2, "model": "candidate.Person", "fields": {
+        "first_name": "Andrzej",
+        "last_name": "Shadowsword",
+        "date_created": "2014-04-01",
+        "state": 1,
+        "comm": 1,
+        "source": 1,
+        "caveats": "He knows how to turn on computer"
+        }
+    },
+    {"pk": 3, "model": "candidate.Person", "fields": {
+        "first_name": "Bamtan",
+        "last_name": "Beggar",
+        "date_created": "2014-04-01",
+        "state": 1,
+        "comm": 1,
+        "source": 1,
+        "caveats": "He's beggin' for a job"
+        }
+    },
+    {"pk": 4, "model": "candidate.Person", "fields": {
+        "first_name": "Lady",
+        "last_name": "For One Night",
+        "date_created": "2014-04-01",
+        "state": 1,
+        "comm": 1,
+        "source": 1,
+        "caveats": "She's going to be hired"
+        }
+    },
+    {"pk": 5, "model": "candidate.Person", "fields": {
+        "first_name": "Krzysztof",
+        "last_name": "Fudali",
+        "date_created": "2014-04-01",
+        "state": 1,
+        "comm": 1,
+        "source": 1,
+        "caveats": "Good programmer!"
+        }
+    },
+    {"pk": 6, "model": "candidate.Person", "fields": {
+        "first_name": "Some Stupid",
+        "last_name": "Huy",
+        "date_created": "2014-04-01",
+        "state": 1,
+        "comm": 1,
+        "source": 1,
+        "caveats": ""
+        }
+    },
+    {"pk": 7, "model": "candidate.Person", "fields": {
+        "first_name": "Krzysztof",
+        "last_name": "Fudali",
+        "date_created": "2014-04-01",
+        "state": 1,
+        "comm": 1,
+        "source": 1,
+        "caveats": "Good programmer!"
+        }
+    },
+    {"pk": 8, "model": "candidate.Person", "fields": {
+        "first_name": "Krzysztof",
+        "last_name": "Fudali",
+        "date_created": "2014-04-01",
+        "state": 1,
+        "comm": 1,
+        "source": 1,
+        "caveats": "Good programmer!"
+        }
+    },
+    {"pk": 9, "model": "candidate.Person", "fields": {
+        "first_name": "Krzysztof",
+        "last_name": "Fudali",
+        "date_created": "2014-04-01",
+        "state": 1,
+        "comm": 1,
+        "source": 1,
+        "caveats": "Good programmer!"
+        }
     }
 ]
