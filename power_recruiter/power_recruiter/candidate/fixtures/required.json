@@ -72,7 +72,7 @@
     },
     {"pk": 6, "model": "candidate.Person", "fields": {
         "first_name": "Some Stupid",
-        "last_name": "Huy",
+        "last_name": "Guy",
         "date_created": "2014-04-01",
         "state": 1,
         "comm": 1,
@@ -81,33 +81,13 @@
         }
     },
     {"pk": 7, "model": "candidate.Person", "fields": {
-        "first_name": "Krzysztof",
-        "last_name": "Fudali",
+        "first_name": "Maciek",
+        "last_name": "z klanu",
         "date_created": "2014-04-01",
         "state": 1,
         "comm": 1,
         "source": 1,
-        "caveats": "Good programmer!"
-        }
-    },
-    {"pk": 8, "model": "candidate.Person", "fields": {
-        "first_name": "Krzysztof",
-        "last_name": "Fudali",
-        "date_created": "2014-04-01",
-        "state": 1,
-        "comm": 1,
-        "source": 1,
-        "caveats": "Good programmer!"
-        }
-    },
-    {"pk": 9, "model": "candidate.Person", "fields": {
-        "first_name": "Krzysztof",
-        "last_name": "Fudali",
-        "date_created": "2014-04-01",
-        "state": 1,
-        "comm": 1,
-        "source": 1,
-        "caveats": "Good programmer!"
+        "caveats": ""
         }
     }
 ]
