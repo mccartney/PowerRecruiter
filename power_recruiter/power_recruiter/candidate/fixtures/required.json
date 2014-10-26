@@ -1,14 +1,17 @@
 [
 	{"pk": 1, "model": "candidate.RecruitmentState", "fields": {
-        "name": "Newly created"}
+        "name": "Awaiting contact"}
     },
     {"pk": 2, "model": "candidate.RecruitmentState", "fields": {
-        "name": "Contacted"}
+        "name": "Contact rejected"}
     },
     {"pk": 3, "model": "candidate.RecruitmentState", "fields": {
-        "name": "Rejected"}
+        "name": "Awaiting meeting"}
     },
     {"pk": 4, "model": "candidate.RecruitmentState", "fields": {
+        "name": "Rejected"}
+    },
+    {"pk": 5, "model": "candidate.RecruitmentState", "fields": {
         "name": "Hired"}
     },
     {"pk": 1, "model": "candidate.Communication", "fields": {

@@ -50,11 +50,33 @@ def candidate_json(request):
                 else:
                     source += 'link'
             source += '</a>'
+        state = ''
+        if p.state_id in [1, 3]:
+            state += '<button onclick=\'' \
+                     '    xmlhttp = new XMLHttpRequest();' \
+                     '    xmlhttp.onreadystatechange=' \
+                     '        function(){' \
+                     '            if (xmlhttp.readyState==4 && xmlhttp.status==200){reloadData();}' \
+                     '    };' \
+                     '    xmlhttp.open("GET","candidate/up/' + str(p.pk) + '",true);' \
+                     '    xmlhttp.send();\'>up</button>' +\
+                     p.state.name +\
+                     '<button onclick=\'' \
+                     '    xmlhttp = new XMLHttpRequest();' \
+                     '    xmlhttp.onreadystatechange=' \
+                     '        function(){' \
+                     '            if (xmlhttp.readyState==4 && xmlhttp.status==200){reloadData();}' \
+                     '    };' \
+                     '    xmlhttp.open("GET","candidate/down/' + str(p.pk) + '",true);' \
+                     '    xmlhttp.send();\'>down</button>'
+        else:
+            state = p.state.name
         resp.append({
             'id': p.pk,
             'candidate_name': p.first_name + ' ' + p.last_name,
             'source': source,
             'type': p.role.name,
+            'state' : state,
             'comm': p.comm.name,
             'attachments': attachments,
             'caveats': p.caveats,
@@ -92,6 +114,17 @@ LOGGING = {
 
 logging.config.dictConfig(LOGGING)
 
+def up(request, candidate_id):
+    person = power_recruiter.candidate.models.Person.objects.get(id=candidate_id)
+    person.state_id += 2
+    person.save()
+    return HttpResponse(200, content_type="plain/text")
+
+def down(request, candidate_id):
+    person = power_recruiter.candidate.models.Person.objects.get(id=candidate_id)
+    person.state_id += 1
+    person.save()
+    return HttpResponse(200, content_type="plain/text")
 
 @csrf_exempt
 def add_candidate(request):
