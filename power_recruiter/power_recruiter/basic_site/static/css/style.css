@@ -24,7 +24,7 @@ body {
 }
 
 .innertd{
-    height: 15px;
+    height: 25px;
     overflow: hidden;
 }
 
@@ -36,8 +36,19 @@ body {
     height: auto;
 }
 
+
 .statcss {
     margin-left: auto;
     margin-right: auto;
     width: 6em
 }
+
+.red-text{
+    color: #F00;
+    font-weight: normal;
+}
+
+.dz-default, .dz-preview{
+    display: none !important;
+}
+
