@@ -5,7 +5,7 @@ import sys
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
-
+from django.shortcuts import render
 from power_recruiter.candidate.models import Attachment, Person
 
 
@@ -84,3 +84,21 @@ def add_candidate(request):
         args[2]
     )
     return HttpResponse(200, content_type="plain/text")
+
+
+def stats(request):
+    context = {}
+    return render(request, "stats.html", context)
+
+
+def stats_data(request):
+    res = """"id","order","score","weight","color","label"
+"FIS",1.1,100,1,"#9E0041","Fisheries"
+"MAR",1.3,100,0.5,"#C32F4B","Mariculture"
+"AO",2,100,1,"#E1514B","Artisanal Fishing Opportunities"
+"NP",3,100,1,"#F47245","Natural Products"
+"CS",4,100,1,"#FB9F59","Carbon Storage"
+"CP",5,100,1,"#FEC574","Coastal Protection"
+"TR",6,100,1,"#FAE38C","Tourism &  Recreation"
+"""
+    return HttpResponse(res, content_type="plain/text")
