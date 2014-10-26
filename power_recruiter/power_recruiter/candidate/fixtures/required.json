@@ -41,8 +41,8 @@
         }
     },
     {"pk": 3, "model": "candidate.Person", "fields": {
-        "first_name": "Bamtan",
-        "last_name": "Beggar",
+        "first_name": "Koń",
+        "last_name": "",
         "date_created": "2014-04-01",
         "state": 1,
         "comm": 1,
@@ -51,23 +51,23 @@
         }
     },
     {"pk": 4, "model": "candidate.Person", "fields": {
-        "first_name": "Lady",
-        "last_name": "For One Night",
+        "first_name": "Bożena",
+        "last_name": " ",
         "date_created": "2014-04-01",
         "state": 1,
         "comm": 1,
         "source": 1,
-        "caveats": "She's going to be hired"
+        "caveats": "bożenka z cyganem za rękę chadza"
         }
     },
     {"pk": 5, "model": "candidate.Person", "fields": {
-        "first_name": "Krzysztof",
-        "last_name": "Fudali",
+        "first_name": "Wojtek",
+        "last_name": "Kadłubek",
         "date_created": "2014-04-01",
         "state": 1,
         "comm": 1,
         "source": 1,
-        "caveats": "Good programmer!"
+        "caveats": "Ma trudności z pisaniem na klawiaturze"
         }
     },
     {"pk": 6, "model": "candidate.Person", "fields": {
@@ -88,6 +88,46 @@
         "comm": 1,
         "source": 1,
         "caveats": ""
+        }
+    },
+    {"pk": 8, "model": "candidate.Person", "fields": {
+        "first_name": "Hanka",
+        "last_name": "z klanu",
+        "date_created": "2014-04-01",
+        "state": 1,
+        "comm": 1,
+        "source": 1,
+        "caveats": ""
+        }
+    },
+    {"pk": 9, "model": "candidate.Person", "fields": {
+        "first_name": "Hanka",
+        "last_name": "z kartonu",
+        "date_created": "2014-04-01",
+        "state": 1,
+        "comm": 1,
+        "source": 1,
+        "caveats": "Mieszka w kartonie, ciężko z nią"
+        }
+    },
+    {"pk": 10, "model": "candidate.Person", "fields": {
+        "first_name": "Maciek",
+        "last_name": "z klanu",
+        "date_created": "2014-04-01",
+        "state": 1,
+        "comm": 1,
+        "source": 1,
+        "caveats": ""
+        }
+    },
+    {"pk": 11, "model": "candidate.Person", "fields": {
+        "first_name": "Łysy",
+        "last_name": "",
+        "date_created": "2014-04-01",
+        "state": 1,
+        "comm": 1,
+        "source": 1,
+        "caveats": "nie myje włosów"
         }
     }
 ]
