@@ -71,7 +71,7 @@ def candidate_json(request):
                     '});</script>'
         else:
             if "Hired" in p.state.name:
-                state = "<span style='color: #0F0'>" + p.state.name + "</span>";
+                state = "<span style='color: #419E16'>" + p.state.name + "</span>";
             else:
                 state = "<span style='color: #F00'>" + p.state.name + "</span>";
         resp.append({

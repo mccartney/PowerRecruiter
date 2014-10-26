@@ -1,6 +1,21 @@
 {% extends "base_generic.html" %}
 {% load staticfiles %}
 {% block content %}
+{% for state in states %}
+    <div class="stateCheckboxDiv"><input type="checkbox" class="stateCheckbox" name="{{ state }}" checked /> {{ state }}</div>
+{% endfor %}
+<script>
+    $('.stateCheckbox').change(function() {
+        url = {% url 'json' %};
+        $('.stateCheckbox').each(function(){
+            if($(this).is(":checked")){
+                url += "&" + encodeURIComponent(this.name) + "=true";
+            }
+        });
+        $("#maintable").attr("data-url", url);
+        reloadData();
+    });
+</script>
 <table id="maintable" data-toggle="table" data-url="{% url 'json' %}" data-cache="false" data-sort-name="price" data-sort-order="desc">
     <thead>
         <tr>

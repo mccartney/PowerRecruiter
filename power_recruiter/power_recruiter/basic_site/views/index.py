@@ -1,5 +1,6 @@
 from django.shortcuts import render
-
+from power_recruiter.candidate.models import RecruitmentState
 
 def index(request):
-    return render(request, "main.html")
+    states = RecruitmentState.objects.all()
+    return render(request, "main.html", {"states": states})
