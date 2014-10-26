@@ -60,7 +60,7 @@ function addBottomBarToTd(){
                 currentTr.find('td').addClass('td-with-bottom-bar');
             }
         });
-
+        $(this).find('.personid').first().val(currentTr.children().first().text());
         if(currentlyOpened != null) {
             currentlyOpened = $('#maintable tr:has(td:textEquals("' + currentlyOpenedId + '"))');
             openLargeTd(currentlyOpened);
