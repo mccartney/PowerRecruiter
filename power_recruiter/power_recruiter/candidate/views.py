@@ -52,25 +52,25 @@ def candidate_json(request):
             source += '</a>'
         state = ''
         if p.state_id in [1, 3]:
-            state += '<a href="#up" id="upButton">'\
+            state += '<a href="#up" id="upButton'+ str(p.pk) +'">'\
                     '<img src="/static/img/bolt.png">' \
                     '</a>' \
-                    '<script>$("#upButton").click(function(){' \
+                    '<script>$("#upButton'+ str(p.pk) +'").click(function(){' \
                         '$.get( "candidate/up/' + str(p.pk) + '", function() {'\
                             'reloadData();'\
                         '});'\
                     '});</script>'\
                      + p.state.name +\
-                    '<a href="#down" id="downButton">'\
+                    '<a href="#down" id="downButton'+ str(p.pk) +'">'\
                     '<img src="/static/img/boltdown.png">' \
                     '</a>' \
-                    '<script>$("#downButton").click(function(){' \
+                    '<script>$("#downButton'+ str(p.pk) +'").click(function(){' \
                         '$.get( "candidate/down/' + str(p.pk) + '", function() {'\
                             'reloadData();'\
                         '});'\
                     '});</script>'
         else:
-            if "hired" in p.state.name:
+            if "Hired" in p.state.name:
                 state = "<span style='color: #0F0'>" + p.state.name + "</span>";
             else:
                 state = "<span style='color: #F00'>" + p.state.name + "</span>";
