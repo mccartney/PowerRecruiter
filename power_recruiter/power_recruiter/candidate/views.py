@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from power_recruiter.candidate.models import Attachment, Person
+from power_recruiter.candidate.models import Attachment, Person, RecruitmentState
 
 
 def get_attachment(request, id):
@@ -87,7 +87,12 @@ def add_candidate(request):
 
 
 def stats(request):
-    context = {}
+    states = RecruitmentState.objects.all()
+    context = {
+        'spices' : [
+            {'num' : len(Person.objects.filter(state = s.pk)), 'name' : s.name} for s in states
+        ]
+    }
     return render(request, "stats.html", context)
 
 

@@ -1,5 +1,38 @@
 {% extends "base_generic.html" %}
 {% load staticfiles %}
 {% block content %}
-<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+<script type="text/javascript">
+window.onload = function () {
+	var chart = new CanvasJS.Chart("chartContainer",
+	{
+		title:{
+			text: "Candidates Chart"
+		},
+		legend:{
+			verticalAlign: "bottom",
+			horizontalAlign: "center"
+		},
+		data: [
+		{
+			indexLabelFontSize: 20,
+			indexLabelFontFamily: "Monospace",
+			indexLabelFontColor: "darkgrey",
+			indexLabelLineColor: "darkgrey",
+			indexLabelPlacement: "outside",
+			type: "pie",
+			showInLegend: true,
+			toolTipContent: "{y} - <strong>#percent%</strong>",
+			dataPoints: [
+				{% for s in spices %}
+                    { y: {{ s.num }}, legendText:"{{ s.name }}", indexLabel: "{{ s.name }}" },
+                {% endfor %}
+			]
+		}
+		]
+	});
+	chart.render();
+}
+</script>
+<div id="chartContainer" style="height: 600px; width: 100%;"></div>
+
 {% endblock %}

@@ -19,13 +19,11 @@ window.onload = function () {
 			showInLegend: true,
 			toolTipContent: "{y} - <strong>#percent%</strong>",
 			dataPoints: [
-				{  y: 4181563, legendText:"PS 3", indexLabel: "" },
-				{  y: 2175498, legendText:"Wii", indexLabel: "Wii" },
-				{  y: 3125844, legendText:"360",exploded: true, indexLabel: "Xbox 360" },
-				{  y: 1176121, legendText:"DS" , indexLabel: "Nintendo DS"},
-				{  y: 1727161, legendText:"PSP", indexLabel: "PSP" },
-				{  y: 4303364, legendText:"3DS" , indexLabel: "Nintendo 3DS"},
-				{  y: 1717786, legendText:"Vita" , indexLabel: "PS Vita"}
+				{  y: 4181563, legendText:"Newly Created", indexLabel: "Newly Created" },
+				{  y: 2175498, legendText:"In progress", indexLabel: "In Progress" },
+				{  y: 3125844, legendText:"Rejected",exploded: true, indexLabel: "Rejected" },
+				{  y: 1176121, legendText:"Hired" , indexLabel: "Hired"},
+				{  y: 4303364, legendText:"Contacted" , indexLabel: "Contacted"}
 			]
 		}
 		]
