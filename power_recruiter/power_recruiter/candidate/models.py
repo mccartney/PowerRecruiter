@@ -49,7 +49,6 @@ class PersonManager(models.Manager):
             source=Source.objects.create_source(source),
             role=Role.objects.get(pk=1)
         )
-
         return person
 
 

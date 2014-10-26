@@ -16,5 +16,18 @@
     },
     {"pk": 1, "model": "candidate.Communication", "fields": {
         "name": "LinkedIn"}
+    },
+    {"pk": 1, "model": "candidate.Source", "fields": {
+        "name": "http://google.com/"}
+    },
+    {"pk": 1, "model": "candidate.Person", "fields": {
+        "first_name": "Krzysztof",
+        "last_name": "Fudali",
+        "date_created": "2014-04-01",
+        "state": 1,
+        "comm": 1,
+        "source": 1,
+        "caveats": "Good programmer!"
+        }
     }
 ]
