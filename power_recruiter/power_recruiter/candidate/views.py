@@ -2,7 +2,7 @@ import json
 import logging
 import sys
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 import power_recruiter.candidate.models
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
@@ -62,6 +62,7 @@ def upload(request):
 
     data = {'form': form}
     return render_to_response('main.html', data, context_instance=RequestContext(request))
+
 LOGGING = {
     'version': 1,
     'handlers': {

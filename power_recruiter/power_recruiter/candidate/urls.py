@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 
 from power_recruiter.candidate.views import get_attachment, \
-    remove_attachment, candidate_json, add_candidate
+    remove_attachment, candidate_json, add_candidate, upload
 
 
 urlpatterns = patterns(
@@ -11,4 +11,5 @@ urlpatterns = patterns(
     url(r'attachment/remove/(?P<id>\d+)$', remove_attachment,
         name='remove_attachment'),
     url(r'add', add_candidate),
+    url(r'attachment/upload/$', upload, name='upload')
 )

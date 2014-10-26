@@ -1,11 +1,12 @@
 /**
  * Created by shadowsword on 25.10.14.
  */
+currentlyOpened = null;
+currentlyOpenedId = null;
+closedAll = false;
 
 $(function () {
-    currentlyOpened = null;
-    currentlyOpenedId = null;
-    closedAll = false;
+
 
     $('#maintable').bootstrapTable({})
     //Open or close large row view
@@ -39,15 +40,10 @@ $(function () {
     //Open large view after sorting
     .on('sort.bs.table',function (e, name, order) {
         addBottomBarToTd();
-        if(currentlyOpened != null) {
-            currentlyOpened = $('#maintable tr:has(td:textEquals("' + currentlyOpenedId + '"))');
-            openLargeTd(currentlyOpened);
-        }
     })
     .on('load-success.bs.table',function (e, name, order) {
         addBottomBarToTd();
      });
-
 });
 
 function addBottomBarToTd(){
@@ -64,7 +60,13 @@ function addBottomBarToTd(){
                 currentTr.find('td').addClass('td-with-bottom-bar');
             }
         });
+
+        if(currentlyOpened != null) {
+            currentlyOpened = $('#maintable tr:has(td:textEquals("' + currentlyOpenedId + '"))');
+            openLargeTd(currentlyOpened);
+        }
     });
+    Dropzone.discover();
 }
 
 function openLargeTd(element){
@@ -73,4 +75,8 @@ function openLargeTd(element){
         element.find('td').removeClass('td-with-bottom-bar');
         element.find('td').addClass('td-with-bottom-bar-upsidedown');
     }
+}
+
+function reloadData() {
+    $('#maintable').bootstrapTable('refresh', "{silent: true}");
 }

@@ -24,7 +24,7 @@ body {
 }
 
 .innertd{
-    height: 15px;
+    height: 25px;
     overflow: hidden;
 }
 
@@ -39,4 +39,8 @@ body {
 .red-text{
     color: #F00;
     font-weight: normal;
+}
+
+.dz-default, .dz-preview{
+    display: none !important;
 }

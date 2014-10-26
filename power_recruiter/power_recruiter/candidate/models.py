@@ -74,8 +74,7 @@ class Person(models.Model):
 
 class Attachment(models.Model):
     person = models.ForeignKey(Person, default=1)
-    name = models.CharField(max_length=100, default='')
-    file = models.FileField(upload_to='attachments/')
+    file = models.FileField(upload_to='attachments/%Y/%m/%d')
 
     def __unicode__(self):
-        return self.name
+        return self.file.name[23:]
