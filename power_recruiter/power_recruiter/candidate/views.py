@@ -6,15 +6,15 @@ from django.http import HttpResponse, HttpResponseRedirect
 import power_recruiter.candidate.models
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+from power_recruiter.candidate.models import Attachment, Person, RecruitmentState
 from django import forms
-from models import Attachment, Person
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 import power_recruiter.candidate.models
 
 class UploadFileForm(forms.ModelForm):
-
     class Meta:
         model = Attachment
 
@@ -84,6 +84,16 @@ def candidate_json(request):
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
 
+@csrf_exempt
+def caveatsUpload(request):
+    if request.method == 'POST':
+        person = Person.objects.get(id=request.POST['id'])
+        person.caveats = request.POST['caveats']
+        person.save()
+        return HttpResponseRedirect(reverse('caveatsUpload'))
+    return HttpResponse("");
+
+
 def upload(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -140,3 +150,13 @@ def add_candidate(request):
         args[2]
     )
     return HttpResponse(200, content_type="plain/text")
+
+
+def stats(request):
+    states = RecruitmentState.objects.all()
+    context = {
+        'spices' : [
+            {'num' : len(Person.objects.filter(state = s.pk)), 'name' : s.name} for s in states
+        ]
+    }
+    return render(request, "stats.html", context)

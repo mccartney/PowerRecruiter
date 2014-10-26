@@ -6,11 +6,20 @@
         <meta charset="UTF-8">
         <title>Power Recruiter</title>
 
+        <!-- FONTS -->
+        <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+
         <!-- JAVASCRIPT -->
         <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
         <script type="text/javascript" src="{% static "js/globalFunctions.js" %}"></script>
         {% bootstrap_javascript %}
         <script type="text/javascript" src="{% static "bootstrap_table/bootstrap-table.js" %}"></script>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+        <script type="text/javascript" src="{% static "js/draw.js" %}"></script>
+        <script type="text/javascript" src="{% static "autosize/jquery.autosize.js" %}"></script>
+
 
         <!-- CSS -->
         {% bootstrap_css %}
