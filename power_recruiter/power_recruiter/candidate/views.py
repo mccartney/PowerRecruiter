@@ -37,10 +37,23 @@ def candidate_json(request):
                 'pk': a.pk
             } for a in power_recruiter.candidate.models.Attachment.objects.filter(person_id=p.pk)
         ]
+        source = p.source.name
+        if 'http' in p.source.name:
+            source = '<a href=' + p.source.name + '>'
+            if 'linkedin' in p.source.name:
+                source += '<img style="width:50px; height:50px" ' \
+                          'src="http://www.socialtalent.co/wp-content/' \
+                          'uploads/2014/07/LinkedIn_logo_initials.png">'
+            else:
+                if 'goldenline' in p.source.name:
+                    source += 'goldenLine'
+                else:
+                    source += 'link'
+            source += '</a>'
         resp.append({
             'id': p.pk,
             'candidate_name': p.first_name + ' ' + p.last_name,
-            'source': p.source.name,
+            'source': source,
             'type': p.role.name,
             'comm': p.comm.name,
             'attachments': attachments,
@@ -94,4 +107,3 @@ def add_candidate(request):
         args[2]
     )
     return HttpResponse(200, content_type="plain/text")
-
