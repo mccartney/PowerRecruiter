@@ -62,7 +62,7 @@ class Person(models.Model):
     source = models.ForeignKey(Source)
     role = models.ForeignKey(Role, blank=True, null=True)
     comm = models.ForeignKey(Communication)
-    caveats = models.CharField(max_length=1000, blank=True)
+    caveats = models.TextField(max_length=1000, blank=True)
 
     objects = PersonManager()
 
