@@ -10,5 +10,7 @@ urlpatterns = patterns(
     url(r'attachment/remove/(?P<id>\d+)$', remove_attachment,
         name='remove_attachment'),
     url(r'add', add_candidate),
-    url(r'attachment/upload/$', upload, name='upload')
+    url(r'stats$', stats, name='stats'),
+    url(r'attachment/upload/$', upload, name='upload'),
+    url(r'caveats/upload/', caveatsUpload, name='caveatsUpload')
 )
