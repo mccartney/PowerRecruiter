@@ -52,25 +52,28 @@ def candidate_json(request):
             source += '</a>'
         state = ''
         if p.state_id in [1, 3]:
-            state += '<button onclick=\'' \
-                     '    xmlhttp = new XMLHttpRequest();' \
-                     '    xmlhttp.onreadystatechange=' \
-                     '        function(){' \
-                     '            if (xmlhttp.readyState==4 && xmlhttp.status==200){reloadData();}' \
-                     '    };' \
-                     '    xmlhttp.open("GET","candidate/up/' + str(p.pk) + '",true);' \
-                     '    xmlhttp.send();\'>up</button>' +\
-                     p.state.name +\
-                     '<button onclick=\'' \
-                     '    xmlhttp = new XMLHttpRequest();' \
-                     '    xmlhttp.onreadystatechange=' \
-                     '        function(){' \
-                     '            if (xmlhttp.readyState==4 && xmlhttp.status==200){reloadData();}' \
-                     '    };' \
-                     '    xmlhttp.open("GET","candidate/down/' + str(p.pk) + '",true);' \
-                     '    xmlhttp.send();\'>down</button>'
+            state += '<a href="#up" id="upButton">'\
+                    '<img src="/static/img/bolt.png">' \
+                    '</a>' \
+                    '<script>$("#upButton").click(function(){' \
+                        '$.get( "candidate/up/' + str(p.pk) + '", function() {'\
+                            'reloadData();'\
+                        '});'\
+                    '});</script>'\
+                     + p.state.name +\
+                    '<a href="#down" id="downButton">'\
+                    '<img src="/static/img/boltdown.png">' \
+                    '</a>' \
+                    '<script>$("#downButton").click(function(){' \
+                        '$.get( "candidate/down/' + str(p.pk) + '", function() {'\
+                            'reloadData();'\
+                        '});'\
+                    '});</script>'
         else:
-            state = p.state.name
+            if "hired" in p.state.name:
+                state = "<span style='color: #0F0'>" + p.state.name + "</span>";
+            else:
+                state = "<span style='color: #F00'>" + p.state.name + "</span>";
         resp.append({
             'id': p.pk,
             'candidate_name': p.first_name + ' ' + p.last_name,
