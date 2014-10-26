@@ -8,20 +8,19 @@
     $('.stateCheckbox').change(function() {
         url = {% url 'json' %} + '?dummy=1';
         $('.stateCheckbox').each(function(){
-            if($(this).is(":checked")){
-                url += "&" + encodeURIComponent(this.name) + "='True'";
+            if(!$(this).is(":checked")){
+                url += "&" + encodeURIComponent(this.name) + "=0";
             }
         });
-        $("#maintable").attr("data-url", url);
-        reloadData();
+        reloadData(url);
     });
 </script>
 <table id="maintable" data-toggle="table" data-url="{% url 'json' %}" data-cache="false" data-sort-name="price" data-sort-order="desc">
     <thead>
         <tr>
-            <th data-field="id" data-sortable="true">ID</th>
-            <th data-field="candidate_name" data-sortable="true">Name</th>
-            <th data-field="source" data-sortable="true">Source</th>
+            <th data-field="id" data-sortable="true" class="col-md-1">ID</th>
+            <th data-field="candidate_name" data-sortable="true" data-align="left" >Name</th>
+            <th data-field="source" data-sortable="true" class="col-md-1">Source</th>
             <th data-field="state" data-sortable="true">State</th>
             <th data-field="attachments" data-formatter="attachmentsListFormatter">Attachments</th>
             <th data-field="caveats" data-formatter="caveatsFormatter">Caveats</th>

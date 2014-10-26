@@ -78,8 +78,12 @@ function openLargeTd(element){
     }
 }
 
-function reloadData() {
-    $('#maintable').bootstrapTable('refresh', "{silent: true}");
+function reloadData(url) {
+    if (url !== undefined) {
+        $('#maintable').bootstrapTable('refresh', JSON.parse('{"url": "' + url + '"}'));
+    }
+    else
+        $('#maintable').bootstrapTable('refresh', "{silent: true}");
     addBottomBarToTd();
 }
 
