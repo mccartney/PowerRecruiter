@@ -79,4 +79,5 @@ function openLargeTd(element){
 
 function reloadData() {
     $('#maintable').bootstrapTable('refresh', "{silent: true}");
+    addBottomBarToTd();
 }
