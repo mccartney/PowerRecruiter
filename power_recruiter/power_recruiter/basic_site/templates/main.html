@@ -1,20 +1,18 @@
 {% extends "base_generic.html" %}
 {% load staticfiles %}
+
+{% block otherHeaders %}
+<link href="{% static 'dropzone/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
+<script src="{% static 'dropzone/dropzone.js' %}"></script>
+{% include "js/maintable.html" %}
+{% endblock %}
+
 {% block content %}
+
 {% for state in states %}
     <div class="stateCheckboxDiv"><input type="checkbox" class="stateCheckbox" name="{{ state }}" checked /> {{ state }}</div>
 {% endfor %}
-<script>
-    $('.stateCheckbox').change(function() {
-        url = {% url 'json' %} + '?dummy=1';
-        $('.stateCheckbox').each(function(){
-            if(!$(this).is(":checked")){
-                url += "&" + encodeURIComponent(this.name) + "=0";
-            }
-        });
-        reloadData(url);
-    });
-</script>
+
 <table id="maintable" data-toggle="table" data-url="{% url 'json' %}" data-cache="false" data-sort-name="price" data-sort-order="desc">
     <thead>
         <tr>
@@ -27,34 +25,5 @@
         </tr>
     </thead>
 </table>
-<script type="text/javascript" src="{% static "js/maintable.js" %}"></script>
-
-<link href="{% static 'dropzone/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
-<script src="{% static 'dropzone/dropzone.js' %}"></script>
-<script>
-function attachmentsListFormatter(value) {
-    toReturn = '<div class="innertd"><form id="my-awesome-dropzone" class="dropzone" action="{% url "upload" %}" method="post" enctype="multipart/form-data">drop file here to upload';
-    toReturn += "{% csrf_token %}";
-    toReturn += '<input type="hidden" class="personid" name="person" value="'+ $() +'"></form>';
-    i = 0;
-    value.forEach(function(){
-        toReturn += '<a href="candidate/attachment/get/' + value[i].pk + '">' + value[i].display_name + '</a><br>';
-        i++;
-    });
-    toReturn += "</div>";
-    return toReturn;
-}
-
-function caveatsFormatter(value) {
-    toReturn = '<div class="innertd"><textarea class="caveatsArea">' + value + '</textarea></div>';
-    return toReturn;
-}
-Dropzone.options.myAwesomeDropzone = {
-  init: function() {
-    this.on("addedfile", function(file) { window.setTimeout(reloadData, 1000); });
-  }
-};
-</script>
-
 
 {% endblock %}
