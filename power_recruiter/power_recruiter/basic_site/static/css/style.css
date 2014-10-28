@@ -1,18 +1,31 @@
+/* latin */
+@font-face {
+  font-family: 'Droid Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Droid Sans'), local('DroidSans'), url('./static/fonts/s-BiyweUPV0v-yRb-cjciCEAvth_LlrfE80CYdSH47w.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Droid Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Droid Sans Bold'), local('DroidSans-Bold'), url('./static/fonts/EFpQQyG9GqCrobXxL-KRMTvw3iLehEZ8Hqbhfrhp4xo.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
 body {
     padding-top: 50px;
     background-color: #F8F8F8;
 }
+
 .starter-template {
     padding: 40px 15px;
     text-align: center;
 }
 
-#top-navbar{
-    height: 55px;
-}
-
 #top-navbar a{
-    height: 55px;
     padding-top: 17px;
     font-family: 'Droid Sans', sans-serif;
     font-size: 16px;
@@ -23,6 +36,13 @@ body {
     table-layout:fixed;
     background-color: #FFF;
     border: 0;
+}
+
+#logo-container{
+    height: 50px;
+    overflow: visible;
+    position: relative;
+    width: 290px;
 }
 
 #maintable th{
@@ -73,7 +93,12 @@ body {
 .caveatsArea{
     resize: none;
     border: 0;
-    width: 160px;
+    width: 95%;
+}
+
+#chartContainer{
+    height: 600px;
+    width: 100%;
 }
 
 .stateCheckboxDiv{

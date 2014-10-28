@@ -1,38 +1,45 @@
 {% extends "base_generic.html" %}
 {% load staticfiles %}
+
+{% block otherHeaders %}
+<script type="text/javascript" src="{% static "charts/d3.v3.min.js" %}"></script>
+<script type="text/javascript" src="{% static "charts/d3.tip.v0.6.3.js" %}"></script>
+<script type="text/javascript" src="{% static "charts/draw.js" %}"></script>
+{% endblock %}
+
 {% block content %}
 <script type="text/javascript">
 window.onload = function () {
-	var chart = new CanvasJS.Chart("chartContainer",
-	{
-		title:{
-			text: "Candidates Chart"
-		},
-		legend:{
-			verticalAlign: "bottom",
-			horizontalAlign: "center"
-		},
-		data: [
-		{
-			indexLabelFontSize: 20,
-			indexLabelFontFamily: "Monospace",
-			indexLabelFontColor: "darkgrey",
-			indexLabelLineColor: "darkgrey",
-			indexLabelPlacement: "outside",
-			type: "pie",
-			showInLegend: true,
-			toolTipContent: "{y} - <strong>#percent%</strong>",
-			dataPoints: [
-				{% for s in spices %}
+    var chart = new CanvasJS.Chart("chartContainer",
+    {
+        title:{
+            text: "Candidates Chart"
+        },
+        legend:{
+            verticalAlign: "bottom",
+            horizontalAlign: "center"
+        },
+        data: [
+        {
+            indexLabelFontSize: 20,
+            indexLabelFontFamily: "Monospace",
+            indexLabelFontColor: "darkgrey",
+            indexLabelLineColor: "darkgrey",
+            indexLabelPlacement: "outside",
+            type: "pie",
+            showInLegend: true,
+            toolTipContent: "{y} - <strong>#percent%</strong>",
+            dataPoints: [
+                {% for s in spices %}
                     { y: {{ s.num }}, legendText:"{{ s.name }}", indexLabel: "{{ s.name }}" },
                 {% endfor %}
-			]
-		}
-		]
-	});
-	chart.render();
+            ]
+        }
+        ]
+    });
+    chart.render();
 }
 </script>
-<div id="chartContainer" style="height: 600px; width: 100%;"></div>
+<div id="chartContainer"></div>
 
 {% endblock %}
