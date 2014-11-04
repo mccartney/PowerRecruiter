@@ -94,6 +94,8 @@ body {
     resize: none;
     border: 0;
     width: 95%;
+    height: 0;
+    position: relative;
 }
 
 #chartContainer{
@@ -105,4 +107,8 @@ body {
     display: inline-block;
     padding-right: 50px;
     padding-bottom: 10px;
+}
+
+.lessPaddingTd{
+    padding-bottom: 0px !important;
 }
