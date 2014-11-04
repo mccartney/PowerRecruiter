@@ -4,7 +4,6 @@
 {% block otherHeaders %}
 <link href="{% static 'dropzone/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
 <script src="{% static 'dropzone/dropzone.js' %}"></script>
-{% include "js/maintable.html" %}
 {% endblock %}
 
 {% block content %}
@@ -21,9 +20,11 @@
             <th data-field="source" data-sortable="true" class="col-md-1">Source</th>
             <th data-field="state" data-sortable="true">State</th>
             <th data-field="attachments" data-formatter="attachmentsListFormatter">Attachments</th>
-            <th data-field="caveats" data-formatter="caveatsFormatter">Caveats</th>
+            <th data-field="caveats" data-formatter="caveatsFormatter" data-cell-style="caveatsTdStyle">Caveats</th>
         </tr>
     </thead>
 </table>
+
+{% include "js/maintable.html" %}
 
 {% endblock %}

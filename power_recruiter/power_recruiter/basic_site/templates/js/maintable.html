@@ -49,7 +49,6 @@
                 haveBottomBar = false;
                 currentTr = $(this);
                 $(this).find('td div.innertd').each(function () {
-                    oldHeight = $(this).css('height');
                     $(this).addClass('large-inner-div');
                     autoHeight = $(this).parent().height();
                     $(this).removeClass('large-inner-div');
@@ -143,5 +142,11 @@
             this.on("addedfile", function(file) { window.setTimeout(reloadData, 1000); });
         }
     };
+
+    function caveatsTdStyle(row, index){
+        return {
+                classes: 'lessPaddingTd'
+            };
+    }
 
 </script>
