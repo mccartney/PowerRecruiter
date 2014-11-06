@@ -173,12 +173,16 @@ def add_candidate(request):
     names = args[0].split(' ')
     first_name = names[0]
     last_name = names[-1]
-    Person.objects.create_person(
-        first_name,
-        last_name,
-        args[2]
-    )
-    return HttpResponse(200, content_type="plain/text")
+    if Person.objects.filter(first_name=first_name, last_name=last_name).exists():
+        person = Person.objects.filter(first_name=first_name, last_name=last_name).first()
+        return HttpResponse(status=418, content_type="plain/text", content=person.state)
+    else:
+        Person.objects.create_person(
+            first_name,
+            last_name,
+            args[2]
+        )
+        return HttpResponse(status=200, content=200, content_type="plain/text")
 
 
 def stats(request):
