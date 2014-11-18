@@ -15,7 +15,7 @@ function loadProfile(elem) {
           var notifications = require("sdk/notifications");
           notifications.notify({
             title: "PowerRecruiter",
-            text: "Użytnik istnieje, stautse: " + response.text
+            text: "Użytnik istnieje, status: " + response.text
           });
         }
        }
