@@ -9,19 +9,21 @@ class RecruitmentState(models.Model):
     def __unicode__(self):
         return self.name
 
-
-class SourceManager(models.Manager):
-    def create_source(self, name):
-        source = self.create(name=name)
-        return source
-
-
 class Source(models.Model):
-    name = models.CharField(max_length=100, default='')
-    objects = SourceManager()
+    linkedin = models.URLField(null=True, unique=True)
+    goldenline = models.URLField(null=True, unique=True)
+    email = models.EmailField(null=True, unique=True)
 
     def __unicode__(self):
-        return self.name
+	toReturn = "";
+	if linkedin is not None:
+	    toReturn += linkedin;        
+	if goldenline is not None:
+	    toReturn += goldenline;        
+	if email is not None:
+	    toReturn += email;        
+		
+	return toReturn
 
 
 class Role(models.Model):

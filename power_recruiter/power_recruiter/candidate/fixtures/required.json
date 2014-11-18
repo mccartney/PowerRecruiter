@@ -18,7 +18,7 @@
         "name": "LinkedIn"}
     },
     {"pk": 1, "model": "candidate.Source", "fields": {
-        "name": "http://google.com/"}
+        "linkedin": "http://google.com/"}
     },
     {"pk": 1, "model": "candidate.Person", "fields": {
         "first_name": "Krzysztof",

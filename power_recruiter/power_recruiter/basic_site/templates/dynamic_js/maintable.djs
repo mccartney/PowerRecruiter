@@ -112,6 +112,29 @@
         reloadData(url);
     });
 
+    function stateImage(imgSrc, link) {
+	iconHiddenClass = "";		
+	hrefBegin = "";
+	hrefEnd = "";	
+	if(link == null)
+	    iconHiddenClass = "icon-hidden";
+	else
+	{	
+	    hrefBegin = '<a href="' + link + '">';
+	    hrefEnd = "</a>";
+	} 
+	return hrefBegin + '<img class="source-icon ' + iconHiddenClass + '" src="' + imgSrc+ '">' + hrefEnd;
+    }
+
+    function stateFormatter(value) {
+	console.log(value);
+	toReturn = "";
+	toReturn += stateImage("static/img/icon_linkedin.png", value.linkedin);
+	toReturn += stateImage("static/img/icon_goldenline.png", value.goldenline);
+	toReturn += stateImage("static/img/icon_email.png", value.email);	
+	return toReturn;
+    }
+
     function attachmentsListFormatter(value) {
         toReturn = '<div class="innertd">';
         toReturn += '<form id="my-awesome-dropzone" class="dropzone" action="{% url "upload" %}" method="post" enctype="multipart/form-data">';

@@ -17,7 +17,7 @@
         <tr>
             <th data-field="id" data-sortable="true" class="col-md-1">ID</th>
             <th data-field="candidate_name" data-sortable="true" data-align="left" >Name</th>
-            <th data-field="source" data-sortable="true" class="col-md-1">Source</th>
+            <th data-field="source" data-sortable="true" data-formatter="stateFormatter" class="col-md-1">Source</th>
             <th data-field="state" data-sortable="true">State</th>
             <th data-field="attachments" data-formatter="attachmentsListFormatter">Attachments</th>
             <th data-field="caveats" data-formatter="caveatsFormatter" data-cell-style="caveatsTdStyle">Caveats</th>
@@ -25,6 +25,6 @@
     </thead>
 </table>
 
-{% include "js/maintable.html" %}
+{% include "dynamic_js/maintable.djs" %}
 
 {% endblock %}

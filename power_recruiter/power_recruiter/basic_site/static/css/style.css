@@ -112,3 +112,22 @@ body {
 .lessPaddingTd{
     padding-bottom: 0px !important;
 }
+
+.source-icon{
+    padding-right: 3px;
+}
+
+.source-icon:hover{
+    padding-right: 3px;
+    position: relative;
+    top: -3px;
+}
+
+.icon-hidden{
+    opacity: 0.3;
+}
+
+.icon-hidden:hover{
+    top: 0 !important;
+}
+

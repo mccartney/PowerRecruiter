@@ -70,19 +70,11 @@ def candidate_json(request):
                 'pk': a.pk
             } for a in Attachment.objects.filter(person_id=p.pk)
         ]
-        source = p.source.name
-        if 'http' in p.source.name:
-            source = '<a href=' + p.source.name + '>'
-            if 'linkedin' in p.source.name:
-                source += '<img style="width:38px; height:38px" ' \
-                          'src="http://www.socialtalent.co/wp-content/' \
-                          'uploads/2014/07/LinkedIn_logo_initials.png">'
-            else:
-                if 'goldenline' in p.source.name:
-                    source += 'goldenLine'
-                else:
-                    source += 'link'
-            source += '</a>'
+	source = {
+	    'linkedin': p.source.linkedin,
+	    'goldenline': p.source.goldenline,
+	    'email': p.source.email
+	}
         state = ''
         if p.state_id in [1, 3]:
             state += '<a href="#up" id="upButton' + str(p.pk) + '">' \
