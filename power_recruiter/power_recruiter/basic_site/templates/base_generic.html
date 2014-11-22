@@ -1,25 +1,24 @@
 {% load staticfiles %}
 {% load bootstrap3 %}
-<!DOCTYPE html>
 <html>
     <head lang="pl">
         <meta charset="UTF-8">
         <title>Power Recruiter</title>
 
         <!-- JQUERY -->
-        <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+        <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
 
         <!-- OTHER JAVASCRIPT -->
-        <script type="text/javascript" src="{% static "js/menuActive.js" %}"></script>
-        <script type="text/javascript" src="{% static "js/globalFunctions.js" %}"></script>
-        <script type="text/javascript" src="{% static "bootstrap/bootstrap.min.js" %}"></script>
-        <script type="text/javascript" src="{% static "bootstrap_table/bootstrap-table.js" %}"></script>
-        <script type="text/javascript" src="{% static "autosize/jquery.autosize.js" %}"></script>
+        <script type="text/javascript" src="{% static 'js/menuActive.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/globalFunctions.js' %}"></script>
+        <script type="text/javascript" src="{% static 'bootstrap/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'bootstrap_table/bootstrap-table.js' %}"></script>
+        <script type="text/javascript" src="{% static 'autosize/jquery.autosize.js' %}"></script>
 
         <!-- CSS -->
-        <link href="{% static "bootstrap/bootstrap.min.css" %}" media="screen" rel="stylesheet">
-        <link href="{% static "css/style.css" %}" media="screen" rel="stylesheet">
-        <link href="{% static "bootstrap_table/bootstrap-table.css" %}" media="screen" rel="stylesheet">
+        <link href="{% static 'bootstrap/bootstrap.min.css' %}" media="screen" rel="stylesheet">
+        <link href="{% static 'css/style.css' %}" media="screen" rel="stylesheet">
+        <link href="{% static 'bootstrap_table/bootstrap-table.css' %}" media="screen" rel="stylesheet">
 
         {% block otherHeaders %}{% endblock %}
     </head>

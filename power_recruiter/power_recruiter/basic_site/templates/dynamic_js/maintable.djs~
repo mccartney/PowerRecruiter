@@ -10,8 +10,7 @@
             if(!$element.hasClass('maintable-row-large')) {
                 openLargeTd($element);
                 currentlyOpenedId = $element.children().first().text();
-            }
-            else{
+            } else {
                 closedAll = true;
             }
 
@@ -27,8 +26,7 @@
                 currentlyOpened = null;
                 closedAll = false;
                 currentlyOpenedId = null
-            }
-            else{
+            } else {
                 currentlyOpened = $element;
             }
         })
@@ -78,9 +76,9 @@
     function reloadData(url) {
         if (url !== undefined) {
             $('#maintable').bootstrapTable('refresh', JSON.parse('{"url": "' + url + '"}'));
-        }
-        else
+        } else {
             $('#maintable').bootstrapTable('refresh', "{silent: true}");
+        }
         reloadTable();
     }
 
@@ -89,25 +87,22 @@
             $('textarea').autosize();
         });
         $('textarea').bind('input propertychange', function() {
-            id = $(this).attr('id').substr('caveats-'.length, $(this).attr('id').lenght);
+            id = $(this).attr('id').substr('caveats-'.length, $(this).attr('id').length);
             content = $(this).val();
             $.post( "/candidate/caveats/upload/", { id: id, caveats: content });
         });
         $('textarea').click(function(){
             if($(this).parents('.maintable-row-large').length)
-            {
                 return false;
-            }
-        })
+        });
         return true;
     }
 
     $('.stateCheckbox').change(function() {
         url = {% url 'json' %} + '?dummy=1';
         $('.stateCheckbox').each(function(){
-            if(!$(this).is(":checked")){
+            if(!$(this).is(":checked"))
                 url += "&" + encodeURIComponent(this.name) + "=0";
-            }
         });
         reloadData(url);
     });
@@ -165,8 +160,8 @@
 
     function caveatsTdStyle(row, index){
         return {
-                classes: 'lessPaddingTd'
-            };
+            classes: 'lessPaddingTd'
+        };
     }
 
 </script>
