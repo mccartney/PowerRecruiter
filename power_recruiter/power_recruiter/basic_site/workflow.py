@@ -1,5 +1,3 @@
-# https://www.python.org/doc/essays/graphs/
-
 WORKFLOW_STATES = {
     0: 'NULL',
     1: 'Rejected',
@@ -40,3 +38,7 @@ def get_previous_nodes(node):
 
 def get_states_list():
     return WORKFLOW_STATES.values()
+
+
+def node_number_to_name(node):
+    return WORKFLOW_STATES[node]

@@ -1,6 +1,8 @@
 from django.utils import timezone
 from django.db.models import Manager, Model, CharField, ForeignKey, \
-    FileField, DateField, TextField, URLField, EmailField
+    FileField, DateField, TextField, URLField, EmailField, IntegerField
+
+from power_recruiter.basic_site.workflow import WORKFLOW_STATES
 
 
 class SourceManager(Manager):
@@ -65,6 +67,10 @@ class Person(Model):
     first_name = CharField(max_length=100)
     last_name = CharField(max_length=100)
     date_created = DateField(default=timezone.now)
+    state = IntegerField(
+        choices=((k, v) for k, v in WORKFLOW_STATES.iteritems()),
+        default=0
+    )
     source = ForeignKey(Source)
     role = ForeignKey(Role, blank=True, null=True)
     comm = ForeignKey(Communication)

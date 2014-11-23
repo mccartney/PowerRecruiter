@@ -11,8 +11,9 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from power_recruiter.candidate.models import Attachment, Person, \
-    RecruitmentState
+from power_recruiter.candidate.models import Attachment, Person
+from power_recruiter.basic_site.workflow import WORKFLOW_STATES, \
+    get_next_nodes, get_previous_nodes, node_number_to_name
 
 
 LOGGING = {
@@ -51,16 +52,9 @@ def candidate_json(request):
 
     persons = Person.objects.all()
 
-    if request.GET.get('Awaiting contact', 0):
-        persons = persons.exclude(state_id=1)
-    if request.GET.get('Contact rejected', 0):
-        persons = persons.exclude(state_id=2)
-    if request.GET.get('Awaiting meeting', 0):
-        persons = persons.exclude(state_id=3)
-    if request.GET.get('Rejected', 0):
-        persons = persons.exclude(state_id=4)
-    if request.GET.get('Hired', 0):
-        persons = persons.exclude(state_id=5)
+    for k in WORKFLOW_STATES.keys():
+        if request.GET.get(str(k), False):
+            persons = persons.exclude(state=k)
 
     resp = []
     for p in persons:
@@ -70,39 +64,36 @@ def candidate_json(request):
                 'pk': a.pk
             } for a in Attachment.objects.filter(person_id=p.pk)
         ]
-	source = {
-	    'linkedin': p.source.linkedin,
-	    'goldenline': p.source.goldenline,
-	    'email': p.source.email
-	}
+        source = {
+            'linkedin': p.source.linkedin,
+            'goldenline': p.source.goldenline,
+            'email': p.source.email
+        }
+        previous_states = map(node_number_to_name, get_previous_nodes(p.state))
+        next_states = map(node_number_to_name, get_next_nodes(p.state))
         state = ''
-        if p.state_id in [1, 3]:
+        state_name = WORKFLOW_STATES[p.state]
+        if previous_states:
+            state += '<a href="#down" id="downButton' + str(p.pk) + '">'\
+                     '<img src="/static/img/boltdown.png">' \
+                     '</a>' \
+                     '<script>$(function(){ $("#downButton' + str(p.pk) + \
+                     '").popover({content: "'
+            popover_content = '<p>' + '</p><p>'.join(previous_states) + '</p>'
+            state += popover_content
+            state += '", placement: "left", trigger: "focus",' + \
+                     'html: true});});</script>'
+        state += state_name
+        if next_states:
             state += '<a href="#up" id="upButton' + str(p.pk) + '">' \
                      '<img src="/static/img/bolt.png">' \
                      '</a>' \
-                     '<script>$("#upButton' + str(p.pk) + \
-                     '").click(function(){' \
-                     '$.get( "candidate/up/' + str(p.pk) + '", function() {'\
-                     'reloadData();' \
-                     '});' \
-                     '});</script>'\
-                     + p.state.name + \
-                     '<a href="#down" id="downButton' + str(p.pk) + '">'\
-                     '<img src="/static/img/boltdown.png">' \
-                     '</a>' \
-                     '<script>$("#downButton' + str(p.pk) + \
-                     '").click(function(){' \
-                     '$.get( "candidate/down/' + str(p.pk) + \
-                     '", function() {' \
-                     'reloadData();' \
-                     '});' \
-                     '});</script>'
-        else:
-            if "Hired" in p.state.name:
-                state = "<span style='color: #419E16'>" + p.state.name + \
-                        "</span>"
-            else:
-                state = "<span style='color: #F00'>" + p.state.name + "</span>"
+                     '<script>$(function(){ $("#upButton' + str(p.pk) + \
+                     '").popover({content: "'
+            popover_content = '<p>' + '</p><p>'.join(next_states) + '</p>'
+            state += popover_content
+            state += '", placement: "right", trigger: "focus",' + \
+                     'html: true});});</script>'
         resp.append({
             'id': p.pk,
             'candidate_name': p.first_name + ' ' + p.last_name,
@@ -145,14 +136,14 @@ def upload(request):
 
 def up(request, candidate_id):
     person = Person.objects.get(id=candidate_id)
-    person.state_id += 2
+    person.state += 2
     person.save()
     return HttpResponse(200, content_type="plain/text")
 
 
 def down(request, candidate_id):
     person = Person.objects.get(id=candidate_id)
-    person.state_id += 1
+    person.state += 1
     person.save()
     return HttpResponse(200, content_type="plain/text")
 
@@ -165,9 +156,19 @@ def add_candidate(request):
     names = args[0].split(' ')
     first_name = names[0]
     last_name = names[-1]
-    if Person.objects.filter(first_name=first_name, last_name=last_name).exists():
-        person = Person.objects.filter(first_name=first_name, last_name=last_name).first()
-        return HttpResponse(status=418, content_type="plain/text", content=person.state)
+    if Person.objects.filter(
+            first_name=first_name,
+            last_name=last_name
+    ).exists():
+        person = Person.objects.filter(
+            first_name=first_name,
+            last_name=last_name
+        ).first()
+        return HttpResponse(
+            status=418,
+            content_type="plain/text",
+            content=person.state
+        )
     else:
         Person.objects.create_person(
             first_name,
@@ -178,11 +179,10 @@ def add_candidate(request):
 
 
 def stats(request):
-    states = RecruitmentState.objects.all()
     context = {
         'spices': [{
-            'num': len(Person.objects.filter(state=s.pk)),
-            'name': s.name
-        } for s in states]
+            'num': len(Person.objects.filter(state=k)),
+            'name': v
+        } for k, v in WORKFLOW_STATES.iteritems()]
     }
     return render(request, "stats.html", context)
