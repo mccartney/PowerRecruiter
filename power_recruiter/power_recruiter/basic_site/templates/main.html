@@ -8,8 +8,10 @@
 
 {% block content %}
 
-{% for state in states %}
-    <div class="stateCheckboxDiv"><input type="checkbox" class="stateCheckbox" name="{{ state }}" checked /> {{ state }}</div>
+{% for k, v in states.iteritems %}
+    <div class="stateCheckboxDiv">
+        <input type="checkbox" class="stateCheckbox" name="{{ k }}" checked />{{ v }}
+    </div>
 {% endfor %}
 
 <table id="maintable" data-toggle="table" data-url="{% url 'json' %}" data-cache="false" data-sort-name="price" data-sort-order="desc">
@@ -25,6 +27,6 @@
     </thead>
 </table>
 
-{% include "dynamic_js/maintable.djs" %}
+{% include "js/maintable.html" %}
 
 {% endblock %}
