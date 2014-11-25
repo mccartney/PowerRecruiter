@@ -29,3 +29,9 @@ function caveatsFormatter(value) {
     toReturn = '<div class="innertd"><textarea class="caveatsArea">' + value + '</textarea></div>';
     return toReturn;
 }
+
+function nameFormatter(value) {
+    var nameField = new NameField(value.candidateId, value.candidateName);
+    setTimeout(function () { nameField.updateEventListeners() }, 100);
+    return nameField;
+}

@@ -7,6 +7,9 @@
 
 <script src="{% static 'js/stateIcon.js' %}"></script>
 <script src="{% static 'js/tableFormatters.js' %}"></script>
+    <script src="{% static 'js/tableSorters.js' %}"></script>
+<script src="{% static 'js/tableReload.js' %}"></script>
+<script src="{% static 'js/dataManagement/editName.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -17,11 +20,11 @@
     </div>
 {% endfor %}
 
-<table id="maintable" data-toggle="table" data-url="{% url 'json' %}" data-cache="false" data-sort-name="price" data-sort-order="desc">
+<table id="maintable" data-toggle="table" data-url="{% url 'json' %}" data-cache="false" data-sort-name="id" data-sort-order="desc">
     <thead>
         <tr>
             <th data-field="id" data-sortable="true" class="col-md-1">ID</th>
-            <th data-field="candidate_name" data-sortable="true" data-align="left" >Name</th>
+            <th data-field="candidateName" data-formatter="nameFormatter" data-sortable="true" data-sorter="nameSorter" data-align="left">Name</th>
             <th data-field="contact" data-formatter="contactFormatter" class="col-md-1" data-align="center">Contact</th>
             <th data-field="state" data-sortable="true" data-align="center">State</th>
             <th data-field="attachments" data-formatter="attachmentsListFormatter" data-align="center">Attachments</th>
