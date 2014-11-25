@@ -20,6 +20,12 @@ body {
     background-color: #F8F8F8;
 }
 
+input[type=text], textarea {
+    border: 0;
+    background-color: #FCFCFC;
+    padding: 4px;
+}
+
 .starter-template {
     padding: 40px 15px;
     text-align: center;
@@ -92,7 +98,6 @@ body {
 
 .caveatsArea{
     resize: none;
-    border: 0;
     width: 95%;
     height: 0;
     position: relative;
@@ -137,4 +142,51 @@ body {
 
 #my-awesome-dropzone{
     margin-bottom: 3px;
+}
+
+.edit-pencil{
+    font-size: 12px;
+    color: #93b1ff;
+    margin-left: 8px;
+    position: relative;
+    top: -1px;
+    display: none;
+}
+
+.edit-ok{
+    font-size: 14px;
+    color: #00b82b;
+    margin-left: 12px;
+    position: relative;
+    top: -1px;
+}
+
+.edit-ok:hover{
+    color: #0F0;
+}
+
+.edit-remove{
+    font-size: 14px;
+    color: #9a0000;
+    margin-left: 10px;
+    position: relative;
+    top: -1px;
+}
+
+.edit-remove:hover{
+    color: #F00;
+}
+
+.edit-pencil:hover {
+    color: #2250c6;
+}
+
+.changeNameInput{
+    width: 160px;
+}
+
+.changeNameOkButton{
+    margin-left: 5px;
+    top: -1px;
+    position: relative;
 }

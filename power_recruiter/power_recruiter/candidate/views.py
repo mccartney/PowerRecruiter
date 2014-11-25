@@ -58,12 +58,11 @@ def candidate_json(request):
 
     resp = []
     for p in persons:
-        attachments = [
-            {
-                'display_name': str(a),
-                'pk': a.pk
-            } for a in Attachment.objects.filter(person_id=p.pk)
-        ]
+        candidateName = {
+            'candidateId': p.pk,
+            'candidateName': str(p)
+        }
+
         contact = {
             'candidateId': p.pk,
             'candidateName': str(p),
@@ -71,6 +70,14 @@ def candidate_json(request):
             'goldenline': p.contact.goldenline,
             'email': p.contact.email
         }
+
+        attachments = [
+            {
+                'display_name': str(a),
+                'pk': a.pk
+            } for a in Attachment.objects.filter(person_id=p.pk)
+        ]
+
         previous_states = map(node_number_to_name, get_previous_nodes(p.state))
         next_states = map(node_number_to_name, get_next_nodes(p.state))
         state = ''
@@ -98,7 +105,7 @@ def candidate_json(request):
                      'html: true});});</script>'
         resp.append({
             'id': p.pk,
-            'candidate_name': str(p),
+            'candidateName': candidateName,
             'contact': contact,
             'state': state,
             'attachments': attachments,
