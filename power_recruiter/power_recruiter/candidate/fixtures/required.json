@@ -1,20 +1,21 @@
 [
     {
         "pk": 1,
-        "model": "candidate.Communication", "fields": {
-            "name": "LinkedIn"
+        "model": "candidate.Contact", "fields": {
+            "linkedin": "https://www.linkedin.com/pub/krzysztof-fudali/a7/3ab/384",
+            "email": "krzysztof@fudali.com"
         }
     },
     {
-        "pk": 1,
-        "model": "candidate.Source", "fields": {
-            "linkedin": "http://google.com/"
+        "pk": 2,
+        "model": "candidate.Contact", "fields": {
+            "linkedin": "https://www.linkedin.com/pub/kamila-kruk/9a/564/155?trk=pub-pbmap"
         }
     },
     {
-        "pk": 1,
-        "model": "candidate.Communication", "fields": {
-            "name": "LinkedIn"
+        "pk": 3,
+        "model": "candidate.Contact", "fields": {
+            "goldenline": "http://www.goldenline.pl/jan-kowalski60/"
         }
     },
     {
@@ -22,175 +23,29 @@
             "first_name": "Krzysztof",
             "last_name": "Fudali",
             "date_created": "2014-04-01",
-            "state": 1,
-            "comm": 1,
-            "source": 1,
+            "state": 2,
+            "contact": 1,
             "caveats": "Good programmer!"
         }
     },
     {
-      "pk": 2, "model": "candidate.Person", "fields": {
-            "first_name": "Andrzej",
-            "last_name": "Shadowsword",
-            "date_created": "2014-04-01",
-            "state": 5,
-            "comm": 1,
-            "source": 1,
-            "caveats": "He knows how to turn on computer"
-        }
-    },
-    {
-      "pk": 3, "model": "candidate.Person", "fields": {
-            "first_name": "Koń",
-            "last_name": "",
-            "date_created": "2014-04-01",
-            "state": 3,
-            "comm": 1,
-            "source": 1,
-            "caveats": "He's beggin' for a job"
-        }
-    },
-    {
-      "pk": 4, "model": "candidate.Person", "fields": {
-            "first_name": "Bożena",
-            "last_name": " ",
-            "date_created": "2014-04-01",
-            "state": 2,
-            "comm": 1,
-            "source": 1,
-            "caveats": "bożenka z cyganem za rękę chadza"
-        }
-    },
-    {
-      "pk": 5, "model": "candidate.Person", "fields": {
-            "first_name": "Wojtek",
-            "last_name": "Kadłubek",
-            "date_created": "2014-04-01",
-            "state": 2,
-            "comm": 1,
-            "source": 1,
-            "caveats": "Ma trudności z pisaniem na klawiaturze"
-        }
-    },
-    {
-      "pk": 6, "model": "candidate.Person", "fields": {
-            "first_name": "Some Stupid",
-            "last_name": "Guy",
-            "date_created": "2014-04-01",
-            "state": 3,
-            "comm": 1,
-            "source": 1,
-            "caveats": ""
-        }
-    },
-    {
-      "pk": 7, "model": "candidate.Person", "fields": {
-            "first_name": "Maciek",
-            "last_name": "z klanu",
-            "date_created": "2014-04-01",
+        "pk": 2, "model": "candidate.Person", "fields": {
+            "first_name": "Kamila",
+            "last_name": "Kruk",
+            "date_created": "2014-04-08",
             "state": 4,
-            "comm": 1,
-            "source": 1,
+            "contact": 2,
             "caveats": ""
         }
     },
     {
-      "pk": 8, "model": "candidate.Person", "fields": {
-            "first_name": "Hanka",
-            "last_name": "z klanu",
-            "date_created": "2014-04-01",
-            "state": 4,
-            "comm": 1,
-            "source": 1,
+        "pk": 3, "model": "candidate.Person", "fields": {
+            "first_name": "Jan",
+            "last_name": "Kowalski",
+            "date_created": "2014-04-08",
+            "state": 3,
+            "contact": 3,
             "caveats": ""
-        }
-    },
-    {
-      "pk": 9, "model": "candidate.Person", "fields": {
-          "first_name": "Hanka",
-          "last_name": "z kartonu",
-          "date_created": "2014-04-01",
-          "state": 1,
-          "comm": 1,
-          "source": 1,
-          "caveats": "Mieszka w kartonie, ciężko z nią"
-        }
-    },
-    {
-      "pk": 10, "model": "candidate.Person", "fields": {
-          "first_name": "Maciek",
-          "last_name": "z klanu",
-          "date_created": "2014-04-01",
-          "state": 2,
-          "comm": 1,
-          "source": 1,
-          "caveats": ""
-        }
-    },
-    {
-      "pk": 11, "model": "candidate.Person", "fields": {
-          "first_name": "Łysy",
-          "last_name": "",
-          "date_created": "2014-04-01",
-          "state": 5,
-          "comm": 1,
-          "source": 1,
-          "caveats": "nie myje włosów"
-        }
-    },
-    {
-      "pk": 12, "model": "candidate.Person", "fields": {
-          "first_name": "Janusz",
-          "last_name": "Janusz",
-          "date_created": "2014-04-01",
-          "state": 6,
-          "comm": 1,
-          "source": 1,
-          "caveats": "nie myje włosów"
-        }
-    },
-    {
-      "pk": 13, "model": "candidate.Person", "fields": {
-          "first_name": "Grażyna",
-          "last_name": "Janusz",
-          "date_created": "2014-04-01",
-          "state": 7,
-          "comm": 1,
-          "source": 1,
-          "caveats": "nie myje włosów"
-        }
-    },
-    {
-      "pk": 14, "model": "candidate.Person", "fields": {
-          "first_name": "Maciek",
-          "last_name": "Janusz",
-          "date_created": "2014-04-01",
-          "state": 8,
-          "comm": 1,
-          "source": 1,
-          "caveats": "nie myje włosów"
-        }
-    },
-    {
-      "pk": 15, "model": "candidate.Person", "fields": {
-          "first_name": "Łysy",
-          "last_name": "Janusz",
-          "date_created": "2014-04-01",
-          "state": 9,
-          "comm": 1,
-          "source": 1,
-          "caveats": "nie myje włosów"
-        }
-    },
-    {
-      "pk": 16, "model": "candidate.Person", "fields": {
-          "first_name": "Andrzej",
-          "last_name": "Janusz",
-          "date_created": "2014-04-01",
-          "state": 10,
-          "comm": 1,
-          "source": 1,
-          "caveats": "nie myje włosów"
         }
     }
 ]
