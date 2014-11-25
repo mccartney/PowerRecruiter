@@ -114,13 +114,13 @@ body {
 }
 
 .source-icon{
-    padding-right: 3px;
+    margin-right: 4px;
+    border-radius: 1px;
 }
 
 .source-icon:hover{
-    padding-right: 3px;
     position: relative;
-    top: -3px;
+    top: -2px;
 }
 
 .icon-hidden{
@@ -135,3 +135,6 @@ body {
     height: auto !important;
 }
 
+#my-awesome-dropzone{
+    margin-bottom: 3px;
+}

@@ -118,7 +118,7 @@
     });
 
     attachmentsListFormatter = function (value) {
-        return attachmentsListFormatterWithoutCSRF(value, "{% csrf_token %}");
+        return attachmentsListFormatterWithoutCSRF(value, "{% url "upload" %}", "{% csrf_token %}");
     }
 
     Dropzone.options.myAwesomeDropzone = {

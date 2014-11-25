@@ -1,6 +1,6 @@
-function attachmentsListFormatterWithoutCSRF(value, csrfToken) {
+function attachmentsListFormatterWithoutCSRF(value, uploadUrl, csrfToken) {
     toReturn = '<div class="innertd">';
-    toReturn += '<form id="my-awesome-dropzone" class="dropzone" action="{% url "upload" %}" method="post" enctype="multipart/form-data">';
+    toReturn += '<form id="my-awesome-dropzone" class="dropzone" action="' + uploadUrl +'" method="post" enctype="multipart/form-data">';
     toReturn += 'drop file here to upload';
     toReturn += csrfToken;
     toReturn += '<input type="hidden" class="personid" name="person" value="'+ $() +'">';
