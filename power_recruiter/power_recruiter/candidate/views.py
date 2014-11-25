@@ -64,10 +64,12 @@ def candidate_json(request):
                 'pk': a.pk
             } for a in Attachment.objects.filter(person_id=p.pk)
         ]
-        source = {
-            'linkedin': p.source.linkedin,
-            'goldenline': p.source.goldenline,
-            'email': p.source.email
+        contact = {
+            'candidateId': p.pk,
+            'candidateName': str(p),
+            'linkedin': p.contact.linkedin,
+            'goldenline': p.contact.goldenline,
+            'email': p.contact.email
         }
         previous_states = map(node_number_to_name, get_previous_nodes(p.state))
         next_states = map(node_number_to_name, get_next_nodes(p.state))
@@ -96,10 +98,9 @@ def candidate_json(request):
                      'html: true});});</script>'
         resp.append({
             'id': p.pk,
-            'candidate_name': p.first_name + ' ' + p.last_name,
-            'source': source,
+            'candidate_name': str(p),
+            'contact': contact,
             'state': state,
-            'comm': p.comm.name,
             'attachments': attachments,
             'caveats': p.caveats,
         })

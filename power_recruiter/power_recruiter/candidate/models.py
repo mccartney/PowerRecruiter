@@ -5,30 +5,26 @@ from django.db.models import Manager, Model, CharField, ForeignKey, \
 from power_recruiter.basic_site.workflow import WORKFLOW_STATES
 
 
-class SourceManager(Manager):
-    def create_source(self, name):
-        if "linkedin" in name:
-            source = self.create(linkedin=name)
-            return source
+class ContactManager(Manager):
+    def create_contact(self, link):
+        if "linkedin" in link:
+            communication = self.create(linkedin=link)
+            return communication
 
-        if "goldenline" in name:
-            source = self.create(goldenline=name)
-            return source
+        if "goldenline" in link:
+            communication = self.create(goldenline=link)
+            return communication
 
-        if "@" in name:
-            source = self.create(email=name)
-            return source
-
-        source = self.create()
-        return source
+        contact = self.create()
+        return contact
 
 
-class Source(Model):
+class Contact(Model):
     linkedin = URLField(null=True, unique=True)
     goldenline = URLField(null=True, unique=True)
     email = EmailField(null=True, unique=True)
 
-    objects = SourceManager()
+    objects = ContactManager()
 
     def __unicode__(self):
         return u"".join([
@@ -45,20 +41,12 @@ class Role(Model):
         return self.name
 
 
-class Communication(Model):
-    name = CharField(max_length=100, default='')
-
-    def __unicode__(self):
-        return self.name
-
-
 class PersonManager(Manager):
-    def create_person(self, first_name, last_name, source):
+    def create_person(self, first_name, last_name, link):
         person = self.create(
-            first_name=first_name,
-            last_name=last_name,
-            comm=Communication.objects.get(pk=1),
-            source=Source.objects.create_source(source)
+            first_name = first_name,
+            last_name = last_name,
+            contact = Contact.objects.create_contact(link)
         )
         return person
 
@@ -71,9 +59,8 @@ class Person(Model):
         choices=((k, v) for k, v in WORKFLOW_STATES.iteritems()),
         default=0
     )
-    source = ForeignKey(Source)
+    contact = ForeignKey(Contact)
     role = ForeignKey(Role, blank=True, null=True)
-    comm = ForeignKey(Communication)
     caveats = TextField(max_length=1000, blank=True)
 
     objects = PersonManager()

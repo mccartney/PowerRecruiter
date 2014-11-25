@@ -4,6 +4,9 @@
 {% block otherHeaders %}
 <link href="{% static 'dropzone/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
 <script src="{% static 'dropzone/dropzone.js' %}"></script>
+
+<script src="{% static 'js/stateIcon.js' %}"></script>
+<script src="{% static 'js/tableFormatters.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -19,7 +22,7 @@
         <tr>
             <th data-field="id" data-sortable="true" class="col-md-1">ID</th>
             <th data-field="candidate_name" data-sortable="true" data-align="left" >Name</th>
-            <th data-field="source" data-sortable="true" data-formatter="stateFormatter" class="col-md-1">Source</th>
+            <th data-field="contact" data-formatter="contactFormatter" class="col-md-1">Contact</th>
             <th data-field="state" data-sortable="true">State</th>
             <th data-field="attachments" data-formatter="attachmentsListFormatter">Attachments</th>
             <th data-field="caveats" data-formatter="caveatsFormatter" data-cell-style="caveatsTdStyle">Caveats</th>
