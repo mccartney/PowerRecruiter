@@ -43,8 +43,16 @@ def get_attachment(request, attachment_id):
     return redirect(attachment.file.url)
 
 
-def remove_attachment(request, attachment_id):
-    return HttpResponse(json.dumps(1), content_type="application.json")
+def remove_attachment(request):
+    if request.method != 'POST':
+        msg = 'error'
+    else:
+        attachment_id = request.POST['id']
+        toRemove = Attachment.objects.get(pk = attachment_id)
+        toRemove.file.delete()
+        toRemove.delete()
+        msg = 'ok'
+    return HttpResponse(json.dumps({'msg': msg}), content_type="application.json")
 
 
 def candidate_json(request):
