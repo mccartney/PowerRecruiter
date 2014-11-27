@@ -8,9 +8,15 @@ function attachmentsListFormatterWithoutCSRF(value, uploadUrl, csrfToken) {
 
     i = 0;
     value.forEach(function(){
+        toReturn += '<div id="attachment' + value[i].pk + '">'
+        toReturn += '<a href="javascript:removeAttachment(' + value[i].pk + ')">'
+        toReturn += '<span class="glyphicon glyphicon-remove btn-xs" aria-hidden="true"></span>'
+        toReturn += '</a>'
+
         toReturn += '<a href="candidate/attachment/get/' + value[i].pk + '">'
         toReturn += value[i].display_name
         toReturn += '</a><br>';
+        toReturn += '</div>'
         i++;
     });
 
