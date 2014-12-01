@@ -1,8 +1,7 @@
 from django.test import TestCase
 
 from power_recruiter.basic_site.workflow import get_next_nodes, \
-    get_previous_nodes, get_states_list, node_number_to_name, WORKFLOW_GRAPH, \
-    WORKFLOW_STATES
+    get_previous_nodes, get_states_list, WORKFLOW_GRAPH
 
 
 class TestWorkflow(TestCase):
@@ -17,6 +16,3 @@ class TestWorkflow(TestCase):
     def test_get_states_list(self):
         self.assertIn('1s', get_states_list())
         self.assertIn('Hired', get_states_list())
-
-    def test_node_number_to_name(self):
-        self.assertEqual(WORKFLOW_STATES[5], node_number_to_name(5))

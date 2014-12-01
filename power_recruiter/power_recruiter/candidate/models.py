@@ -1,8 +1,10 @@
 from django.utils import timezone
 from django.db.models import Manager, Model, CharField, ForeignKey, \
     FileField, DateField, TextField, URLField, EmailField, IntegerField
+from django.template.loader import render_to_string
 
-from power_recruiter.basic_site.workflow import WORKFLOW_STATES
+from power_recruiter.basic_site.workflow import WORKFLOW_STATES, \
+    get_next_nodes, get_previous_nodes
 
 
 class ContactManager(Manager):
@@ -44,9 +46,9 @@ class Role(Model):
 class PersonManager(Manager):
     def create_person(self, first_name, last_name, link):
         person = self.create(
-            first_name = first_name,
-            last_name = last_name,
-            contact = Contact.objects.create_contact(link)
+            first_name=first_name,
+            last_name=last_name,
+            contact=Contact.objects.create_contact(link)
         )
         return person
 
@@ -68,9 +70,48 @@ class Person(Model):
     def __unicode__(self):
         return self.first_name + " " + self.last_name
 
+    def to_json(self):
+        candidate_name = {
+            'candidateId': self.pk,
+            'candidateName': str(self)
+        }
+
+        contact = {
+            'candidateId': self.pk,
+            'candidateName': str(self),
+            'linkedin': self.contact.linkedin,
+            'goldenline': self.contact.goldenline,
+            'email': self.contact.email
+        }
+
+        attachments = [{
+            'display_name': str(a),
+            'pk': a.pk
+        } for a in Attachment.objects.filter(person_id=self.pk)]
+
+        previous_states = {k: WORKFLOW_STATES[k]
+                           for k in get_previous_nodes(self.state)}
+        next_states = {k: WORKFLOW_STATES[k]
+                       for k in get_next_nodes(self.state)}
+        state = render_to_string('state.html', {
+            'person_id': self.pk,
+            'previous_states': previous_states,
+            'next_states': next_states,
+            'state_name': WORKFLOW_STATES[self.state]
+        })
+
+        return {
+            'id': self.pk,
+            'candidateName': candidate_name,
+            'contact': contact,
+            'state': state,
+            'attachments': attachments,
+            'caveats': self.caveats,
+        }
+
 
 class Attachment(Model):
-    person = ForeignKey(Person, default=1)
+    person = ForeignKey(Person)
     file = FileField(upload_to='attachments/%Y/%m/%d')
 
     def __unicode__(self):

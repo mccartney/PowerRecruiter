@@ -2,18 +2,18 @@ import json
 import logging
 import sys
 
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import redirect, render, render_to_response, \
+    get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django import forms
 from django.core.urlresolvers import reverse
-from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from power_recruiter.candidate.models import Attachment, Person
 from power_recruiter.basic_site.workflow import WORKFLOW_STATES, \
-    get_next_nodes, get_previous_nodes, node_number_to_name
+    are_nodes_connected
 
 
 LOGGING = {
@@ -48,78 +48,21 @@ def remove_attachment(request):
         msg = 'error'
     else:
         attachment_id = request.POST['id']
-        toRemove = Attachment.objects.get(pk = attachment_id)
-        toRemove.file.delete()
-        toRemove.delete()
+        to_remove = Attachment.objects.get(pk=attachment_id)
+        to_remove.file.delete()
+        to_remove.delete()
         msg = 'ok'
-    return HttpResponse(json.dumps({'msg': msg}), content_type="application.json")
+    return HttpResponse(json.dumps({'msg': msg}),
+                        content_type="application.json")
 
 
 def candidate_json(request):
-    # TODO: this view needs to be fixed ASAP, it's a mess
-
     persons = Person.objects.all()
-
     for k in WORKFLOW_STATES.keys():
         if request.GET.get(str(k), False):
             persons = persons.exclude(state=k)
-
-    resp = []
-    for p in persons:
-        candidateName = {
-            'candidateId': p.pk,
-            'candidateName': str(p)
-        }
-
-        contact = {
-            'candidateId': p.pk,
-            'candidateName': str(p),
-            'linkedin': p.contact.linkedin,
-            'goldenline': p.contact.goldenline,
-            'email': p.contact.email
-        }
-
-        attachments = [
-            {
-                'display_name': str(a),
-                'pk': a.pk
-            } for a in Attachment.objects.filter(person_id=p.pk)
-        ]
-
-        previous_states = map(node_number_to_name, get_previous_nodes(p.state))
-        next_states = map(node_number_to_name, get_next_nodes(p.state))
-        state = ''
-        state_name = WORKFLOW_STATES[p.state]
-        if previous_states:
-            state += '<a href="#down" id="downButton' + str(p.pk) + '">'\
-                     '<img src="/static/img/boltdown.png">' \
-                     '</a>' \
-                     '<script>$(function(){ $("#downButton' + str(p.pk) + \
-                     '").popover({content: "'
-            popover_content = '<p>' + '</p><p>'.join(previous_states) + '</p>'
-            state += popover_content
-            state += '", placement: "left", trigger: "focus",' + \
-                     'html: true});});</script>'
-        state += state_name
-        if next_states:
-            state += '<a href="#up" id="upButton' + str(p.pk) + '">' \
-                     '<img src="/static/img/bolt.png">' \
-                     '</a>' \
-                     '<script>$(function(){ $("#upButton' + str(p.pk) + \
-                     '").popover({content: "'
-            popover_content = '<p>' + '</p><p>'.join(next_states) + '</p>'
-            state += popover_content
-            state += '", placement: "right", trigger: "focus",' + \
-                     'html: true});});</script>'
-        resp.append({
-            'id': p.pk,
-            'candidateName': candidateName,
-            'contact': contact,
-            'state': state,
-            'attachments': attachments,
-            'caveats': p.caveats,
-        })
-    return HttpResponse(json.dumps(resp), content_type="application/json")
+    response = [p.to_json() for p in persons]
+    return HttpResponse(json.dumps(response), content_type="application/json")
 
 
 @require_POST
@@ -150,18 +93,19 @@ def upload(request):
     )
 
 
-def up(request, candidate_id):
-    person = Person.objects.get(id=candidate_id)
-    person.state += 2
-    person.save()
-    return HttpResponse(200, content_type="plain/text")
-
-
-def down(request, candidate_id):
-    person = Person.objects.get(id=candidate_id)
-    person.state += 1
-    person.save()
-    return HttpResponse(200, content_type="plain/text")
+@require_POST
+def change_state(request):
+    try:
+        person_id = int(request.POST['person_id'])
+        new_state_id = int(request.POST['new_state_id'])
+    except KeyError:
+        raise Http404
+    person = get_object_or_404(Person, id=person_id)
+    if are_nodes_connected(new_state_id, person.state):
+        person.state = new_state_id
+        person.save()
+        return HttpResponse(200, content_type="plain/text")
+    raise Http404
 
 
 @csrf_exempt

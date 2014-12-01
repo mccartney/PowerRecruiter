@@ -40,5 +40,8 @@ def get_states_list():
     return WORKFLOW_STATES.values()
 
 
-def node_number_to_name(node):
-    return WORKFLOW_STATES[node]
+def are_nodes_connected(first_node, second_node):
+    return (
+        first_node in WORKFLOW_GRAPH[second_node] or
+        second_node in WORKFLOW_GRAPH[first_node]
+    )

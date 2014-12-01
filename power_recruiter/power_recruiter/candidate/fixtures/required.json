@@ -8,28 +8,70 @@
     },
     {
         "pk": 2,
-        "model": "candidate.Contact", "fields": {
+        "model": "candidate.Contact",
+        "fields": {
             "linkedin": "https://www.linkedin.com/pub/kamila-kruk/9a/564/155?trk=pub-pbmap"
         }
     },
     {
         "pk": 3,
-        "model": "candidate.Contact", "fields": {
+        "model": "candidate.Contact",
+        "fields": {
             "goldenline": "http://www.goldenline.pl/jan-kowalski60/"
         }
     },
     {
-        "pk": 1, "model": "candidate.Person", "fields": {
+        "pk": 1,
+        "model": "candidate.Person",
+        "fields": {
             "first_name": "Krzysztof",
             "last_name": "Fudali",
             "date_created": "2014-04-01",
-            "state": 2,
+            "state": 0,
             "contact": 1,
             "caveats": "Good programmer!"
         }
     },
     {
-        "pk": 2, "model": "candidate.Person", "fields": {
+        "pk": 2,
+        "model": "candidate.Person",
+        "fields": {
+            "first_name": "Kamila",
+            "last_name": "Kruk",
+            "date_created": "2014-04-08",
+            "state": 1,
+            "contact": 2,
+            "caveats": ""
+        }
+    },
+    {
+        "pk": 3,
+        "model": "candidate.Person",
+        "fields": {
+            "first_name": "Jan",
+            "last_name": "Kowalski",
+            "date_created": "2014-04-08",
+            "state": 2,
+            "contact": 3,
+            "caveats": ""
+        }
+    },
+    {
+        "pk": 4,
+        "model": "candidate.Person",
+        "fields": {
+            "first_name": "Kamila",
+            "last_name": "Kruk",
+            "date_created": "2014-04-08",
+            "state": 3,
+            "contact": 2,
+            "caveats": ""
+        }
+    },
+    {
+        "pk": 5,
+        "model": "candidate.Person",
+        "fields": {
             "first_name": "Kamila",
             "last_name": "Kruk",
             "date_created": "2014-04-08",
@@ -39,12 +81,74 @@
         }
     },
     {
-        "pk": 3, "model": "candidate.Person", "fields": {
-            "first_name": "Jan",
-            "last_name": "Kowalski",
+        "pk": 6,
+        "model": "candidate.Person",
+        "fields": {
+            "first_name": "Kamila",
+            "last_name": "Kruk",
             "date_created": "2014-04-08",
-            "state": 3,
-            "contact": 3,
+            "state": 5,
+            "contact": 2,
+            "caveats": ""
+        }
+    },
+    {
+        "pk": 7,
+        "model": "candidate.Person",
+        "fields": {
+            "first_name": "Kamila",
+            "last_name": "Kruk",
+            "date_created": "2014-04-08",
+            "state": 6,
+            "contact": 2,
+            "caveats": ""
+        }
+    },
+    {
+        "pk": 8,
+        "model": "candidate.Person",
+        "fields": {
+            "first_name": "Kamila",
+            "last_name": "Kruk",
+            "date_created": "2014-04-08",
+            "state": 7,
+            "contact": 2,
+            "caveats": ""
+        }
+    },
+    {
+        "pk": 9,
+        "model": "candidate.Person",
+        "fields": {
+            "first_name": "Kamila",
+            "last_name": "Kruk",
+            "date_created": "2014-04-08",
+            "state": 8,
+            "contact": 2,
+            "caveats": ""
+        }
+    },
+    {
+        "pk": 10,
+        "model": "candidate.Person",
+        "fields": {
+            "first_name": "Kamila",
+            "last_name": "Kruk",
+            "date_created": "2014-04-08",
+            "state": 9,
+            "contact": 2,
+            "caveats": ""
+        }
+    },
+    {
+        "pk": 11,
+        "model": "candidate.Person",
+        "fields": {
+            "first_name": "Kamila",
+            "last_name": "Kruk",
+            "date_created": "2014-04-08",
+            "state": 10,
+            "contact": 2,
             "caveats": ""
         }
     }
