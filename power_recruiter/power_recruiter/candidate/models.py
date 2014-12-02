@@ -44,11 +44,12 @@ class Role(Model):
 
 
 class PersonManager(Manager):
-    def create_person(self, first_name, last_name, link):
+    def create_person(self, first_name, last_name, link, photo_url):
         person = self.create(
             first_name=first_name,
             last_name=last_name,
-            contact=Contact.objects.create_contact(link)
+            contact=Contact.objects.create_contact(link),
+            photo_url=photo_url
         )
         return person
 
@@ -61,6 +62,7 @@ class Person(Model):
         choices=((k, v) for k, v in WORKFLOW_STATES.iteritems()),
         default=0
     )
+    photo_url = CharField(max_length=200)
     contact = ForeignKey(Contact)
     role = ForeignKey(Role, blank=True, null=True)
     caveats = TextField(max_length=1000, blank=True)
@@ -105,6 +107,7 @@ class Person(Model):
         return {
             'id': self.pk,
             'candidateName': candidate_name,
+            'candidatePhoto': self.photo_url,
             'contact': contact,
             'state': state,
             'attachments': attachments,

@@ -8,15 +8,15 @@ function attachmentsListFormatterWithoutCSRF(value, uploadUrl, csrfToken) {
 
     i = 0;
     value.forEach(function(){
-        toReturn += '<div id="attachment' + value[i].pk + '">'
-        toReturn += '<a href="javascript:removeAttachment(' + value[i].pk + ')">'
-        toReturn += '<span class="glyphicon glyphicon-remove btn-xs" aria-hidden="true"></span>'
-        toReturn += '</a>'
+        toReturn += '<div id="attachment' + value[i].pk + '">';
+        toReturn += '<a href="javascript:removeAttachment(' + value[i].pk + ')">';
+        toReturn += '<span class="glyphicon glyphicon-remove btn-xs" aria-hidden="true"></span>';
+        toReturn += '</a>';
 
-        toReturn += '<a href="candidate/attachment/get/' + value[i].pk + '">'
-        toReturn += value[i].display_name
+        toReturn += '<a href="candidate/attachment/get/' + value[i].pk + '">';
+        toReturn += value[i].display_name;
         toReturn += '</a><br>';
-        toReturn += '</div>'
+        toReturn += '</div>';
         i++;
     });
 
@@ -40,4 +40,11 @@ function nameFormatter(value) {
     var nameField = new NameField(value.candidateId, value.candidateName);
     setTimeout(function () { nameField.updateEventListeners() }, 100);
     return nameField;
+}
+
+function photoFormatter(value) {
+    console.log(value);
+    DEFAULT_SRC = 'https://static.licdn.com/scds/common/u/images/themes/katy/ghosts/person/ghost_person_200x200_v1.png';
+    src = value == '' ? DEFAULT_SRC : value;
+    return '<img src="' + src + '" style="width:50px; height:50px"/>';
 }
