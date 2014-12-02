@@ -1,3 +1,18 @@
+function idFormatter(value){
+        DEFAULT_SRC = 'https://static.licdn.com/scds/common/u/images/themes/katy/ghosts/person/ghost_person_200x200_v1.png';
+    src = value.photo == '' ? DEFAULT_SRC : value;
+    imageDiv = '<div class="imageDiv"><img src="' + src + '" style="width:50px; height:50px"/></div>';
+
+    return imageDiv + value.id;
+}
+
+function shortenDisplayName(name){
+    if(name.length > 21) {
+        return name.substr(0, 18) + "...";
+    }
+    return name;
+}
+
 function attachmentsListFormatterWithoutCSRF(value, uploadUrl, csrfToken) {
     toReturn = '<div class="innertd">';
     toReturn += '<form id="my-awesome-dropzone" class="dropzone" action="' + uploadUrl +'" method="post" enctype="multipart/form-data">';
@@ -14,7 +29,7 @@ function attachmentsListFormatterWithoutCSRF(value, uploadUrl, csrfToken) {
         toReturn += '</a>';
 
         toReturn += '<a href="candidate/attachment/get/' + value[i].pk + '">';
-        toReturn += value[i].display_name;
+        toReturn += shortenDisplayName(value[i].display_name);
         toReturn += '</a><br>';
         toReturn += '</div>';
         i++;
@@ -42,9 +57,6 @@ function nameFormatter(value) {
     return nameField;
 }
 
-function photoFormatter(value) {
-    console.log(value);
-    DEFAULT_SRC = 'https://static.licdn.com/scds/common/u/images/themes/katy/ghosts/person/ghost_person_200x200_v1.png';
-    src = value == '' ? DEFAULT_SRC : value;
-    return '<img src="' + src + '" style="width:50px; height:50px"/>';
+function stateFormatter(value){
+    return value.state_view;
 }

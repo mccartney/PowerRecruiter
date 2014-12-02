@@ -151,7 +151,7 @@ input[type=text], textarea {
 .edit-ok{
     font-size: 14px;
     color: #00b82b;
-    margin-left: 12px;
+    margin-left: 4px;
     position: relative;
     top: -1px;
 }
@@ -163,7 +163,7 @@ input[type=text], textarea {
 .edit-remove{
     font-size: 14px;
     color: #9a0000;
-    margin-left: 10px;
+    margin-left: 5px;
     position: relative;
     top: -1px;
 }
@@ -209,4 +209,9 @@ input[type=text], textarea {
     width: 16px;
     height: 16px;
     display: inline-block;
+}
+
+.imageDiv{
+    position: absolute;
+    left: -60px;
 }

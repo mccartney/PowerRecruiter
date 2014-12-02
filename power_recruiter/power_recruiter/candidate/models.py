@@ -73,6 +73,11 @@ class Person(Model):
         return self.first_name + " " + self.last_name
 
     def to_json(self):
+        id = {
+            'id': self.pk,
+            'photo': self.photo_url
+        }
+
         candidate_name = {
             'candidateId': self.pk,
             'candidateName': str(self)
@@ -96,18 +101,19 @@ class Person(Model):
         next_states = {k: WORKFLOW_STATES[k]
                        for k in get_next_nodes(self.state)}
 
-        state = render_to_string('state.html', {
-            'person_id': self.pk,
-            'previous_states': previous_states,
-            'next_states': next_states,
-            'state_view': WORKFLOW_STATES[self.state],
-            'state_name': WORKFLOW_STATES[self.state].get_name()
-        })
+        state = {
+            'state_name': WORKFLOW_STATES[self.state].get_name(),
+            'state_view': render_to_string('state.html', {
+                'person_id': self.pk,
+                'previous_states': previous_states,
+                'next_states': next_states,
+                'state_view': WORKFLOW_STATES[self.state]
+             })
+        }
 
         return {
-            'id': self.pk,
+            'id': id,
             'candidateName': candidate_name,
-            'candidatePhoto': self.photo_url,
             'contact': contact,
             'state': state,
             'attachments': attachments,

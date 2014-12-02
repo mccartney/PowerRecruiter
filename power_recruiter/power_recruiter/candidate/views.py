@@ -143,7 +143,7 @@ def stats(request):
     context = {
         'spices': [{
             'num': len(Person.objects.filter(state=k)),
-            'name': v
+            'name': v.get_name()
         } for k, v in WORKFLOW_STATES.iteritems()]
     }
     return render(request, "stats.html", context)

@@ -24,6 +24,7 @@ var NameField = function(candidateId, candidateName){
     }
 
     this.clickOk = function(){
+
         this.editMode = false;
         this.refresh();
     }
