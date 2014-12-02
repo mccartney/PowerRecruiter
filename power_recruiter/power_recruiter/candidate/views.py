@@ -127,13 +127,14 @@ def add_candidate(request):
         return HttpResponse(
             status=418,
             content_type="plain/text",
-            content=person.state
+            content=WORKFLOW_STATES[person.state]
         )
     else:
         Person.objects.create_person(
             first_name,
             last_name,
-            args[2]
+            args[2],
+            args[1]
         )
         return HttpResponse(status=200, content=200, content_type="plain/text")
 
