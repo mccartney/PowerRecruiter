@@ -1,7 +1,13 @@
-{% if previous_states %}
-    {% include "state_popover.html" with person_id=person_id states=previous_states placement="left" id_prefix="down" %}
-{% endif %}
-{{ state_name }}
-{% if next_states %}
-    {% include "state_popover.html" with person_id=person_id states=next_states placement="right" id_prefix="up" %}
-{% endif %}
+<span class="stateArrowBox">
+    {% if previous_states %}
+        {% include "state_popover.html" with person_id=person_id states=previous_states placement="left" id_prefix="left" %}
+    {% endif %}
+</span>
+
+{{ state_view | safe}}
+
+<span class="stateArrowBox">
+    {% if next_states %}
+        {% include "state_popover.html" with person_id=person_id states=next_states placement="right" id_prefix="right" %}
+    {% endif %}
+</span>

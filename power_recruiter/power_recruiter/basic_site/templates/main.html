@@ -16,7 +16,7 @@
 
 {% for k, v in states.iteritems %}
     <div class="stateCheckboxDiv">
-        <input type="checkbox" class="stateCheckbox" name="{{ k }}" checked />{{ v }}
+        <input type="checkbox" class="stateCheckbox" name="{{ k }}" checked />{{ v | safe }}
     </div>
 {% endfor %}
 
@@ -26,7 +26,7 @@
             <th data-field="id" data-sortable="true" class="col-md-1">ID</th>
             <th data-field="candidateName" data-formatter="nameFormatter" data-sortable="true" data-sorter="nameSorter" data-align="left">Name</th>
             <th data-field="contact" data-formatter="contactFormatter" class="col-md-1" data-align="center">Contact</th>
-            <th data-field="state" data-sortable="true" data-align="center">State</th>
+            <th data-field="state" data-sortable="true" class="col-md-3" data-align="center">State</th>
             <th data-field="attachments" data-formatter="attachmentsListFormatter" data-align="center">Attachments</th>
             <th data-field="caveats" data-formatter="caveatsFormatter" data-cell-style="caveatsTdStyle">Caveats</th>
         </tr>

@@ -1,15 +1,43 @@
+from django.template.loader import render_to_string
+
+class State:
+
+    def __init__(self, name, type):
+        self.name = name
+        self.type = type
+
+    def get_name(self):
+        return self.name
+
+    def get_view(self):
+        if self.type != 0:
+            if self.type == 1:
+                css_class = "greenText"
+            else:
+                css_class = "redText"
+
+            return render_to_string('state_name.html', {
+               'css_class': css_class,
+               'state_view': self.name
+            })
+
+        return self.name
+
+    def __str__(self):
+        return self.get_view()
+
 WORKFLOW_STATES = {
-    0: 'NULL',
-    1: 'Rejected',
-    2: 'First message',
-    3: 'No response',
-    4: 'Negative response',
-    5: 'Positive response',
-    6: '1s',
-    7: 'Resigned',
-    8: '>1',
-    9: 'Rejected after meeting',
-    10: 'Hired'
+    0: State('New', 0),
+    1: State('Rejected', -1),
+    2: State('First message', 0),
+    3: State('No response', -1),
+    4: State('Negative response', -1),
+    5: State('Positive response', 0),
+    6: State('First meeting', 0),
+    7: State('Resigned', -1),
+    8: State('More than one meeting', 0),
+    9: State('Rejected after meeting', -1),
+    10: State('Hired', 1)
 }
 
 WORKFLOW_GRAPH = {

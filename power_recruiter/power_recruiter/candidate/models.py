@@ -93,11 +93,13 @@ class Person(Model):
                            for k in get_previous_nodes(self.state)}
         next_states = {k: WORKFLOW_STATES[k]
                        for k in get_next_nodes(self.state)}
+
         state = render_to_string('state.html', {
             'person_id': self.pk,
             'previous_states': previous_states,
             'next_states': next_states,
-            'state_name': WORKFLOW_STATES[self.state]
+            'state_view': WORKFLOW_STATES[self.state],
+            'state_name': WORKFLOW_STATES[self.state].get_name()
         })
 
         return {

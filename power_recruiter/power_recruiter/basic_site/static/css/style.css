@@ -87,11 +87,6 @@ input[type=text], textarea {
     width: 6em
 }
 
-.red-text{
-    color: #F00;
-    font-weight: normal;
-}
-
 .dz-default, .dz-preview{
     display: none !important;
 }
@@ -189,4 +184,29 @@ input[type=text], textarea {
     margin-left: 5px;
     top: -1px;
     position: relative;
+}
+
+.redText{
+    color: #F00000;
+}
+
+.greenText{
+    color: #33CC00;
+}
+
+.grayText{
+    color: #999;
+}
+
+.glyphicon-arrow{
+    position: relative;
+    top: 2px;
+}
+
+.stateArrowBox{
+    margin-left: 6px;
+    margin-right: 6px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
 }

@@ -38,6 +38,10 @@ function setTableEvents(){
         e.stopPropagation();
     });
 
+    $(".popover-content").click(function(e){
+        e.stopPropagation();
+    });
+
     $("input").click(function(e){
        e.stopPropagation();
     });

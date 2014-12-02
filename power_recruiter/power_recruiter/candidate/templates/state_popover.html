@@ -1,18 +1,26 @@
 <a href="#" id="{{ id_prefix }}Button{{ person_id }}">
-    <img src="/static/img/bolt{{ id_prefix }}.png">
+    <span class="
+        glyphicon
+        glyphicon-arrow
+        glyphicon-arrow-{{ id_prefix }}
+        {% if id_prefix == 'left' %}
+            grayText
+        {% elif id_prefix == 'right' %}
+            greenText
+        {% endif %}" aria-hidden="true" />
 </a>
 
 <script>
     $(function() {
         $('#{{ id_prefix }}Button{{ person_id }}').popover({
-            content: '{% for state_id, state_name in states.items %}' +
-                '<p><a id="{{ id_prefix }}state_link_{{ person_id }}_{{ state_id }}" href="#">' +
-                '{{ state_name }}</a></p>{% endfor %}',
+            content: '{% for state_id, state_view in states.items %}' +
+                '<p id="{{ id_prefix }}state_link_{{ person_id }}_{{ state_id }}">' +
+                '{{ state_view | safe }}</p>{% endfor %}',
             placement: '{{ placement }}',
             trigger: 'focus',
             html: true
         });
-        {% for state_id, state_name in states.items %}
+        {% for state_id, state_view in states.items %}
             $(document).off(
                     'click',
                     '#{{ id_prefix }}state_link_{{ person_id }}_{{ state_id }}'
