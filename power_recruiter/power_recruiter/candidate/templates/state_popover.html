@@ -1,0 +1,37 @@
+<a href="#" id="{{ id_prefix }}Button{{ person_id }}">
+    <img src="/static/img/bolt{{ id_prefix }}.png">
+</a>
+
+<script>
+    $(function() {
+        $('#{{ id_prefix }}Button{{ person_id }}').popover({
+            content: '{% for state_id, state_name in states.items %}' +
+                '<p><a id="{{ id_prefix }}state_link_{{ person_id }}_{{ state_id }}" href="#">' +
+                '{{ state_name }}</a></p>{% endfor %}',
+            placement: '{{ placement }}',
+            trigger: 'focus',
+            html: true
+        });
+        {% for state_id, state_name in states.items %}
+            $(document).off(
+                    'click',
+                    '#{{ id_prefix }}state_link_{{ person_id }}_{{ state_id }}'
+            );
+            $(document).on(
+                    'click',
+                    '#{{ id_prefix }}state_link_{{ person_id }}_{{ state_id }}',
+                    function() {
+                        $.post('/candidate/change_state/',
+                            {
+                                'person_id': '{{ person_id }}',
+                                'new_state_id': '{{ state_id }}'
+                            },
+                            function() {
+                                reloadData();
+                            }
+                        );
+                    }
+            );
+        {% endfor %}
+    });
+</script>
