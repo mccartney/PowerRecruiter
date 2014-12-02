@@ -1,6 +1,6 @@
 function idFormatter(value){
-        DEFAULT_SRC = 'https://static.licdn.com/scds/common/u/images/themes/katy/ghosts/person/ghost_person_200x200_v1.png';
-    src = value.photo == '' ? DEFAULT_SRC : value;
+    DEFAULT_SRC = 'https://static.licdn.com/scds/common/u/images/themes/katy/ghosts/person/ghost_person_200x200_v1.png';
+    src = value.photo == '' ? DEFAULT_SRC : value.photo;
     imageDiv = '<div class="imageDiv"><img src="' + src + '" style="width:50px; height:50px"/></div>';
 
     return imageDiv + value.id;
