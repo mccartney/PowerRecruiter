@@ -114,6 +114,7 @@ class Person(Model):
         return {
             'id': id,
             'candidateName': candidate_name,
+            'candidatePhoto': self.photo_url,
             'contact': contact,
             'state': state,
             'attachments': attachments,
