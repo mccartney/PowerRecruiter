@@ -40,7 +40,8 @@ class Migration(migrations.Migration):
                 ('first_name', models.CharField(max_length=100)),
                 ('last_name', models.CharField(max_length=100)),
                 ('date_created', models.DateField(default=django.utils.timezone.now)),
-                ('state', models.IntegerField(default=0, choices=[(0, b'NULL'), (1, b'Rejected'), (2, b'First message'), (3, b'No response'), (4, b'Negative response'), (5, b'Positive response'), (6, b'1s'), (7, b'Resigned'), (8, b'>1'), (9, b'Rejected after meeting'), (10, b'Hired')])),
+                ('state', models.IntegerField(default=0)),
+                ('photo_url', models.CharField(max_length=200)),
                 ('caveats', models.TextField(max_length=1000, blank=True)),
                 ('contact', models.ForeignKey(to='candidate.Contact')),
             ],
@@ -67,7 +68,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='attachment',
             name='person',
-            field=models.ForeignKey(default=1, to='candidate.Person'),
+            field=models.ForeignKey(to='candidate.Person'),
             preserve_default=True,
         ),
     ]
