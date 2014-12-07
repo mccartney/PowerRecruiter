@@ -58,10 +58,7 @@ class Person(Model):
     first_name = CharField(max_length=100)
     last_name = CharField(max_length=100)
     date_created = DateField(default=timezone.now)
-    state = IntegerField(
-        choices=((k, v) for k, v in WORKFLOW_STATES.iteritems()),
-        default=0
-    )
+    state = IntegerField(default=0)
     photo_url = CharField(max_length=200)
     contact = ForeignKey(Contact)
     role = ForeignKey(Role, blank=True, null=True)
@@ -102,13 +99,13 @@ class Person(Model):
                        for k in get_next_nodes(self.state)}
 
         state = {
-            'state_name': WORKFLOW_STATES[self.state].get_name(),
+            'state_name': WORKFLOW_STATES[self.state].name,
             'state_view': render_to_string('state.html', {
                 'person_id': self.pk,
                 'previous_states': previous_states,
                 'next_states': next_states,
                 'state_view': WORKFLOW_STATES[self.state]
-             })
+                })
         }
 
         return {

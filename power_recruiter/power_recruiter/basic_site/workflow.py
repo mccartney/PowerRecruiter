@@ -1,44 +1,51 @@
 from django.template.loader import render_to_string
 
-class State:
+from power_recruiter.basic_site.utils import multiton
 
-    def __init__(self, name, type):
+
+@multiton
+class State(object):
+    def __init__(self, name, hired=False, rejected=False):
+        if hired and rejected:
+            raise ValueError("Cannot be hired and rejected at the same time.")
         self.name = name
-        self.type = type
-
-    def get_name(self):
-        return self.name
+        self.hired = hired
+        self.rejected = rejected
 
     def get_view(self):
-        if self.type != 0:
-            if self.type == 1:
-                css_class = "greenText"
-            else:
-                css_class = "redText"
+        if self.hired:
+            css_class = "greenText"
+        elif self.rejected:
+            css_class = "redText"
+        else:
+            css_class = "normalText"
 
-            return render_to_string('state_name.html', {
-               'css_class': css_class,
-               'state_view': self.name
-            })
+        return render_to_string('state_name.html', {
+            'css_class': css_class,
+            'state_view': self.name
+        })
 
-        return self.name
+    __str__ = get_view
 
-    def __str__(self):
-        return self.get_view()
+    @staticmethod
+    def get_instance_name(name, hired=False, rejected=False):
+        return ''.join([name, str(hired), str(rejected)])
+
 
 WORKFLOW_STATES = {
-    0: State('New', 0),
-    1: State('Rejected', -1),
-    2: State('First message', 0),
-    3: State('No response', -1),
-    4: State('Negative response', -1),
-    5: State('Positive response', 0),
-    6: State('First meeting', 0),
-    7: State('Resigned', -1),
-    8: State('More than one meeting', 0),
-    9: State('Rejected after meeting', -1),
-    10: State('Hired', 1)
+    0: State("New"),
+    1: State("Rejected", rejected=True),
+    2: State("First message"),
+    3: State("No response", rejected=True),
+    4: State("Negative response", rejected=True),
+    5: State("Positive response"),
+    6: State("First meeting"),
+    7: State("Resigned", rejected=True),
+    8: State("More than one meeting"),
+    9: State("Rejected after meeting", rejected=True),
+    10: State("Hired", hired=True)
 }
+
 
 WORKFLOW_GRAPH = {
     0: [1, 2],
