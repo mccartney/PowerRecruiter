@@ -49,6 +49,25 @@ $.ajaxSetup({
     }
 });
 
+function sendAjax(url, data, done) {
+    var msg = "";
+    var jqxhr = $.ajax(url, {
+        type: "POST",
+        data: data
+    })
+    .done(function (data) {
+        msg = data;
+        done(data);
+    })
+    .fail(function () {
+        console.log("error while sending ajax");
+        msg = 'error';
+    })
+    .always(function () {
+        return msg
+    })
+}
+
 function removeAttachment(id) {
     var resp = sendAjax('candidate/attachment/remove/', {'id': id}, function(data) {
         var div = document.getElementById("attachment" + id);
