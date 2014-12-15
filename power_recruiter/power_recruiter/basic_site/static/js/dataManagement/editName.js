@@ -24,11 +24,14 @@ var NameField = function(candidateId, candidateName){
     }
 
     this.clickOk = function(){
-        this.editMode = false;
-        var resp = sendAjax('candidate/attachment/remove/', {'id': id}, function(data) {
-            var div = document.getElementById("attachment" + id);
-            div.parentNode.removeChild(div);
+        var new_name = $("#changeNameInputUnique-" + this.candidateId).val();
+        var resp = sendAjax('candidate/change_name/', {
+            'id': this.candidateId,
+            'name': new_name
+            }, function(data) {
         })
+        this.candidateName = new_name;
+        this.editMode = false;
         this.refresh();
     }
 

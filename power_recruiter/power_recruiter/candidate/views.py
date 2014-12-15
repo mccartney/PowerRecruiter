@@ -56,14 +56,20 @@ def remove_attachment(request):
                         content_type="application.json")
 
 
+@require_POST
 def change_name(request):
-    if request.method != 'POST':
-        msg = 'error'
-    else:
-        person_id = request.POST['id']
+    try:
+        person_id = int(request.POST['id'])
         new_name = request.POST['name']
-        
-        msg = 'ok'
+    except KeyError:
+        raise Http404
+    person = get_object_or_404(Person, id=person_id)
+    new_name = new_name.strip()
+    names = new_name.split()
+    person.first_name = names[0]
+    person.last_name = " ".join(names[1:])
+    person.save()
+    msg = 'ok'
     return HttpResponse(json.dumps({'msg' : msg}), content_type="application.json")
 
 
