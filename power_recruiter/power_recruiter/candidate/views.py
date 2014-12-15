@@ -56,6 +56,17 @@ def remove_attachment(request):
                         content_type="application.json")
 
 
+def change_name(request):
+    if request.method != 'POST':
+        msg = 'error'
+    else:
+        person_id = request.POST['id']
+        new_name = request.POST['name']
+        
+        msg = 'ok'
+    return HttpResponse(json.dumps({'msg' : msg}), content_type="application.json")
+
+
 def candidate_json(request):
     persons = Person.objects.all()
     for k in WORKFLOW_STATES.keys():

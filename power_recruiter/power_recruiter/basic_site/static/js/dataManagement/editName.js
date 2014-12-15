@@ -24,8 +24,11 @@ var NameField = function(candidateId, candidateName){
     }
 
     this.clickOk = function(){
-
         this.editMode = false;
+        var resp = sendAjax('candidate/attachment/remove/', {'id': id}, function(data) {
+            var div = document.getElementById("attachment" + id);
+            div.parentNode.removeChild(div);
+        })
         this.refresh();
     }
 
