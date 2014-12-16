@@ -43,17 +43,16 @@ def get_attachment(request, attachment_id):
     return redirect(attachment.file.url)
 
 
+@require_POST
 def remove_attachment(request):
-    if request.method != 'POST':
-        msg = 'error'
-    else:
-        attachment_id = request.POST['id']
-        to_remove = Attachment.objects.get(pk=attachment_id)
-        to_remove.file.delete()
-        to_remove.delete()
-        msg = 'ok'
-    return HttpResponse(json.dumps({'msg': msg}),
-                        content_type="application.json")
+    try:
+        attachment_id = int(request.POST['id'])
+    except KeyError:
+        raise Http404
+    to_remove = Attachment.objects.get(pk=attachment_id)
+    to_remove.file.delete()
+    to_remove.delete()
+    return HttpResponse(200, content_type="plain/text")
 
 
 @require_POST
@@ -69,8 +68,18 @@ def change_name(request):
     person.first_name = names[0]
     person.last_name = " ".join(names[1:])
     person.save()
-    msg = 'ok'
-    return HttpResponse(json.dumps({'msg' : msg}), content_type="application.json")
+    return HttpResponse(200, content_type="plain/text")
+
+
+@require_POST
+def remove_person(request):
+    try:
+        person_id = int(require_POST['id'])
+    except KeyError:
+        raise Http404
+    person = get_object_or_404(Person, id=person_id)
+    person.delete()
+    return HttpResponse(200, content_type="plain/text")
 
 
 def candidate_json(request):
@@ -83,7 +92,7 @@ def candidate_json(request):
 
 
 @require_POST
-@csrf_exempt
+@csrf_exempt  # Do we need it? I think we have csrf ajax done at js level
 def caveats_upload(request):
     person = Person.objects.get(id=request.POST['id'])
     person.caveats = request.POST['caveats']
@@ -125,7 +134,7 @@ def change_state(request):
     raise Http404
 
 
-@csrf_exempt
+@csrf_exempt  # Do we need it?
 def add_candidate(request):
     args = []
     for i in xrange(3):
