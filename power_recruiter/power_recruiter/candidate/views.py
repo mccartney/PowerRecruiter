@@ -92,7 +92,7 @@ def candidate_json(request):
 
 
 @require_POST
-@csrf_exempt # Do we need it? I think we have csrf ajax done at js level
+@csrf_exempt  # Do we need it? I think we have csrf ajax done at js level
 def caveats_upload(request):
     person = Person.objects.get(id=request.POST['id'])
     person.caveats = request.POST['caveats']
@@ -134,7 +134,7 @@ def change_state(request):
     raise Http404
 
 
-@csrf_exempt # Do we need it?
+@csrf_exempt  # Do we need it?
 def add_candidate(request):
     args = []
     for i in xrange(3):
