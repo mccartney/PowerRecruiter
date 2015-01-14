@@ -75,6 +75,12 @@ function removeAttachment(id) {
     })
 }
 
+function removePerson(id) {
+    var resp = sendAjax('candidate/remove/', {'id' : id}, function(data) {
+        reloadData();
+    })
+}
+
 $.expr[':'].textEquals = $.expr.createPseudo(function(arg) {
     return function( elem ) {
         return $(elem).text().match("^" + arg + "$");

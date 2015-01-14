@@ -5,6 +5,11 @@ function photoFormatter(value) {
     return imageDiv;
 }
 
+function removeFormatter(value) {
+    var btn = '<button type="button" onclick="removePerson(' + value.id + ')" class="btn btn-default"><span class="glyphicon glyphicon-remove"/></button>';
+    return btn;
+}
+
 function idFormatter(value){
     return value.id;
 }
