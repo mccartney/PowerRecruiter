@@ -25,6 +25,9 @@ class State(object):
             'state_view': self.name
         })
 
+    def get_name(self):
+        return self.name
+
     __str__ = get_view
 
     @staticmethod
