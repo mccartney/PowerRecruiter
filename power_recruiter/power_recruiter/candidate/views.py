@@ -74,7 +74,7 @@ def change_name(request):
 @require_POST
 def remove_person(request):
     try:
-        person_id = int(require_POST['id'])
+        person_id = int(request.POST['id'])
     except KeyError:
         raise Http404
     person = get_object_or_404(Person, id=person_id)

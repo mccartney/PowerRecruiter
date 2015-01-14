@@ -72,12 +72,15 @@ class Person(Model):
     def to_json(self):
         id = {
             'id': self.pk,
-            'photo': self.photo_url
+        }
+
+        photo = {
+            'photo': self.photo_url,
         }
 
         candidate_name = {
             'candidateId': self.pk,
-            'candidateName': str(self)
+            'candidateName': str(self),
         }
 
         contact = {
@@ -85,7 +88,7 @@ class Person(Model):
             'candidateName': str(self),
             'linkedin': self.contact.linkedin,
             'goldenline': self.contact.goldenline,
-            'email': self.contact.email
+            'email': self.contact.email,
         }
 
         attachments = [{
@@ -110,6 +113,7 @@ class Person(Model):
 
         return {
             'id': id,
+            'photo' : photo,
             'candidateName': candidate_name,
             'contact': contact,
             'state': state,
