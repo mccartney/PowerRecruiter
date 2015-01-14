@@ -1,10 +1,12 @@
-function idFormatter(value){
+function photoFormatter(value) {
     var DEFAULT_SRC = 'https://static.licdn.com/scds/common/u/images/themes/katy/ghosts/person/ghost_person_200x200_v1.png';
     var src = value.photo == '' ? DEFAULT_SRC : value.photo;
-    var imageDiv = '<div class="imageDiv"><img src="' + src + '" style="width:50px; height:50px"/></div>';
+    var imageDiv = '<div class="imageDiv"><img src="' + src + '"/></div>';
+    return imageDiv;
+}
 
-
-    return imageDiv + value.id;
+function idFormatter(value){
+    return value.id;
 }
 
 function shortenDisplayName(name){
