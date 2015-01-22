@@ -55,18 +55,6 @@ input[type=text], textarea {
     border-bottom-width: 1px;
 }
 
-.td-with-bottom-bar{
-   background-image: url("/static/img/table_bottom_bar.png");
-   background-position: bottom;
-   background-repeat: repeat-x;
-}
-
-.td-with-bottom-bar-upsidedown{
-   background-image: url("/static/img/table_bottom_bar_upsidedown.png");
-   background-position: bottom;
-   background-repeat: repeat-x;
-}
-
 .innertd{
     height: 25px;
     overflow: hidden;
@@ -177,7 +165,7 @@ input[type=text], textarea {
 }
 
 .changeNameInput{
-    width: 160px;
+    width: 130px;
 }
 
 .changeNameOkButton{
@@ -212,17 +200,37 @@ input[type=text], textarea {
 }
 
 .imageDiv{
-    width: 50px;
-    height: 50px;
-    position: absolute;
+    margin: auto;
 }
 
 tr > td > div.imageDiv > img{
-    width: 60%;
-    height: 60%;
+    width: 25px;
+    height: 25px;
 }
 
 .maintable-row-large > td > div.imageDiv > img{
-    width: 100%;
-    height: 100%;
+    width: 50px;
+    height: 50px;
+}
+
+.removePersonButton{
+    position: absolute;
+    right: -25px;
+    padding-top: 4px;
+    padding-left: 10px;
+    padding-bottom: 6px;
+    opacity: 0;
+    color: #000;
+}
+
+tr.maintable-row-large > td > span > a > div.removePersonButton{
+    opacity: 0.3;
+}
+
+.removePersonButton:hover{
+    opacity: 0.6 !important;
+}
+
+.contactIcons{
+    padding-top: 2px;
 }

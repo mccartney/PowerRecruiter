@@ -5,8 +5,8 @@ var NameField = function(candidateId, candidateName){
 
     this.editModeBox = function(){
         toReturn = "<input type='text' class='changeNameInput' id='changeNameInputUnique-" + this.candidateId + "' value='" + this.candidateName + "'>";
-        toReturn += '<span class="glyphicon glyphicon-ok edit-ok blockTableEvent" id="nameContainerOk-' + this.candidateId + '" aria-hidden="true"></span>';
-        toReturn += '<span class="glyphicon glyphicon-remove edit-remove blockTableEvent" id="nameContainerRemove-' + this.candidateId + '" aria-hidden="true"></span>';
+        toReturn += '<span class="glyphicon glyphicon-ok edit-ok" id="nameContainerOk-' + this.candidateId + '" aria-hidden="true"></span>';
+        toReturn += '<span class="glyphicon glyphicon-remove edit-remove" id="nameContainerRemove-' + this.candidateId + '" aria-hidden="true"></span>';
         return toReturn;
     }
 

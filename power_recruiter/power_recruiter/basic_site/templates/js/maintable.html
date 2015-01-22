@@ -18,10 +18,6 @@
 
             if(currentlyOpened != null) {
                 currentlyOpened.removeClass('maintable-row-large');
-                if(currentlyOpened.find('td').first().hasClass('td-with-bottom-bar-upsidedown')){
-                    currentlyOpened.find('td').removeClass('td-with-bottom-bar-upsidedown');
-                    currentlyOpened.find('td').addClass('td-with-bottom-bar');
-                }
             }
 
             if(closedAll) {
@@ -38,16 +34,15 @@
         .on('sort.bs.table',function (e, name, order) {
             reloadTable();
         })
+
         .on('load-success.bs.table',function (e, name, order) {
             reloadTable();
          });
     });
 
     function openLargeTd(element){
-        element.addClass('maintable-row-large');
-        if(element.find('td').first().hasClass('td-with-bottom-bar')){
-            element.find('td').removeClass('td-with-bottom-bar');
-            element.find('td').addClass('td-with-bottom-bar-upsidedown');
+        if(element !== null){
+            element.addClass('maintable-row-large');
         }
     }
 

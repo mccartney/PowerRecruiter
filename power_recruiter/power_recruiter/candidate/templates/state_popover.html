@@ -1,15 +1,16 @@
-<a href="#" id="{{ id_prefix }}Button{{ person_id }}">
-    <span class="
-        glyphicon
-        glyphicon-arrow
-        glyphicon-arrow-{{ id_prefix }}
-        {% if id_prefix == 'left' %}
-            grayText
-        {% elif id_prefix == 'right' %}
-            greenText
-        {% endif %}" aria-hidden="true" />
-</a>
-
+<span class="blockTableEvent">
+    <a href="#" id="{{ id_prefix }}Button{{ person_id }}">
+        <span class="
+            glyphicon
+            glyphicon-arrow
+            glyphicon-arrow-{{ id_prefix }}
+            {% if id_prefix == 'left' %}
+                grayText
+            {% elif id_prefix == 'right' %}
+                greenText
+            {% endif %}" aria-hidden="true" />
+    </a>
+</span>
 <script>
     $(function() {
         $('#{{ id_prefix }}Button{{ person_id }}').popover({
@@ -17,7 +18,6 @@
                 '<p id="{{ id_prefix }}state_link_{{ person_id }}_{{ state_id }}">' +
                 '{{ state_view | safe }}</p>{% endfor %}',
             placement: '{{ placement }}',
-            trigger: 'focus',
             html: true
         });
         {% for state_id, state_view in states.items %}

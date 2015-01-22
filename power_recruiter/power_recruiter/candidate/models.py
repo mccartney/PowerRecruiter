@@ -91,10 +91,13 @@ class Person(Model):
             'email': self.contact.email,
         }
 
-        attachments = [{
-            'display_name': str(a),
-            'pk': a.pk
-        } for a in Attachment.objects.filter(person_id=self.pk)]
+        attachments = {
+            'candidateId': self.pk,
+            'attachments': [{
+                'display_name': str(a),
+                'pk': a.pk
+            } for a in Attachment.objects.filter(person_id=self.pk)]
+        }
 
         previous_states = {k: WORKFLOW_STATES[k]
                            for k in get_previous_nodes(self.state)}
@@ -111,6 +114,12 @@ class Person(Model):
                 })
         }
 
+        caveats = {
+            'candidateId': self.pk,
+            'candidateName': str(self),
+            'caveats': self.caveats
+        }
+
         return {
             'id': id,
             'photo' : photo,
@@ -118,7 +127,7 @@ class Person(Model):
             'contact': contact,
             'state': state,
             'attachments': attachments,
-            'caveats': self.caveats,
+            'caveats': caveats,
         }
 
 

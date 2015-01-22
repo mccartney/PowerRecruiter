@@ -1,49 +1,24 @@
 function reloadTable(){
-    //Add bottom bar to tr
+
     if(setAutosize()) {
         $("#maintable tr").each(function () {
-            haveBottomBar = false;
             currentTr = $(this);
-            $(this).find('td div.innertd').each(function () {
-                $(this).addClass('large-inner-div');
-                autoHeight = $(this).parent().height();
-                $(this).removeClass('large-inner-div');
-                if ($(this).parent().height() < autoHeight) {
-                    currentTr.find('td').addClass('td-with-bottom-bar');
-                }
-            });
-            $(this).find('.personid').first().val(currentTr.children().first().text());
-            $(this).find('.caveatsArea').first().attr('id', "caveats-" + (currentTr.children().first().text()));
             if (currentlyOpened != null) {
-                currentlyOpened = $('#maintable tr:has(td:textEquals("' + currentlyOpenedId + '"))');
-                openLargeTd(currentlyOpened);
+                if(currentTr.find('td:nth-child(2)').text() == currentlyOpened.find('td:nth-child(2)').text()){ //nth-child(2) == td of candidateId
+                    openLargeTd($(this));
+                    currentlyOpened = $(this);
+                }
             }
         });
     }
 
-    setTableEvents();
+    blockTableEventPropagation();
     Dropzone.discover();
 }
 
-function setTableEvents(){
-    $("a").click(function(e){
-        e.stopPropagation();
-    });
-
-    $("button").click(function(e){
-        e.stopPropagation();
-    });
-
+function blockTableEventPropagation(){
     $(".blockTableEvent").click(function(e) {
         e.stopPropagation();
-    });
-
-    $(".popover-content").click(function(e){
-        e.stopPropagation();
-    });
-
-    $("input").click(function(e){
-       e.stopPropagation();
     });
 }
 

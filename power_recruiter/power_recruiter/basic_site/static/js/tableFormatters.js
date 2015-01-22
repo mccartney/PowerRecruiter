@@ -5,39 +5,33 @@ function photoFormatter(value) {
     return imageDiv;
 }
 
-function removeFormatter(value) {
-    var btn = '<button type="button" onclick="removePerson(' + value.id + ')" class="btn btn-default"><span class="glyphicon glyphicon-remove"/></button>';
-    return btn;
-}
-
 function idFormatter(value){
     return value.id;
 }
 
 function shortenDisplayName(name){
-    if(name.length > 21) {
-        return name.substr(0, 18) + "...";
+    if(name.length > 16) {
+        return name.substr(0, 13) + "...";
     }
     return name;
 }
 
 function attachmentsListFormatterWithoutCSRF(value, uploadUrl, csrfToken) {
-    toReturn = '<div class="innertd">';
+    toReturn = '<div class="innertd blockTableEvent">';
     toReturn += '<form id="my-awesome-dropzone" class="dropzone" action="' + uploadUrl +'" method="post" enctype="multipart/form-data">';
-    toReturn += 'drop file here to upload';
+    toReturn += '(' + value.attachments.length + ') attachment(s)';
     toReturn += csrfToken;
-    toReturn += '<input type="hidden" class="personid" name="person" value="'+ $() +'">';
+    toReturn += '<input type="hidden" name="person" value="'+ value.candidateId +'">';
     toReturn += '</form>';
-
     i = 0;
-    value.forEach(function(){
-        toReturn += '<div id="attachment' + value[i].pk + '">';
-        toReturn += '<a href="javascript:removeAttachment(' + value[i].pk + ')">';
+    value.attachments.forEach(function(){
+        toReturn += '<div id="attachment' + value.attachments[i].pk + '"">';
+        toReturn += '<a href="javascript:removeAttachment(' + value.attachments[i].pk + ')">';
         toReturn += '<span class="glyphicon glyphicon-remove btn-xs" aria-hidden="true"></span>';
         toReturn += '</a>';
 
-        toReturn += '<a href="candidate/attachment/get/' + value[i].pk + '">';
-        toReturn += shortenDisplayName(value[i].display_name);
+        toReturn += '<a href="candidate/attachment/get/' + value.attachments[i].pk + '">';
+        toReturn += shortenDisplayName(value.attachments[i].display_name);
         toReturn += '</a><br>';
         toReturn += '</div>';
         i++;
@@ -51,12 +45,28 @@ function contactFormatter(value) {
     linkedinIcon = new stateIcon("static/img/icon_linkedin.png", value.linkedin, 'linkedin', value.candidateId, value.candidateName);
     goldenlineIcon = new stateIcon("static/img/icon_goldenline.png", value.goldenline, 'goldenline', value.candidateId, value.candidateName);
     emailIcon = new stateIcon("static/img/icon_email.png", value.email, 'email', value.candidateId, value.candidateName);
-    return linkedinIcon + goldenlineIcon + emailIcon;
+    return "<div class='blockTableEvent contactIcons'>" + linkedinIcon + goldenlineIcon + emailIcon + "</div>";
+}
+
+function openDeleteCandidateModal(id, name){
+    $("#deleteModalInfo").html("candidate <b> " + name + "</b> with <b>id = " + id +"</b>");
+    $("#confirmDeleteButton").off();
+    $("#confirmDeleteButton").click(function(){removePerson(id); $('#confirm-delete').modal('hide'); });
+    $('#confirm-delete').modal('show');
+}
+
+function candidateRemoveHtml(id, name){
+    toReturn = '<span class="blockTableEvent">';
+    toReturn += '<div class="removePersonButton"><a onclick="openDeleteCandidateModal(' + id + ',\'' + name + '\')" href="#">';
+    toReturn += '<span class="glyphicon glyphicon-remove"/></a>';
+    toReturn += '</a></div></span>';
+    return toReturn;
 }
 
 function caveatsFormatter(value) {
-    var toReturn = '<div class="innertd"><textarea class="caveatsArea">' + value + '</textarea></div>';
-     //toReturn += '<a href="#"><span class="glyphicon glyphicon-remove edit-remove"></span></a>';
+    var toReturn = '<div class="innertd"><textarea class="caveatsArea" id="caveats-'+ value.candidateId + '">' + value.caveats + '</textarea></div>';
+    //add remove person button to the right of table
+    toReturn = candidateRemoveHtml(value.candidateId, value.candidateName) + toReturn;
     return toReturn;
 }
 
