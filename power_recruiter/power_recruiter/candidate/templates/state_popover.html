@@ -1,16 +1,14 @@
-<span class="blockTableEvent">
-    <a href="#" id="{{ id_prefix }}Button{{ person_id }}">
-        <span class="
-            glyphicon
-            glyphicon-arrow
-            glyphicon-arrow-{{ id_prefix }}
-            {% if id_prefix == 'left' %}
-                grayText
-            {% elif id_prefix == 'right' %}
-                greenText
-            {% endif %}" aria-hidden="true" />
-    </a>
-</span>
+<a href="#" class="blockTableEvent" id="{{ id_prefix }}Button{{ person_id }}">
+    <span class="
+        glyphicon
+        glyphicon-arrow
+        glyphicon-arrow-{{ id_prefix }}
+        {% if id_prefix == 'left' %}
+            grayText
+        {% elif id_prefix == 'right' %}
+            greenText
+        {% endif %}" aria-hidden="true" />
+</a>
 <script>
     $(function() {
         $('#{{ id_prefix }}Button{{ person_id }}').popover({
@@ -38,6 +36,7 @@
                                 reloadData();
                             }
                         );
+                        e.preventDefault();
                     }
             );
         {% endfor %}
