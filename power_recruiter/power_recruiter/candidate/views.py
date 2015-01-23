@@ -168,12 +168,3 @@ def add_candidate(request):
         )
         return HttpResponse(status=200, content=200, content_type="plain/text")
 
-
-def stats(request):
-    context = {
-        'spices': [{
-            'num': len(Person.objects.filter(state=k)),
-            'name': v.get_name()
-        } for k, v in WORKFLOW_STATES.iteritems()]
-    }
-    return render(request, "stats.html", context)

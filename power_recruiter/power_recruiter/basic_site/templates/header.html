@@ -15,7 +15,13 @@
         <div class="collapse navbar-collapse navbar-right">
             <ul class="nav navbar-nav">
                 <li class="homeli"><a href="{% url 'home' %}"><span class="glyphicon glyphicon-list-alt"></span> Data sheet</a></li>
-                <li class="statsli"><a href="{% url 'stats' %}"><span class="glyphicon glyphicon-stats"></span> Statistics</a></li>
+                <li class="statsli dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-stats"></span> Statistics</a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="{% url 'pieChart' %}"><img class="chartIcon" src="static/img/piechart.png" /> Pie Chart</a></li>
+                        <li><a href="{% url 'lineChart' %}"><img class="chartIcon" src="static/img/linechart.png" /> Line Chart</a></li>
+                    </ul>
+                </li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

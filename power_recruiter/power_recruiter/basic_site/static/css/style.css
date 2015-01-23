@@ -24,6 +24,7 @@ input[type=text], textarea {
     border: 0;
     background-color: #FCFCFC;
     padding: 4px;
+    margin-bottom: 7px;
 }
 
 .starter-template {
@@ -251,4 +252,20 @@ tr.maintable-row-large > td > span > a > div.removePersonButton{
 .oldStateDate{
     color: #AAA;
     font-size: 10px;
+}
+
+.dropdown-menu a{
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+}
+
+.chartIcon{
+    margin-right: 5px;
+    width: 25px;
+    height: 25px;
+}
+
+.statsName{
+    font-size: 38px;
+    padding-bottom: 10px;
 }

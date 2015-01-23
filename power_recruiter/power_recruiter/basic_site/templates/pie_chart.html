@@ -1,0 +1,30 @@
+{% extends "stats.html" %}
+
+{% block statsName %}
+Pie Chart
+{% endblock %}
+
+{% block stats %}
+
+<div id="chart"></div>
+<script>
+var chart = c3.generate({
+    size: {
+        height: 480,
+        width: 600
+    },
+    data: {
+        columns: [
+        {% for s in spices %}
+            ['{{ s.name }}', {{ s.num }}],
+        {% endfor %}
+        ],
+        type : 'pie'
+    },
+    legend: {
+        position: 'right'
+    },
+});
+
+</script>
+{% endblock %}

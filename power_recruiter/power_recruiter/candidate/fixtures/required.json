@@ -1,71 +1,743 @@
 [
-    {
-        "pk": 1,
-        "model": "candidate.Contact", "fields": {
-            "linkedin": "https://www.linkedin.com/pub/krzysztof-fudali/a7/3ab/384",
-            "email": "krzysztof@fudali.com"
-        }
-    },
-    {
-        "pk": 2,
-        "model": "candidate.Contact",
-        "fields": {
-            "linkedin": "https://www.linkedin.com/pub/kamila-kruk/9a/564/155?trk=pub-pbmap"
-        }
-    },
-    {
-        "pk": 3,
-        "model": "candidate.Contact",
-        "fields": {
-            "goldenline": "http://www.goldenline.pl/jan-kowalski60/"
-        }
-    },
-    {
-        "pk": 1,
-        "model": "candidate.Person",
-        "fields": {
-            "first_name": "Krzysztof",
-            "last_name": "Fudali",
-            "current_state_started": "2014-04-01",
-            "state": 0,
-            "contact": 1,
-            "caveats": "Good programmer!"
-        }
-    },
-    {
-        "pk": 2,
-        "model": "candidate.Person",
-        "fields": {
-            "first_name": "Kamila",
-            "last_name": "Kruk",
-            "current_state_started": "2014-04-08",
-            "state": 1,
-            "contact": 2,
-            "caveats": ""
-        }
-    },
-    {
-        "pk": 3,
-        "model": "candidate.Person",
-        "fields": {
-            "first_name": "Jan",
-            "last_name": "Kowalski",
-            "current_state_started": "2014-04-08",
-            "state": 2,
-            "contact": 3,
-            "caveats": ""
-        }
-    },
-    {
-        "pk": 4,
-        "model": "candidate.Person",
-        "fields": {
-            "first_name": "Kamila",
-            "last_name": "Kruk",
-            "current_state_started": "2014-04-08",
-            "state": 10,
-            "contact": 2,
-            "caveats": ""
-        }
-    }
+   {
+      "fields":{
+         "model":"logentry",
+         "name":"log entry",
+         "app_label":"admin"
+      },
+      "model":"contenttypes.contenttype",
+      "pk":1
+   },
+   {
+      "fields":{
+         "model":"permission",
+         "name":"permission",
+         "app_label":"auth"
+      },
+      "model":"contenttypes.contenttype",
+      "pk":2
+   },
+   {
+      "fields":{
+         "model":"group",
+         "name":"group",
+         "app_label":"auth"
+      },
+      "model":"contenttypes.contenttype",
+      "pk":3
+   },
+   {
+      "fields":{
+         "model":"user",
+         "name":"user",
+         "app_label":"auth"
+      },
+      "model":"contenttypes.contenttype",
+      "pk":4
+   },
+   {
+      "fields":{
+         "model":"contenttype",
+         "name":"content type",
+         "app_label":"contenttypes"
+      },
+      "model":"contenttypes.contenttype",
+      "pk":5
+   },
+   {
+      "fields":{
+         "model":"session",
+         "name":"session",
+         "app_label":"sessions"
+      },
+      "model":"contenttypes.contenttype",
+      "pk":6
+   },
+   {
+      "fields":{
+         "model":"contact",
+         "name":"contact",
+         "app_label":"candidate"
+      },
+      "model":"contenttypes.contenttype",
+      "pk":7
+   },
+   {
+      "fields":{
+         "model":"role",
+         "name":"role",
+         "app_label":"candidate"
+      },
+      "model":"contenttypes.contenttype",
+      "pk":8
+   },
+   {
+      "fields":{
+         "model":"person",
+         "name":"person",
+         "app_label":"candidate"
+      },
+      "model":"contenttypes.contenttype",
+      "pk":9
+   },
+   {
+      "fields":{
+         "model":"attachment",
+         "name":"attachment",
+         "app_label":"candidate"
+      },
+      "model":"contenttypes.contenttype",
+      "pk":10
+   },
+   {
+      "fields":{
+         "model":"oldstate",
+         "name":"old state",
+         "app_label":"candidate"
+      },
+      "model":"contenttypes.contenttype",
+      "pk":11
+   },
+   {
+      "fields":{
+         "email":"krzysztof@fudali.com",
+         "linkedin":"https://www.linkedin.com/pub/krzysztof-fudali/a7/3ab/384",
+         "goldenline":null
+      },
+      "model":"candidate.contact",
+      "pk":1
+   },
+   {
+      "fields":{
+         "email":null,
+         "linkedin":"https://www.linkedin.com/pub/kamila-kruk/9a/564/155?trk=pub-pbmap",
+         "goldenline":null
+      },
+      "model":"candidate.contact",
+      "pk":2
+   },
+   {
+      "fields":{
+         "email":null,
+         "linkedin":null,
+         "goldenline":"http://www.goldenline.pl/jan-kowalski60/"
+      },
+      "model":"candidate.contact",
+      "pk":3
+   },
+   {
+      "fields":{
+         "email":null,
+         "linkedin":null,
+         "goldenline":null
+      },
+      "model":"candidate.contact",
+      "pk":4
+   },
+   {
+      "fields":{
+         "email":null,
+         "linkedin":null,
+         "goldenline":null
+      },
+      "model":"candidate.contact",
+      "pk":5
+   },
+   {
+      "fields":{
+         "first_name":"Krzysztof",
+         "last_name":"Fudali",
+         "caveats":"Good programmer!",
+         "current_state_started":"2014-12-31T21:48:32.116Z",
+         "state":6,
+         "contact":1,
+         "role":null,
+         "photo_url":""
+      },
+      "model":"candidate.person",
+      "pk":1
+   },
+   {
+      "fields":{
+         "first_name":"Kamila",
+         "last_name":"Kruk",
+         "caveats":"",
+         "current_state_started":"2014-12-31T21:48:28.111Z",
+         "state":10,
+         "contact":2,
+         "role":null,
+         "photo_url":""
+      },
+      "model":"candidate.person",
+      "pk":2
+   },
+   {
+      "fields":{
+         "first_name":"Jan",
+         "last_name":"Kowalski",
+         "caveats":"",
+         "current_state_started":"2014-12-28T21:48:27.915Z",
+         "state":7,
+         "contact":3,
+         "role":null,
+         "photo_url":""
+      },
+      "model":"candidate.person",
+      "pk":3
+   },
+   {
+      "fields":{
+         "first_name":"Paulina",
+         "last_name":"Kiepska",
+         "caveats":"",
+         "current_state_started":"2014-12-23T21:48:34.622Z",
+         "state":4,
+         "contact":4,
+         "role":null,
+         "photo_url":""
+      },
+      "model":"candidate.person",
+      "pk":4
+   },
+   {
+      "fields":{
+         "first_name":"Wojtek",
+         "last_name":"Wawelski",
+         "caveats":"",
+         "current_state_started":"2015-01-03T21:48:29.158Z",
+         "state":10,
+         "contact":5,
+         "role":null,
+         "photo_url":""
+      },
+      "model":"candidate.person",
+      "pk":5
+   },
+   {
+      "fields":{
+         "person":5,
+         "state":0,
+         "changeDate":"2014-12-09T21:48:33.227Z",
+         "startDate":"2014-11-28T00:00:00Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":1
+   },
+   {
+      "fields":{
+         "person":1,
+         "state":0,
+         "changeDate":"2014-12-09T21:48:51.089Z",
+         "startDate":"2014-12-08T00:00:00Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":2
+   },
+   {
+      "fields":{
+         "person":1,
+         "state":2,
+         "changeDate":"2014-12-11T21:48:28.559Z",
+         "startDate":"2014-12-09T21:48:51.208Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":3
+   },
+   {
+      "fields":{
+         "person":3,
+         "state":0,
+         "changeDate":"2014-12-11T21:48:31.595Z",
+         "startDate":"2014-12-01T00:00:00Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":4
+   },
+   {
+      "fields":{
+         "person":3,
+         "state":1,
+         "changeDate":"2014-12-12T21:48:27.849Z",
+         "startDate":"2014-12-11T21:48:31.728Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":5
+   },
+   {
+      "fields":{
+         "person":4,
+         "state":0,
+         "changeDate":"2014-12-13T21:48:28.955Z",
+         "startDate":"2014-12-12T00:00:00Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":6
+   },
+   {
+      "fields":{
+         "person":2,
+         "state":0,
+         "changeDate":"2014-12-13T21:48:30.806Z",
+         "startDate":"2014-12-12T00:00:00Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":7
+   },
+   {
+      "fields":{
+         "person":1,
+         "state":5,
+         "changeDate":"2014-12-15T21:48:28.596Z",
+         "startDate":"2014-12-11T21:48:28.703Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":8
+   },
+   {
+      "fields":{
+         "person":2,
+         "state":2,
+         "changeDate":"2014-12-15T21:48:30.914Z",
+         "startDate":"2014-12-13T21:48:30.952Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":9
+   },
+   {
+      "fields":{
+         "person":5,
+         "state":2,
+         "changeDate":"2014-12-19T21:48:28.809Z",
+         "startDate":"2014-12-09T21:48:33.379Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":10
+   },
+   {
+      "fields":{
+         "person":2,
+         "state":5,
+         "changeDate":"2014-12-19T21:48:32.921Z",
+         "startDate":"2014-12-15T21:48:31.090Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":11
+   },
+   {
+      "fields":{
+         "person":3,
+         "state":0,
+         "changeDate":"2014-12-19T21:48:36.418Z",
+         "startDate":"2014-12-12T21:48:28.008Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":12
+   },
+   {
+      "fields":{
+         "person":3,
+         "state":2,
+         "changeDate":"2014-12-20T21:48:31.427Z",
+         "startDate":"2014-12-19T21:48:36.586Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":13
+   },
+   {
+      "fields":{
+         "person":1,
+         "state":6,
+         "changeDate":"2014-12-21T21:48:28.804Z",
+         "startDate":"2014-12-15T21:48:28.741Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":14
+   },
+   {
+      "fields":{
+         "person":5,
+         "state":5,
+         "changeDate":"2014-12-23T21:48:30.920Z",
+         "startDate":"2014-12-19T21:48:28.931Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":15
+   },
+   {
+      "fields":{
+         "person":4,
+         "state":2,
+         "changeDate":"2014-12-23T21:48:34.504Z",
+         "startDate":"2014-12-13T21:48:29.105Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":16
+   },
+   {
+      "fields":{
+         "person":3,
+         "state":5,
+         "changeDate":"2014-12-23T21:48:36.858Z",
+         "startDate":"2014-12-20T21:48:32.410Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":17
+   },
+   {
+      "fields":{
+         "person":3,
+         "state":6,
+         "changeDate":"2014-12-28T21:48:27.780Z",
+         "startDate":"2014-12-23T21:48:37.003Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":18
+   },
+   {
+      "fields":{
+         "person":2,
+         "state":6,
+         "changeDate":"2014-12-28T21:48:30.111Z",
+         "startDate":"2014-12-19T21:48:33.069Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":19
+   },
+   {
+      "fields":{
+         "person":5,
+         "state":6,
+         "changeDate":"2014-12-28T21:48:33.332Z",
+         "startDate":"2014-12-23T21:48:31.106Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":20
+   },
+   {
+      "fields":{
+         "person":2,
+         "state":8,
+         "changeDate":"2014-12-31T21:48:27.968Z",
+         "startDate":"2014-12-28T21:48:30.297Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":21
+   },
+   {
+      "fields":{
+         "person":1,
+         "state":5,
+         "changeDate":"2014-12-31T21:48:31.951Z",
+         "startDate":"2014-12-21T21:48:28.931Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":22
+   },
+   {
+      "fields":{
+         "person":5,
+         "state":8,
+         "changeDate":"2015-01-03T21:48:29.001Z",
+         "startDate":"2014-12-28T21:48:33.478Z"
+      },
+      "model":"candidate.oldstate",
+      "pk":23
+   },
+   {
+      "fields":{
+         "codename":"add_logentry",
+         "name":"Can add log entry",
+         "content_type":1
+      },
+      "model":"auth.permission",
+      "pk":1
+   },
+   {
+      "fields":{
+         "codename":"change_logentry",
+         "name":"Can change log entry",
+         "content_type":1
+      },
+      "model":"auth.permission",
+      "pk":2
+   },
+   {
+      "fields":{
+         "codename":"delete_logentry",
+         "name":"Can delete log entry",
+         "content_type":1
+      },
+      "model":"auth.permission",
+      "pk":3
+   },
+   {
+      "fields":{
+         "codename":"add_permission",
+         "name":"Can add permission",
+         "content_type":2
+      },
+      "model":"auth.permission",
+      "pk":4
+   },
+   {
+      "fields":{
+         "codename":"change_permission",
+         "name":"Can change permission",
+         "content_type":2
+      },
+      "model":"auth.permission",
+      "pk":5
+   },
+   {
+      "fields":{
+         "codename":"delete_permission",
+         "name":"Can delete permission",
+         "content_type":2
+      },
+      "model":"auth.permission",
+      "pk":6
+   },
+   {
+      "fields":{
+         "codename":"add_group",
+         "name":"Can add group",
+         "content_type":3
+      },
+      "model":"auth.permission",
+      "pk":7
+   },
+   {
+      "fields":{
+         "codename":"change_group",
+         "name":"Can change group",
+         "content_type":3
+      },
+      "model":"auth.permission",
+      "pk":8
+   },
+   {
+      "fields":{
+         "codename":"delete_group",
+         "name":"Can delete group",
+         "content_type":3
+      },
+      "model":"auth.permission",
+      "pk":9
+   },
+   {
+      "fields":{
+         "codename":"add_user",
+         "name":"Can add user",
+         "content_type":4
+      },
+      "model":"auth.permission",
+      "pk":10
+   },
+   {
+      "fields":{
+         "codename":"change_user",
+         "name":"Can change user",
+         "content_type":4
+      },
+      "model":"auth.permission",
+      "pk":11
+   },
+   {
+      "fields":{
+         "codename":"delete_user",
+         "name":"Can delete user",
+         "content_type":4
+      },
+      "model":"auth.permission",
+      "pk":12
+   },
+   {
+      "fields":{
+         "codename":"add_contenttype",
+         "name":"Can add content type",
+         "content_type":5
+      },
+      "model":"auth.permission",
+      "pk":13
+   },
+   {
+      "fields":{
+         "codename":"change_contenttype",
+         "name":"Can change content type",
+         "content_type":5
+      },
+      "model":"auth.permission",
+      "pk":14
+   },
+   {
+      "fields":{
+         "codename":"delete_contenttype",
+         "name":"Can delete content type",
+         "content_type":5
+      },
+      "model":"auth.permission",
+      "pk":15
+   },
+   {
+      "fields":{
+         "codename":"add_session",
+         "name":"Can add session",
+         "content_type":6
+      },
+      "model":"auth.permission",
+      "pk":16
+   },
+   {
+      "fields":{
+         "codename":"change_session",
+         "name":"Can change session",
+         "content_type":6
+      },
+      "model":"auth.permission",
+      "pk":17
+   },
+   {
+      "fields":{
+         "codename":"delete_session",
+         "name":"Can delete session",
+         "content_type":6
+      },
+      "model":"auth.permission",
+      "pk":18
+   },
+   {
+      "fields":{
+         "codename":"add_contact",
+         "name":"Can add contact",
+         "content_type":7
+      },
+      "model":"auth.permission",
+      "pk":19
+   },
+   {
+      "fields":{
+         "codename":"change_contact",
+         "name":"Can change contact",
+         "content_type":7
+      },
+      "model":"auth.permission",
+      "pk":20
+   },
+   {
+      "fields":{
+         "codename":"delete_contact",
+         "name":"Can delete contact",
+         "content_type":7
+      },
+      "model":"auth.permission",
+      "pk":21
+   },
+   {
+      "fields":{
+         "codename":"add_role",
+         "name":"Can add role",
+         "content_type":8
+      },
+      "model":"auth.permission",
+      "pk":22
+   },
+   {
+      "fields":{
+         "codename":"change_role",
+         "name":"Can change role",
+         "content_type":8
+      },
+      "model":"auth.permission",
+      "pk":23
+   },
+   {
+      "fields":{
+         "codename":"delete_role",
+         "name":"Can delete role",
+         "content_type":8
+      },
+      "model":"auth.permission",
+      "pk":24
+   },
+   {
+      "fields":{
+         "codename":"add_person",
+         "name":"Can add person",
+         "content_type":9
+      },
+      "model":"auth.permission",
+      "pk":25
+   },
+   {
+      "fields":{
+         "codename":"change_person",
+         "name":"Can change person",
+         "content_type":9
+      },
+      "model":"auth.permission",
+      "pk":26
+   },
+   {
+      "fields":{
+         "codename":"delete_person",
+         "name":"Can delete person",
+         "content_type":9
+      },
+      "model":"auth.permission",
+      "pk":27
+   },
+   {
+      "fields":{
+         "codename":"add_attachment",
+         "name":"Can add attachment",
+         "content_type":10
+      },
+      "model":"auth.permission",
+      "pk":28
+   },
+   {
+      "fields":{
+         "codename":"change_attachment",
+         "name":"Can change attachment",
+         "content_type":10
+      },
+      "model":"auth.permission",
+      "pk":29
+   },
+   {
+      "fields":{
+         "codename":"delete_attachment",
+         "name":"Can delete attachment",
+         "content_type":10
+      },
+      "model":"auth.permission",
+      "pk":30
+   },
+   {
+      "fields":{
+         "codename":"add_oldstate",
+         "name":"Can add old state",
+         "content_type":11
+      },
+      "model":"auth.permission",
+      "pk":31
+   },
+   {
+      "fields":{
+         "codename":"change_oldstate",
+         "name":"Can change old state",
+         "content_type":11
+      },
+      "model":"auth.permission",
+      "pk":32
+   },
+   {
+      "fields":{
+         "codename":"delete_oldstate",
+         "name":"Can delete old state",
+         "content_type":11
+      },
+      "model":"auth.permission",
+      "pk":33
+   }
 ]

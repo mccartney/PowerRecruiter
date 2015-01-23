@@ -1,0 +1,48 @@
+{% extends "stats.html" %}
+
+{% block statsName %}
+Line Chart
+{% endblock %}
+
+{% block stats %}
+
+<div id="chart"></div>
+<script>
+var chart = c3.generate({
+    size: {
+        height: 500
+    },
+    data: {
+        xs: {
+            {% for state, list in dicts.items %}
+            '{{state}}': 'x-{{state}}',
+            {% endfor %}
+        },
+        columns: [
+        {% for state, list in dicts.items %}
+            ['x-{{state}}'
+            {% for item in list %}, '{{item.0}}'{% endfor %}
+            ],
+            ['{{state}}'
+            {% for item in list %}, '{{item.1}}'{% endfor %}
+            ],
+        {% endfor %}
+        ]
+    },
+    axis : {
+       x : {
+            type : 'timeseries',
+            tick: {
+                count: 20,
+                format: "%e %b %y"
+            }
+        },
+    },
+    subchart: {
+        show: true
+    }
+
+});
+</script>
+
+{% endblock %}
