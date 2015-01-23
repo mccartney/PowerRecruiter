@@ -1,6 +1,6 @@
 from django.utils import timezone
 from django.db.models import Manager, Model, CharField, ForeignKey, \
-    FileField, DateField, TextField, URLField, EmailField, IntegerField
+    FileField, DateField, DateTimeField, TextField, URLField, EmailField, IntegerField
 from django.template.loader import render_to_string
 
 from power_recruiter.basic_site.workflow import WORKFLOW_STATES, \
@@ -57,7 +57,7 @@ class PersonManager(Manager):
 class Person(Model):
     first_name = CharField(max_length=100)
     last_name = CharField(max_length=100)
-    date_created = DateField(default=timezone.now)
+    current_state_started = DateField(default=timezone.now)
     state = IntegerField(default=0)
     photo_url = CharField(max_length=200)
     contact = ForeignKey(Contact)
@@ -106,12 +106,18 @@ class Person(Model):
 
         state = {
             'state_name': WORKFLOW_STATES[self.state].name,
+            'current_state_started': str(self.current_state_started),
             'state_view': render_to_string('state.html', {
                 'person_id': self.pk,
                 'previous_states': previous_states,
                 'next_states': next_states,
                 'state_view': WORKFLOW_STATES[self.state]
-                })
+                }),
+            'state_history':  [{
+                'startDate': str(oldState.changeDate.date()),
+                'changeDate': str(oldState.changeDate.date()),
+                'state': str(WORKFLOW_STATES[oldState.state])
+            } for oldState in OldState.objects.filter(person_id=self.pk).order_by('-changeDate')]
         }
 
         caveats = {
@@ -137,3 +143,10 @@ class Attachment(Model):
 
     def __unicode__(self):
         return self.file.name[23:]
+
+
+class OldState(Model):
+    person = ForeignKey(Person)
+    startDate = DateTimeField(default=timezone.now)
+    changeDate = DateTimeField(default=timezone.now)
+    state = IntegerField(default=0)

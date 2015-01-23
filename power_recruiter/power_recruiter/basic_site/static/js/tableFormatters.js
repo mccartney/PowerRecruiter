@@ -76,6 +76,16 @@ function nameFormatter(value) {
     return nameField;
 }
 
+function stateHistoryView(value){
+    stateHistory = "<div class='oldStateContainer'><div class='oldStateDate'>(from: "  + value.current_state_started + ")</div></div>";
+    value.state_history.forEach(function(oldState) {
+        stateHistory += "<div class='oldStateContainer'><div><span class='glyphicon glyphicon-arrow-up' aria-hidden='true' style='font-size: 8px'></span></div>";
+        stateHistory += "<div class='oldStateName'>" + oldState.state + "</div>";
+        stateHistory += "<div class='oldStateDate'>(from " + oldState.startDate + " to " + oldState.changeDate + ")</div></div>";
+    });
+    return stateHistory;
+}
+
 function stateFormatter(value){
-    return value.state_view;
+    return value.state_view + stateHistoryView(value);
 }

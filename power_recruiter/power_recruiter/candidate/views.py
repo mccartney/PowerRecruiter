@@ -1,6 +1,7 @@
 import json
 import logging
 import sys
+import datetime
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import redirect, render, render_to_response, \
@@ -11,7 +12,7 @@ from django import forms
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
-from power_recruiter.candidate.models import Attachment, Person
+from power_recruiter.candidate.models import Attachment, Person, OldState
 from power_recruiter.basic_site.workflow import WORKFLOW_STATES, \
     are_nodes_connected
 
@@ -128,7 +129,10 @@ def change_state(request):
         raise Http404
     person = get_object_or_404(Person, id=person_id)
     if are_nodes_connected(new_state_id, person.state):
+        oldState = OldState(person=person, startDate=person.current_state_started, changeDate=datetime.datetime.now(), state=person.state)
+        oldState.save()
         person.state = new_state_id
+        person.current_state_started = datetime.datetime.now()
         person.save()
         return HttpResponse(200, content_type="plain/text")
     raise Http404
