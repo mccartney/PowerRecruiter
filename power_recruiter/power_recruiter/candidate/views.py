@@ -157,7 +157,7 @@ def add_candidate(request):
         return HttpResponse(
             status=418,
             content_type="plain/text",
-            content=WORKFLOW_STATES[person.state]
+            content=WORKFLOW_STATES[person.state].name
         )
     else:
         Person.objects.create_person(
