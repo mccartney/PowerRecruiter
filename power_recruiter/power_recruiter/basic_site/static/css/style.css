@@ -209,6 +209,16 @@ tr > td > div.imageDiv > img{
     height: 25px;
 }
 
+td {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.maintable-row-large > td{
+    white-space: normal !important;
+    word-wrap: break-word !important;
+}
+
 .oldStateContainer{
     display: none;
 }
