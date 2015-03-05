@@ -1,8 +1,9 @@
-from datetime import MAXYEAR
+import datetime
+
 from django.shortcuts import render
 from power_recruiter.basic_site.workflow import WORKFLOW_STATES
 from power_recruiter.candidate.models import Person, OldState
-import datetime
+
 
 def add_to_double_directory(first_directory, date, value, min_date, max_date):
 
@@ -17,8 +18,8 @@ def add_to_double_directory(first_directory, date, value, min_date, max_date):
         max_date = date
     return (min_date, max_date)
 
-def line_chart(request):
 
+def line_chart(request):
     state_dict = {}
     for idx, state in WORKFLOW_STATES.iteritems():
         state_dict[state.get_name()] = {}
@@ -70,3 +71,4 @@ def line_chart(request):
         'dicts': result
     }
     return render(request, "line_chart.html", context)
+

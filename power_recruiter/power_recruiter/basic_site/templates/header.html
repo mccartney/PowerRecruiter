@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
             </button>
             <div id="logo-container">
-                <img src="{% static 'img/logo.png' %}">
+                <a href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}"></a>
             </div>
         </div>
         <div class="collapse navbar-collapse navbar-right">
@@ -22,6 +22,9 @@
                         <li><a href="{% url 'lineChart' %}"><img class="chartIcon" src="static/img/linechart.png" /> Line Chart</a></li>
                     </ul>
                 </li>
+                <li class="notifili"><a href="{% url 'notifications' %}"><span class="glyphicon glyphicon glyphicon-warning-sign"></span> Notifications</a></li>
+                <li class="configli"><a href="{% url 'configuration' %}"><span class="glyphicon glyphicon glyphicon-wrench"></span> Configuration</a></li>
+
             </ul>
         </div><!--/.nav-collapse -->
     </div>
