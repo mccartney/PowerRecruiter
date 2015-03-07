@@ -14,20 +14,32 @@
 
 {% block content %}
 
-{% for k, v in states.iteritems %}
-    <div class="stateCheckboxDiv">
-        <input type="checkbox" class="stateCheckbox" name="{{ k }}" checked />{{ v | safe }}
+
+
+<div id="top-tooltip">
+    <div id="top-tooltip-left">
+        <div class="top-tooltip-inner-left">
+            <div class="btn-group">
+                <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">Filter states <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    {% for k, v in states.iteritems %}
+                    <li><input type="checkbox" class="stateCheckbox" name="{{ k }}" id="{{ k }}" checked /><label for="{{ k }}">{{ v | safe }}</label></li>
+                    {% endfor %}
+                </ul>
+            </div>
+         </div>
     </div>
-{% endfor %}
-
-
+    <div id="top-tooltip-right">
+        <div class="top-tooltip-inner-right">
+            <a href="javascript:$('#creation-modal').modal('show');" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Add new candidate</a>
+        </div>
+    </div>
+</div>
 
 <table id="maintable" data-toggle="table" data-url="{% url 'json' %}" data-cache="false" data-sort-name="id" data-sort-order="desc">
     <thead>
         <tr>
-            <th data-field="photo" data-formatter="photoFormatter" data-sortable="false" class="col-md-1" data-align="center">
-                <a href="javascript:$('#creation-modal').modal('show');" type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></a>
-            </th>
+            <th data-field="photo" data-formatter="photoFormatter" data-sortable="false" class="col-md-1" data-align="center"></th>
             <th data-field="id" data-formatter="idFormatter" data-sortable="true" data-sorter="idSorter" class="col-md-1">ID</th>
             <th data-field="candidateName" data-formatter="nameFormatter" data-sortable="true" data-sorter="nameSorter" data-align="left">Name</th>
             <th data-field="contact" data-formatter="contactFormatter" class="col-md-1" data-align="center">Contact</th>

@@ -279,3 +279,27 @@ tr.maintable-row-large > td > span > a > div.removePersonButton{
     font-size: 38px;
     padding-bottom: 10px;
 }
+
+#top-tooltip{
+    float: left;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+#top-tooltip-left{
+    width: 50%;
+    float: left;
+}
+
+#top-tooltip-right{
+    width: 50%;
+    float: right;
+}
+
+.top-tooltip-inner-left{
+    float: left;
+}
+
+.top-tooltip-inner-right{
+    float: right;
+}
