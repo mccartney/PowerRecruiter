@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 
 from power_recruiter.basic_site.workflow import WORKFLOW_STATES, \
     get_next_nodes, get_previous_nodes
-
+from power_recruiter.basic_site.models import Notification
 
 class ContactManager(Manager):
     def create_contact(self, link):
@@ -76,6 +76,9 @@ class Person(Model):
 
         photo = {
             'photo': self.photo_url,
+            'notifications': [{
+                'message': str(msg)
+            } for msg in self.get_person_notifications()]
         }
 
         candidate_name = {
@@ -136,6 +139,12 @@ class Person(Model):
             'caveats': caveats,
         }
 
+    def get_person_notifications(self):
+        notifications = []
+        for notification in Notification.objects.all():
+            if notification.get_message(self):
+                notifications.append(notification.get_message(self))
+        return notifications
 
 class Attachment(Model):
     person = ForeignKey(Person)

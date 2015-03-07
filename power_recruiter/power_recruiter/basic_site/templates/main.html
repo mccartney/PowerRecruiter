@@ -14,6 +14,17 @@
 
 {% block content %}
 
+{% if notifications > 0 %}
+    <div class="alert alert-danger">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Error!</strong>
+        {% if notifications > 0 %}
+            There is one notification.
+        {% elif notifications > 1 %}
+            There are {{notifications}} notifications.
+        {% endif %}
+    </div>
+{% endif %}
 
 
 <div id="top-tooltip">

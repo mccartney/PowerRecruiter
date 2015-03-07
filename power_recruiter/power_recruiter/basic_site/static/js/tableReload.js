@@ -14,6 +14,7 @@ function reloadTable(){
 
     blockTableEventPropagation();
     Dropzone.discover();
+    $('[data-toggle="popover"]').popover();
 }
 
 function blockTableEventPropagation(){

@@ -1,8 +1,22 @@
+function notifyFormatter(notifications){
+    if(notifications.length == 0){
+        return "";
+    }
+    toReturn = '<div class="notification-icon"><span class="glyphicon glyphicon glyphicon-warning-sign notification-icon-span"';
+    toReturn += 'data-placement="bottom" data-toggle="popover" data-trigger="hover" title="Notifications" ';
+    toReturn += 'data-content="';
+    notifications.forEach(function(notification){
+        toReturn += notification.message;
+    });
+    toReturn += '"></span></div>';
+    return toReturn;
+}
+
 function photoFormatter(value) {
     var DEFAULT_SRC = 'https://static.licdn.com/scds/common/u/images/themes/katy/ghosts/person/ghost_person_200x200_v1.png';
     var src = value.photo == '' ? DEFAULT_SRC : value.photo;
     var imageDiv = '<div class="imageDiv"><img src="' + src + '"/></div>';
-    return imageDiv;
+    return notifyFormatter(value.notifications) + imageDiv;
 }
 
 function idFormatter(value){

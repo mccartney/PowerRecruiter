@@ -303,3 +303,22 @@ tr.maintable-row-large > td > span > a > div.removePersonButton{
 .top-tooltip-inner-right{
     float: right;
 }
+
+.notification-icon{
+    position: absolute;
+    left: -30px;
+    padding-top: 5px;
+}
+
+.notification-icon-span{
+    color: #F00;
+}
+
+.notification-icon .popover-title{
+    display: none;
+}
+
+.notification-icon .popover-content {
+    color: #F00;
+    font-size: 12px;
+}
