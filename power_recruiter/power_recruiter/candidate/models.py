@@ -7,6 +7,7 @@ from power_recruiter.basic_site.workflow import WORKFLOW_STATES, \
     get_next_nodes, get_previous_nodes
 from power_recruiter.basic_site.models import Notification
 
+
 class ContactManager(Manager):
     def create_contact(self, link):
         if "linkedin" in link:
@@ -116,11 +117,14 @@ class Person(Model):
                 'next_states': next_states,
                 'state_view': WORKFLOW_STATES[self.state]
                 }),
-            'state_history':  [{
-                'startDate': str(oldState.startDate.date()),
-                'changeDate': str(oldState.changeDate.date()),
-                'state': str(WORKFLOW_STATES[oldState.state])
-            } for oldState in OldState.objects.filter(person_id=self.pk).order_by('-changeDate')]
+            'state_history':  [
+                {
+                    'start_date': str(oldState.start_date.date()),
+                    'change_date': str(oldState.change_date.date()),
+                    'state': str(WORKFLOW_STATES[oldState.state])
+                } for oldState in OldState.objects.filter(
+                    person_id=self.pk).order_by('-change_date')
+            ]
         }
 
         caveats = {
@@ -131,7 +135,7 @@ class Person(Model):
 
         return {
             'id': id,
-            'photo' : photo,
+            'photo': photo,
             'candidateName': candidate_name,
             'contact': contact,
             'state': state,
@@ -146,6 +150,7 @@ class Person(Model):
                 notifications.append(notification.get_message(self))
         return notifications
 
+
 class Attachment(Model):
     person = ForeignKey(Person)
     file = FileField(upload_to='attachments/%Y/%m/%d')
@@ -156,6 +161,6 @@ class Attachment(Model):
 
 class OldState(Model):
     person = ForeignKey(Person)
-    startDate = DateTimeField(default=timezone.now)
-    changeDate = DateTimeField(default=timezone.now)
+    start_date = DateTimeField(default=timezone.now)
+    change_date = DateTimeField(default=timezone.now)
     state = IntegerField(default=0)

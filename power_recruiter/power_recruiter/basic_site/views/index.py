@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
 from power_recruiter.basic_site.workflow import WORKFLOW_STATES
-from power_recruiter.basic_site.models import Notification
 from power_recruiter.candidate.models import Person
+
 
 def index(request):
 

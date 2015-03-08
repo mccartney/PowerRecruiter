@@ -1,4 +1,4 @@
-from django.db.models import Manager, Model, IntegerField, TextField
+from django.db.models import Model, IntegerField, TextField
 import datetime
 
 
