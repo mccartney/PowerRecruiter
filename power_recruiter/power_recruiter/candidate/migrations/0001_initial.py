@@ -34,12 +34,24 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
+            name='OldState',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('start_date', models.DateTimeField(default=django.utils.timezone.now)),
+                ('change_date', models.DateTimeField(default=django.utils.timezone.now)),
+                ('state', models.IntegerField(default=0)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
             name='Person',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('first_name', models.CharField(max_length=100)),
                 ('last_name', models.CharField(max_length=100)),
-                ('date_created', models.DateField(default=django.utils.timezone.now)),
+                ('current_state_started', models.DateTimeField(default=django.utils.timezone.now)),
                 ('state', models.IntegerField(default=0)),
                 ('photo_url', models.CharField(max_length=200)),
                 ('caveats', models.TextField(max_length=1000, blank=True)),
@@ -63,6 +75,12 @@ class Migration(migrations.Migration):
             model_name='person',
             name='role',
             field=models.ForeignKey(blank=True, to='candidate.Role', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='oldstate',
+            name='person',
+            field=models.ForeignKey(to='candidate.Person'),
             preserve_default=True,
         ),
         migrations.AddField(

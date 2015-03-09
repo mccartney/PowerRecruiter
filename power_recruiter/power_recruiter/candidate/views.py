@@ -128,8 +128,13 @@ def change_state(request):
         raise Http404
     person = get_object_or_404(Person, id=person_id)
     if are_nodes_connected(new_state_id, person.state):
-        oldState = OldState(person=person, startDate=person.current_state_started, changeDate=datetime.datetime.now(), state=person.state)
-        oldState.save()
+        old_state = OldState(
+            person=person,
+            start_date=person.current_state_started,
+            change_date=datetime.datetime.now(),
+            state=person.state
+        )
+        old_state.save()
         person.state = new_state_id
         person.current_state_started = datetime.datetime.now()
         person.save()
@@ -166,4 +171,3 @@ def add_candidate(request):
             args[1]
         )
         return HttpResponse(status=200, content=200, content_type="plain/text")
-
