@@ -7,21 +7,6 @@ from power_recruiter.basic_site.workflow import WORKFLOW_STATES, \
     get_next_nodes, get_previous_nodes
 from power_recruiter.basic_site.models import Notification
 
-
-class ContactManager(Manager):
-    def create_contact(self, link):
-        if "linkedin" in link:
-            communication = self.create(linkedin=link)
-            return communication
-
-        if "goldenline" in link:
-            communication = self.create(goldenline=link)
-            return communication
-
-        contact = self.create()
-        return contact
-
-
 class Role(Model):
     name = CharField(max_length=100, default='')
 
@@ -31,14 +16,27 @@ class Role(Model):
 
 class PersonManager(Manager):
     def create_person(self, first_name, last_name, link, photo_url):
-        person = self.create(
-            first_name=first_name,
-            last_name=last_name,
-            contact=Contact.objects.create_contact(link),
-            photo_url=photo_url
-        )
-        return person
+        if "linkedin" in link:
+            return self.create(
+                first_name=first_name,
+                last_name=last_name,
+                linkedin=link,
+                photo_url=photo_url
+            )
 
+        if "goldenline" in link:
+            return self.create(
+                first_name=first_name,
+                last_name=last_name,
+                goldenline=link,
+                photo_url=photo_url
+            )
+
+        return self.create(
+                first_name=first_name,
+                last_name=last_name,
+                photo_url=photo_url
+            )
 
 class Person(Model):
     first_name = CharField(max_length=100)
