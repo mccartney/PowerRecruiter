@@ -36,18 +36,18 @@ def line_chart(request):
             max_date
             )
 
-    for oldState in OldState.objects.all():
+    for old_state in OldState.objects.all():
         (min_date, max_date) = add_to_double_directory(
-            state_dict[WORKFLOW_STATES[oldState.state].get_name()],
-            oldState.startDate.date(),
+            state_dict[WORKFLOW_STATES[old_state.state].get_name()],
+            old_state.start_date.date(),
             1,
             min_date,
             max_date
             )
 
         (min_date, max_date) = add_to_double_directory(
-            state_dict[WORKFLOW_STATES[oldState.state].get_name()],
-            oldState.changeDate.date(),
+            state_dict[WORKFLOW_STATES[old_state.state].get_name()],
+            old_state.change_date.date(),
             -1,
             min_date,
             max_date
