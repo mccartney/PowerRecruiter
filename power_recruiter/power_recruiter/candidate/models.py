@@ -22,21 +22,6 @@ class ContactManager(Manager):
         return contact
 
 
-class Contact(Model):
-    linkedin = URLField(null=True, unique=True)
-    goldenline = URLField(null=True, unique=True)
-    email = EmailField(null=True, unique=True)
-
-    objects = ContactManager()
-
-    def __unicode__(self):
-        return u"".join([
-            self.linkedin or u"",
-            self.goldenline or u"",
-            self.email or u""
-        ])
-
-
 class Role(Model):
     name = CharField(max_length=100, default='')
 
@@ -61,7 +46,9 @@ class Person(Model):
     current_state_started = DateTimeField(default=timezone.now)
     state = IntegerField(default=0)
     photo_url = CharField(max_length=200)
-    contact = ForeignKey(Contact)
+    linkedin = URLField(null=True, unique=True)
+    goldenline = URLField(null=True, unique=True)
+    email = EmailField(null=True, unique=True)
     role = ForeignKey(Role, blank=True, null=True)
     caveats = TextField(max_length=1000, blank=True)
 
@@ -90,9 +77,9 @@ class Person(Model):
         contact = {
             'candidateId': self.pk,
             'candidateName': str(self),
-            'linkedin': self.contact.linkedin,
-            'goldenline': self.contact.goldenline,
-            'email': self.contact.email,
+            'linkedin': self.linkedin,
+            'goldenline': self.goldenline,
+            'email': self.email,
         }
 
         attachments = {

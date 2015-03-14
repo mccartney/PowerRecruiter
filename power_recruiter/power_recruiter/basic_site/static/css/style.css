@@ -17,7 +17,16 @@
 
 body {
     padding-top: 50px;
+    padding-bottom: 30px;
     background-color: #F8F8F8;
+}
+
+a {
+    color: #333;
+}
+
+a:focus, a:hover{
+    text-decoration: none;
 }
 
 input[type=text], textarea {
@@ -321,4 +330,17 @@ tr.maintable-row-large > td > span > a > div.removePersonButton{
 .notification-icon .popover-content {
     color: #F00;
     font-size: 12px;
+}
+
+.breadcrumb{
+    margin-top: 20px;
+    background: none;
+}
+
+.actions {
+    margin-bottom: 10px;
+}
+
+#result_list{
+    background-color: #FFF;
 }

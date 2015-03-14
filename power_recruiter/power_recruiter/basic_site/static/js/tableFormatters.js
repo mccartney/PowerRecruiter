@@ -95,7 +95,7 @@ function stateHistoryView(value){
     value.state_history.forEach(function(oldState) {
         stateHistory += "<div class='oldStateContainer'><div><span class='glyphicon glyphicon-arrow-up' aria-hidden='true' style='font-size: 8px'></span></div>";
         stateHistory += "<div class='oldStateName'>" + oldState.state + "</div>";
-        stateHistory += "<div class='oldStateDate'>(from " + oldState.startDate + " to " + oldState.changeDate + ")</div></div>";
+        stateHistory += "<div class='oldStateDate'>(from " + oldState.start_date + " to " + oldState.change_date + ")</div></div>";
     });
     return stateHistory;
 }

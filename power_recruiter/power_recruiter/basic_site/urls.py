@@ -9,7 +9,5 @@ urlpatterns = patterns(
     '',
     url(r'^$', index, name='home'),
     url(r'^pieChart$', pie_chart, name='pieChart'),
-    url(r'^lineChart$', line_chart, name='lineChart'),
-    url(r'^notifications$', notifications, name='notifications'),
-    url(r'^configuration$', configuration, name='configuration')
+    url(r'^lineChart$', line_chart, name='lineChart')
 )

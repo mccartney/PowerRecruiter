@@ -18,12 +18,11 @@
                 <li class="statsli dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-stats"></span> Statistics</a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="{% url 'pieChart' %}"><img class="chartIcon" src="static/img/piechart.png" /> Pie Chart</a></li>
-                        <li><a href="{% url 'lineChart' %}"><img class="chartIcon" src="static/img/linechart.png" /> Line Chart</a></li>
+                        <li><a href="{% url 'pieChart' %}"><img class="chartIcon" src="{% static 'img/piechart.png' %}" /> Pie Chart</a></li>
+                        <li><a href="{% url 'lineChart' %}"><img class="chartIcon" src="{% static 'img/linechart.png' %}" /> Line Chart</a></li>
                     </ul>
                 </li>
-                <li class="notifili"><a href="{% url 'notifications' %}"><span class="glyphicon glyphicon glyphicon-warning-sign"></span> Notifications</a></li>
-                <li class="configli"><a href="{% url 'configuration' %}"><span class="glyphicon glyphicon glyphicon-wrench"></span> Configuration</a></li>
+                <li class="configli"><a href="{% url 'admin:index' %}"><span class="glyphicon glyphicon glyphicon-wrench"></span> Configuration</a></li>
 
             </ul>
         </div><!--/.nav-collapse -->
