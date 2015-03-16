@@ -1,6 +1,7 @@
 from django.template.loader import render_to_string
 
 from power_recruiter.basic_site.utils import multiton
+from power_recruiter.basic_site.models import State as St, Edge
 
 
 @multiton
@@ -65,6 +66,12 @@ WORKFLOW_GRAPH = {
 }
 
 
+def get_states_dict():
+    states = St.objects.all()
+    k = len(states)
+    return dict(zip(range(k), states))
+
+
 def get_next_nodes(node):
     return WORKFLOW_GRAPH[node]
 
@@ -79,7 +86,10 @@ def get_states_list():
 
 
 def are_nodes_connected(first_node, second_node):
-    return (
-        first_node in WORKFLOW_GRAPH[second_node] or
-        second_node in WORKFLOW_GRAPH[first_node]
-    )
+    a = len(Edge.objects.filter(state_out=first_node, state_in=second_node))
+    b = len(Edge.objects.filter(state_out=second_node, state_in=first_node))
+    return a+b > 0
+    # return (
+    #     first_node in WORKFLOW_GRAPH[second_node] or
+    #     second_node in WORKFLOW_GRAPH[first_node]
+    # )

@@ -38,6 +38,7 @@ class PersonManager(Manager):
                 photo_url=photo_url
             )
 
+
 class Person(Model):
     first_name = CharField(max_length=100)
     last_name = CharField(max_length=100)
