@@ -1,7 +1,7 @@
 import datetime
 
 from django.shortcuts import render
-from power_recruiter.basic_site.workflow import WORKFLOW_STATES, get_states_dict
+from power_recruiter.basic_site.workflow import get_states_dict
 from power_recruiter.candidate.models import Person, OldState
 
 

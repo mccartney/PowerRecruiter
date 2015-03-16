@@ -12,8 +12,8 @@ from django import forms
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from power_recruiter.candidate.models import Attachment, Person, OldState
-from power_recruiter.basic_site.workflow import WORKFLOW_STATES, \
-    are_nodes_connected
+from power_recruiter.basic_site.workflow import are_nodes_connected, \
+    get_states_dict
 
 
 LOGGING = {
@@ -83,8 +83,10 @@ def remove_person(request):
 
 
 def candidate_json(request):
+    # TODO to db_states mozna by jakos wyciagac z bazy w jednym miejscu
+    db_states = get_states_dict()
     persons = Person.objects.all()
-    for k in WORKFLOW_STATES.keys():
+    for k in db_states.keys():
         if request.GET.get(str(k), False):
             persons = persons.exclude(state=k)
     response = [p.to_json() for p in persons]
@@ -144,6 +146,7 @@ def change_state(request):
 
 @csrf_exempt  # Do we need it?
 def add_candidate(request):
+    db_states = get_states_dict()
     args = []
     for i in xrange(3):
         args.append(request.POST['args[%d]' % i])
@@ -161,7 +164,7 @@ def add_candidate(request):
         return HttpResponse(
             status=418,
             content_type="plain/text",
-            content=WORKFLOW_STATES[person.state].name
+            content=db_states[person.state].name
         )
     else:
         Person.objects.create_person(

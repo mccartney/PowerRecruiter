@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from power_recruiter.basic_site.workflow import get_next_nodes, \
-    get_previous_nodes, get_states_list, WORKFLOW_GRAPH, State
+# from power_recruiter.basic_site.workflow import get_next_nodes, \
+#     get_previous_nodes, get_states_list, WORKFLOW_GRAPH, State
 
 
 class TestWorkflow(TestCase):

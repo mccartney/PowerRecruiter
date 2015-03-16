@@ -3,8 +3,8 @@ from django.db.models import Manager, Model, CharField, ForeignKey, \
     FileField, DateTimeField, TextField, URLField, EmailField, IntegerField
 from django.template.loader import render_to_string
 
-from power_recruiter.basic_site.workflow import WORKFLOW_STATES, \
-    get_next_nodes, get_previous_nodes
+from power_recruiter.basic_site.workflow import get_next_nodes, \
+    get_previous_nodes, get_states_dict
 from power_recruiter.basic_site.models import Notification
 
 class Role(Model):
@@ -57,6 +57,7 @@ class Person(Model):
         return self.first_name + " " + self.last_name
 
     def to_json(self):
+        db_states = get_states_dict()
         id = {
             'id': self.pk,
         }
@@ -89,25 +90,25 @@ class Person(Model):
             } for a in Attachment.objects.filter(person_id=self.pk)]
         }
 
-        previous_states = {k: WORKFLOW_STATES[k]
+        previous_states = {k: db_states[k]
                            for k in get_previous_nodes(self.state)}
-        next_states = {k: WORKFLOW_STATES[k]
+        next_states = {k: db_states[k]
                        for k in get_next_nodes(self.state)}
 
         state = {
-            'state_name': WORKFLOW_STATES[self.state].name,
+            'state_name': db_states[self.state].name,
             'current_state_started': str(self.current_state_started.date()),
             'state_view': render_to_string('state.html', {
                 'person_id': self.pk,
                 'previous_states': previous_states,
                 'next_states': next_states,
-                'state_view': WORKFLOW_STATES[self.state]
+                'state_view': db_states[self.state]
                 }),
             'state_history':  [
                 {
                     'start_date': str(oldState.start_date.date()),
                     'change_date': str(oldState.change_date.date()),
-                    'state': str(WORKFLOW_STATES[oldState.state])
+                    'state': str(db_states[oldState.state])
                 } for oldState in OldState.objects.filter(
                     person_id=self.pk).order_by('-change_date')
             ]
