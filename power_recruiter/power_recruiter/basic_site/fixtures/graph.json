@@ -1,0 +1,26 @@
+[
+    {"fields": {"name": "New"}, "model": "basic_site.state", "pk": 0},
+    {"fields": {"name": "Rejected", "rejected" : true}, "model": "basic_site.state", "pk": 1},
+    {"fields": {"name": "First message"}, "model": "basic_site.state", "pk": 2},
+    {"fields": {"name": "No response", "rejected" : true}, "model": "basic_site.state", "pk": 3},
+    {"fields": {"name": "Negative response", "rejected" : true}, "model": "basic_site.state", "pk": 4},
+    {"fields": {"name": "Positive response"}, "model": "basic_site.state", "pk": 5},
+    {"fields": {"name": "First meeting"}, "model": "basic_site.state", "pk": 6},
+    {"fields": {"name": "Resigned", "rejected" : true}, "model": "basic_site.state", "pk": 7},
+    {"fields": {"name": "More than one meeting"}, "model": "basic_site.state", "pk": 8},
+    {"fields": {"name": "Rejected after meeting", "rejected" : true}, "model": "basic_site.state", "pk": 9},
+    {"fields": {"name": "Hired", "hired" : true}, "model": "basic_site.state", "pk": 10},
+
+    {"fields" : {"state_out" : 0, "state_in" : 1}, "model" : "basic_site.edge", "pk" : 0},
+    {"fields" : {"state_out" : 0, "state_in" : 2}, "model" : "basic_site.edge", "pk" : 1},
+    {"fields" : {"state_out" : 2, "state_in" : 3}, "model" : "basic_site.edge", "pk" : 2},
+    {"fields" : {"state_out" : 2, "state_in" : 4}, "model" : "basic_site.edge", "pk" : 3},
+    {"fields" : {"state_out" : 2, "state_in" : 5}, "model" : "basic_site.edge", "pk" : 4},
+    {"fields" : {"state_out" : 5, "state_in" : 6}, "model" : "basic_site.edge", "pk" : 5},
+    {"fields" : {"state_out" : 6, "state_in" : 7}, "model" : "basic_site.edge", "pk" : 6},
+    {"fields" : {"state_out" : 6, "state_in" : 8}, "model" : "basic_site.edge", "pk" : 7},
+    {"fields" : {"state_out" : 6, "state_in" : 9}, "model" : "basic_site.edge", "pk" : 8},
+    {"fields" : {"state_out" : 8, "state_in" : 7}, "model" : "basic_site.edge", "pk" : 9},
+    {"fields" : {"state_out" : 8, "state_in" : 9}, "model" : "basic_site.edge", "pk" : 10},
+    {"fields" : {"state_out" : 8, "state_in" : 10}, "model" : "basic_site.edge", "pk" : 11}
+]

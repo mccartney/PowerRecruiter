@@ -1,5 +1,7 @@
-from django.db.models import Model, IntegerField, TextField
+from django.db.models import Model, IntegerField, TextField, CharField, ForeignKey
 import datetime
+from django.db.models.fields import BooleanField
+from django.template.loader import render_to_string
 
 
 class Notification(Model):
@@ -17,3 +19,40 @@ class Notification(Model):
 
     def __unicode__(self):
         return self.message
+
+
+class State(Model):
+    name = CharField(max_length=100, default='')
+    hired = BooleanField(default=False)
+    rejected = BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.name
+
+    def get_view(self):
+        if self.hired:
+            css_class = "greenText"
+        elif self.rejected:
+            css_class = "redText"
+        else:
+            css_class = "normalText"
+
+        return render_to_string('state_name.html', {
+            'css_class': css_class,
+            'state_view': self.name
+        })
+
+    def get_name(self):
+        return self.name
+
+    @staticmethod
+    def get_instance_name(name, hired=False, rejected=False):
+        return ''.join([name, str(hired), str(rejected)])
+
+
+class Edge(Model):
+    state_out = ForeignKey(State, related_name='s_out')
+    state_in = ForeignKey(State, related_name='s_in')
+
+    def __unicode__(self):
+        return str(self.state_out) + " -> " + str(self.state_in)
