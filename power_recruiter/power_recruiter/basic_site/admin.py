@@ -6,10 +6,15 @@ from django.contrib.auth.models import Group
 
 admin.site.unregister(User)
 admin.site.unregister(Group)
-admin.site.register(Edge)
 admin.site.register(State)
 
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ("message", "days", "state")
+    fields = ("message", "days", "state")
+    list_display = ("message", "days", "get_state_view")
 
 admin.site.register(Notification, NotificationAdmin)
+
+class EdgeAdmin(admin.ModelAdmin):
+    list_display= ("get_view", )
+
+admin.site.register(Edge, EdgeAdmin)
