@@ -9,9 +9,6 @@ class State(Model):
     hired = BooleanField(default=False)
     rejected = BooleanField(default=False)
 
-    def __unicode__(self):
-        return self.name
-
     def get_view(self):
         if self.hired:
             css_class = "greenText"
@@ -25,9 +22,14 @@ class State(Model):
             'state_view': self.name
         })
 
+    def get_name(self):
+        return self.name
+
     def __unicode__(self):
         return self.get_view()
 
+    def to_json(self):
+        return self.get_view()
 
     @staticmethod
     def get_instance_name(name, hired=False, rejected=False):
@@ -45,6 +47,7 @@ class Edge(Model):
         return self.__unicode__()
     get_view.allow_tags = True
 
+
 class Notification(Model):
     days = IntegerField(null=False)
     state = ForeignKey(State, null=True)
@@ -54,7 +57,7 @@ class Notification(Model):
         state_started = person.current_state_started.replace(tzinfo=None)
         current_time = datetime.datetime.now().replace(tzinfo=None)
         delta = current_time - state_started
-        if delta.days > self.days and person.state == self.state:
+        if delta.days >= self.days and person.state == self.state:
             return str(self)
         return None
 

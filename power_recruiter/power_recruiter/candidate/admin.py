@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from power_recruiter.candidate.models import Person, Attachment, Role
+from power_recruiter.candidate.models import Person, Attachment
 
 class PersonForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -29,4 +29,3 @@ admin.site.register(Person, PersonAdmin)
 
 
 admin.site.register(Attachment)
-admin.site.register(Role)

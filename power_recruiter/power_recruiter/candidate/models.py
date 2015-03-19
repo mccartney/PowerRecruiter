@@ -5,13 +5,7 @@ from django.template.loader import render_to_string
 
 from power_recruiter.basic_site.workflow import get_next_nodes, \
     get_previous_nodes, get_states_dict
-from power_recruiter.basic_site.models import Notification
-
-class Role(Model):
-    name = CharField(max_length=100, default='')
-
-    def __unicode__(self):
-        return self.name
+from power_recruiter.basic_site.models import Notification, State
 
 
 class PersonManager(Manager):
@@ -43,12 +37,11 @@ class Person(Model):
     first_name = CharField(max_length=100)
     last_name = CharField(max_length=100)
     current_state_started = DateTimeField(default=timezone.now)
-    state = IntegerField(default=0)
+    state = ForeignKey(State, null=True)
     photo_url = CharField(max_length=200)
     linkedin = URLField(null=True, unique=True)
     goldenline = URLField(null=True, unique=True)
     email = EmailField(null=True, unique=True)
-    role = ForeignKey(Role, blank=True, null=True)
     caveats = TextField(max_length=1000, blank=True)
 
     objects = PersonManager()
@@ -96,13 +89,13 @@ class Person(Model):
                        for k in get_next_nodes(self.state)}
 
         state = {
-            'state_name': db_states[self.state].name,
+            'state_name': str(self.state),
             'current_state_started': str(self.current_state_started.date()),
             'state_view': render_to_string('state.html', {
                 'person_id': self.pk,
                 'previous_states': previous_states,
                 'next_states': next_states,
-                'state_view': db_states[self.state]
+                'state_view': str(self.state)
                 }),
             'state_history':  [
                 {

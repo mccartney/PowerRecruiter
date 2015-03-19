@@ -1,12 +1,12 @@
 [
     {"fields": {"state": 6, "message": "Co\u015b za d\u0142ugo nie ma spotkania", "days": 3}, "model": "basic_site.notification", "pk": 1},
 
-    {"fields": {"first_name": "Krzysztof", "last_name": "Fudali", "caveats": "Good programmer!", "current_state_started": "2014-12-31T21:48:32.116Z", "state": 6, "role": null, "photo_url": ""}, "model": "candidate.person", "pk": 1},
-    {"fields": {"first_name": "Kamila", "last_name": "Kruk", "caveats": "", "current_state_started": "2014-12-31T21:48:28.111Z", "state": 10, "role": null, "photo_url": ""}, "model": "candidate.person", "pk": 2},
-    {"fields": {"first_name": "Jan", "last_name": "Kowalski", "caveats": "", "current_state_started": "2014-12-28T21:48:27.915Z", "state": 7, "role": null, "photo_url": ""}, "model": "candidate.person", "pk": 3},
-    {"fields": {"first_name": "Paulina", "last_name": "Kiepska", "caveats": "", "current_state_started": "2014-12-23T21:48:34.622Z", "state": 4, "role": null, "photo_url": ""}, "model": "candidate.person", "pk": 4},
-    {"fields": {"first_name": "Wojtek", "last_name": "Wawelski", "caveats": "", "current_state_started": "2015-01-03T21:48:29.158Z", "state": 10, "role": null, "photo_url": ""}, "model": "candidate.person", "pk": 5},
-    {"fields": {"first_name": "Kolejna", "last_name": "osoba", "caveats": "", "current_state_started": "2015-03-07T08:22:39.040Z", "state": 2, "role": null, "photo_url": ""}, "model": "candidate.person", "pk": 6},
+    {"fields": {"first_name": "Krzysztof", "last_name": "Fudali", "caveats": "Good programmer!", "current_state_started": "2014-12-31T21:48:32.116Z", "state": 6, "photo_url": ""}, "model": "candidate.person", "pk": 1},
+    {"fields": {"first_name": "Kamila", "last_name": "Kruk", "caveats": "", "current_state_started": "2014-12-31T21:48:28.111Z", "state": 10, "photo_url": ""}, "model": "candidate.person", "pk": 2},
+    {"fields": {"first_name": "Jan", "last_name": "Kowalski", "caveats": "", "current_state_started": "2014-12-28T21:48:27.915Z", "state": 7, "photo_url": ""}, "model": "candidate.person", "pk": 3},
+    {"fields": {"first_name": "Paulina", "last_name": "Kiepska", "caveats": "", "current_state_started": "2014-12-23T21:48:34.622Z", "state": 4, "photo_url": ""}, "model": "candidate.person", "pk": 4},
+    {"fields": {"first_name": "Wojtek", "last_name": "Wawelski", "caveats": "", "current_state_started": "2015-01-03T21:48:29.158Z", "state": 10, "photo_url": ""}, "model": "candidate.person", "pk": 5},
+    {"fields": {"first_name": "Kolejna", "last_name": "osoba", "caveats": "", "current_state_started": "2015-03-07T08:22:39.040Z", "state": 2, "photo_url": ""}, "model": "candidate.person", "pk": 6},
 
     {"fields": {"person": 5, "state": 0, "change_date": "2014-12-09T21:48:33.227Z", "start_date": "2014-11-28T00:00:00Z"}, "model": "candidate.oldstate", "pk": 1},
     {"fields": {"person": 1, "state": 0, "change_date": "2014-12-09T21:48:51.089Z", "start_date": "2014-12-08T00:00:00Z"}, "model": "candidate.oldstate", "pk": 2},

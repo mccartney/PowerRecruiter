@@ -83,7 +83,6 @@ def remove_person(request):
 
 
 def candidate_json(request):
-    # TODO to db_states mozna by jakos wyciagac z bazy w jednym miejscu
     db_states = get_states_dict()
     persons = Person.objects.all()
     for k in db_states.keys():
