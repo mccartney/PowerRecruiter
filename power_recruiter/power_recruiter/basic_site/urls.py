@@ -3,8 +3,8 @@ from django.conf.urls import patterns, url
 from power_recruiter.basic_site.views.index import index
 from power_recruiter.basic_site.views.pie_chart import pie_chart
 from power_recruiter.basic_site.views.line_chart import line_chart
-from power_recruiter.basic_site.views.notifications import notifications
-from power_recruiter.basic_site.views.configuration import configuration
+
+
 urlpatterns = patterns(
     '',
     url(r'^$', index, name='home'),

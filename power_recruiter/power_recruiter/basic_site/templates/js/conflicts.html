@@ -1,0 +1,52 @@
+<script>
+    function get_conflicts() {
+        $.get(
+                '/candidate/get_conflicts/',
+                function (data) {
+                    if (data[0].length > 0)
+                        show_conflicts_modal(data);
+                }
+        );
+    }
+
+    function show_conflicts_modal(data) {
+        var $conflicts_modal = $('#conflicts_modal');
+        $conflicts_modal.find('.modal-body').text(JSON.stringify(data));
+        $conflicts_modal.modal('show');
+    }
+
+    function merge(person_ids) {
+        resolve_conflicts(person_ids, true);
+    }
+
+    function dont_merge(person_ids) {
+        resolve_conflicts(person_ids, false);
+    }
+
+    function resolve_conflicts(person_ids, merge) {
+        $.post(
+                '/candidate/resolve_conflicts/',
+                {
+                    'person_ids': JSON.stringify(person_ids),
+                    'merge': merge
+                },
+                get_conflicts
+        );
+    }
+
+    function get_person_ids_from_conflicts_modal() {
+        // TODO
+    }
+
+    $('#conflicts_modal_merge').on('click', function (e) {
+        var person_ids = get_person_ids_from_conflicts_modal();
+        resolve_conflicts(person_ids, true);
+    });
+
+    $('#conflicts_modal_dont_merge').on('click', function (e) {
+        var person_ids = get_person_ids_from_conflicts_modal();
+        resolve_conflicts(person_ids, false);
+    });
+
+    get_conflicts();
+</script>

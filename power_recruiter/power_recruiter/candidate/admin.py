@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django import forms
+
 from power_recruiter.candidate.models import Person, Attachment, Role
+
 
 class PersonForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -13,6 +15,7 @@ class PersonForm(forms.ModelForm):
     class Meta:
         model = Person
         exclude = ("current_state_started",)
+
 
 class PersonAdmin(admin.ModelAdmin):
     list_display = (

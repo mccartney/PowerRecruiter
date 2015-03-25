@@ -1,11 +1,13 @@
 from django.utils import timezone
 from django.db.models import Manager, Model, CharField, ForeignKey, \
-    FileField, DateTimeField, TextField, URLField, EmailField, IntegerField
+    FileField, DateTimeField, TextField, URLField, EmailField, IntegerField, \
+    BooleanField
 from django.template.loader import render_to_string
 
 from power_recruiter.basic_site.workflow import get_next_nodes, \
     get_previous_nodes, get_states_dict
 from power_recruiter.basic_site.models import Notification
+
 
 class Role(Model):
     name = CharField(max_length=100, default='')
@@ -33,10 +35,10 @@ class PersonManager(Manager):
             )
 
         return self.create(
-                first_name=first_name,
-                last_name=last_name,
-                photo_url=photo_url
-            )
+            first_name=first_name,
+            last_name=last_name,
+            photo_url=photo_url
+        )
 
 
 class Person(Model):
@@ -50,11 +52,38 @@ class Person(Model):
     email = EmailField(null=True, unique=True)
     role = ForeignKey(Role, blank=True, null=True)
     caveats = TextField(max_length=1000, blank=True)
+    conflict_resolved = BooleanField(default=False)
 
     objects = PersonManager()
 
     def __unicode__(self):
         return self.first_name + " " + self.last_name
+
+    @classmethod
+    def get_conflicts(cls):
+        all_candidates = cls.objects.filter(conflict_resolved=False)
+        for c in all_candidates:
+            candidates = cls.objects.filter(
+                first_name=c.first_name,
+                last_name=c.last_name
+            )
+            if len(candidates) > 1:
+                return list(candidates)
+        return []
+
+    @classmethod
+    def merge(cls, ids):
+        # FIXME
+        for person_id in ids[1:]:
+            p = cls.objects.get(pk=person_id)
+            p.delete()
+
+    @classmethod
+    def dont_merge(cls, ids):
+        for person_id in ids:
+            p = cls.objects.get(pk=person_id)
+            p.conflict_resolved = True
+            p.save()
 
     def to_json(self):
         db_states = get_states_dict()
