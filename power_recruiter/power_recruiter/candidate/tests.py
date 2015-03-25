@@ -13,7 +13,7 @@ class TestPerson(unittest.TestCase):
 
         first_name = "Cezary"
         last_name = "Kotko"
-        photo_url = "http:/www.lolek.com"
+        photo_url = "http://kokso.wtf/cezary.jpeg"
 
         new_person1 = Person.objects.create_person(
             first_name=first_name,
