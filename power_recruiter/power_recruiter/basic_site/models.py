@@ -1,6 +1,7 @@
-from django.db.models import Model, IntegerField, TextField, CharField, ForeignKey
 import datetime
-from django.db.models.fields import BooleanField
+
+from django.db.models import Model, IntegerField, TextField, CharField, \
+    ForeignKey, BooleanField
 from django.template.loader import render_to_string
 
 
@@ -8,9 +9,6 @@ class State(Model):
     name = CharField(max_length=100, default='')
     hired = BooleanField(default=False)
     rejected = BooleanField(default=False)
-
-    def __unicode__(self):
-        return self.name
 
     def get_view(self):
         if self.hired:
@@ -28,7 +26,6 @@ class State(Model):
     def __unicode__(self):
         return self.get_view()
 
-
     @staticmethod
     def get_instance_name(name, hired=False, rejected=False):
         return ''.join([name, str(hired), str(rejected)])
@@ -44,6 +41,7 @@ class Edge(Model):
     def get_view(self):
         return self.__unicode__()
     get_view.allow_tags = True
+
 
 class Notification(Model):
     days = IntegerField(null=False)
@@ -64,4 +62,3 @@ class Notification(Model):
     def get_state_view(self):
         return self.state.get_view()
     get_state_view.allow_tags = True
-

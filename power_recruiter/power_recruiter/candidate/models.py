@@ -8,6 +8,7 @@ from power_recruiter.basic_site.workflow import get_next_nodes, \
     get_previous_nodes, get_states_dict
 from power_recruiter.basic_site.models import Notification
 
+
 class Role(Model):
     name = CharField(max_length=100, default='')
 
@@ -34,10 +35,10 @@ class PersonManager(Manager):
             )
 
         return self.create(
-                first_name=first_name,
-                last_name=last_name,
-                photo_url=photo_url
-            )
+            first_name=first_name,
+            last_name=last_name,
+            photo_url=photo_url
+        )
 
 
 class Person(Model):
