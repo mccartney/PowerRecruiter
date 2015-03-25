@@ -174,3 +174,21 @@ def add_candidate(request):
             args[1]
         )
         return HttpResponse(status=200, content=200, content_type="plain/text")
+
+
+def get_conflicts(request):
+    conflicting_candidates = Person.get_conflicts()
+    response = [c.to_json() for c in conflicting_candidates],
+    return HttpResponse(json.dumps(response), content_type="application/json")
+
+
+@require_POST
+def resolve_conflicts(request):
+    person_ids_json = request.POST.get('person_ids')
+    person_ids = json.loads(person_ids_json)
+    merge = json.loads(request.POST.get('merge'))
+    if merge:
+        Person.merge(person_ids)
+    else:
+        Person.dont_merge(person_ids)
+    return HttpResponse(status=200, content=200, content_type="plain/text")

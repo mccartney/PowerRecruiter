@@ -159,6 +159,8 @@
     </div>
 </div>
 
+{% include "conflicts_modal.html" %}
+
 <script>
     function show_if_checked(show_id, checked_id) {
 		_show_if_checked = function(show_id, checked_id, fade) {
@@ -198,5 +200,6 @@
 </script>
 
 {% include "js/maintable.html" %}
+{% include "js/conflicts.html" %}
 
 {% endblock %}
