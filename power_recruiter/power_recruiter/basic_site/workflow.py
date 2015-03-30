@@ -1,7 +1,5 @@
-from django.template.loader import render_to_string
-
-# from power_recruiter.basic_site.utils import multiton
 from power_recruiter.basic_site.models import State, Edge
+
 
 def get_states_dict():
     states = State.objects.all()
@@ -10,12 +8,12 @@ def get_states_dict():
 
 
 def get_next_nodes(node):
-    edges = Edge.objects.filter(state_out = node)
+    edges = Edge.objects.filter(state_out=node)
     return [e.state_in.pk for e in edges]
 
 
 def get_previous_nodes(node):
-    edges = Edge.objects.filter(state_in = node)
+    edges = Edge.objects.filter(state_in=node)
     return [e.state_out.pk for e in edges]
 
 

@@ -1,3 +1,2 @@
 #!/bin/bash
-./manage.py test
-
+./manage.py test --traceback --verbosity=2

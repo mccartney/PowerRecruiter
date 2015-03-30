@@ -1,6 +1,7 @@
-from django.db.models import Model, IntegerField, TextField, CharField, ForeignKey
 import datetime
-from django.db.models.fields import BooleanField
+
+from django.db.models import Model, IntegerField, TextField, CharField, \
+    ForeignKey, BooleanField
 from django.template.loader import render_to_string
 
 
@@ -28,9 +29,12 @@ class State(Model):
     def __unicode__(self):
         return self.get_view()
 
+<<<<<<< HEAD
     def to_json(self):
         return self.get_view()
 
+=======
+>>>>>>> 2d792a4e7bd1936a998e223f4509d2bcf7b7ba5e
     @staticmethod
     def get_instance_name(name, hired=False, rejected=False):
         return ''.join([name, str(hired), str(rejected)])
@@ -67,4 +71,3 @@ class Notification(Model):
     def get_state_view(self):
         return self.state.get_view()
     get_state_view.allow_tags = True
-

@@ -1,6 +1,12 @@
 from django.contrib import admin
 from django import forms
+<<<<<<< HEAD
 from power_recruiter.candidate.models import Person, Attachment
+=======
+
+from power_recruiter.candidate.models import Person, Attachment, Role
+>>>>>>> 2d792a4e7bd1936a998e223f4509d2bcf7b7ba5e
+
 
 class PersonForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -13,6 +19,7 @@ class PersonForm(forms.ModelForm):
     class Meta:
         model = Person
         exclude = ("current_state_started",)
+
 
 class PersonAdmin(admin.ModelAdmin):
     list_display = (
