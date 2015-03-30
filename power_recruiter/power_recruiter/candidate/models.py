@@ -42,7 +42,6 @@ class Person(Model):
     linkedin = URLField(null=True, unique=True)
     goldenline = URLField(null=True, unique=True)
     email = EmailField(null=True, unique=True)
-    role = ForeignKey(Role, blank=True, null=True)
     caveats = TextField(max_length=1000, blank=True)
 
     objects = PersonManager()

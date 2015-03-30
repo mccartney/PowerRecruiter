@@ -1,11 +1,6 @@
 from django.contrib import admin
 from django import forms
-<<<<<<< HEAD
 from power_recruiter.candidate.models import Person, Attachment
-=======
-
-from power_recruiter.candidate.models import Person, Attachment, Role
->>>>>>> 2d792a4e7bd1936a998e223f4509d2bcf7b7ba5e
 
 
 class PersonForm(forms.ModelForm):
