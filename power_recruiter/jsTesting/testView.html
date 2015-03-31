@@ -9,7 +9,12 @@
   <div id="qunit"></div>
   <div id="qunit-fixture"></div>
   <script src="lib/qunit/qunit.js"></script>
-  <script src="tests/simpleTest.js"</script>
   <script src="lib/qunit-reporter/qunit-reporter-junit.js"></script>
+  <script src="tests/simpleTest.js"></script>
+  <script>
+  QUnit.jUnitReport = function(report) {
+    console.log(report.xml);
+  };
+  </script>
 </body>
 </html>
