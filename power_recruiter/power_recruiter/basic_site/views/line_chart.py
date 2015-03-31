@@ -30,7 +30,7 @@ def line_chart(request):
 
     for person in Person.objects.all():
         (min_date, max_date) = add_to_double_directory(
-            state_dict[db_states[person.state].get_name()],
+            state_dict[state.get_name()],
             person.current_state_started.date(),
             1,
             min_date,
@@ -39,7 +39,7 @@ def line_chart(request):
 
     for old_state in OldState.objects.all():
         (min_date, max_date) = add_to_double_directory(
-            state_dict[db_states[old_state.state].get_name()],
+            state_dict[old_state.state.get_name()],
             old_state.start_date.date(),
             1,
             min_date,
@@ -47,7 +47,7 @@ def line_chart(request):
             )
 
         (min_date, max_date) = add_to_double_directory(
-            state_dict[db_states[old_state.state].get_name()],
+            state_dict[old_state.state.get_name()],
             old_state.change_date.date(),
             -1,
             min_date,

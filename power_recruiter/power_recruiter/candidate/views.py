@@ -11,7 +11,7 @@ from django.views.decorators.http import require_POST
 from django import forms
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from power_recruiter.candidate.models import Attachment, Person, OldState
+from power_recruiter.candidate.models import Attachment, Person, OldState, State
 from power_recruiter.basic_site.workflow import are_nodes_connected, \
     get_states_dict
 
@@ -136,7 +136,7 @@ def change_state(request):
             state=person.state
         )
         old_state.save()
-        person.state = new_state_id
+        person.state = get_object_or_404(State, id=new_state_id)
         person.current_state_started = datetime.datetime.now()
         person.save()
         return HttpResponse(200, content_type="plain/text")
