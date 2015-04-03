@@ -12,25 +12,25 @@
 <script>
     $(function() {
         $('#{{ id_prefix }}Button{{ person_id }}').popover({
-            content: '{% for state_id, state_view in states.items %}' +
-                '<p class="blockTableEvent" id="{{ id_prefix }}state_link_{{ person_id }}_{{ state_id }}">' +
-                '{{ state_view | safe }}</p>{% endfor %}',
+            content: '{% for state in states %}' +
+                '<p class="blockTableEvent" id="{{ id_prefix }}state_link_{{ person_id }}_{{ state.pk }}">' +
+                '{{ state | safe }}</p>{% endfor %}',
             placement: '{{ placement }}',
             html: true
         });
-        {% for state_id, state_view in states.items %}
+        {% for state in states %}
             $(document).off(
                     'click',
-                    '#{{ id_prefix }}state_link_{{ person_id }}_{{ state_id }}'
+                    '#{{ id_prefix }}state_link_{{ person_id }}_{{ state.pk }}'
             );
             $(document).on(
                     'click',
-                    '#{{ id_prefix }}state_link_{{ person_id }}_{{ state_id }}',
+                    '#{{ id_prefix }}state_link_{{ person_id }}_{{ state.pk }}',
                     function() {
                         $.post('/candidate/change_state/',
                             {
                                 'person_id': '{{ person_id }}',
-                                'new_state_id': '{{ state_id }}'
+                                'new_state_id': '{{ state.pk }}'
                             },
                             function() {
                                 reloadData();

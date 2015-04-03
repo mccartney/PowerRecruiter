@@ -12,8 +12,7 @@ from django import forms
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from power_recruiter.candidate.models import Attachment, Person, OldState, State
-from power_recruiter.basic_site.workflow import are_nodes_connected, \
-    get_states_dict
+from power_recruiter.basic_site.workflow import are_nodes_connected
 
 
 LOGGING = {
@@ -83,11 +82,10 @@ def remove_person(request):
 
 
 def candidate_json(request):
-    db_states = get_states_dict()
     persons = Person.objects.all()
-    for k in db_states.keys():
-        if request.GET.get(str(k), False):
-            persons = persons.exclude(state=k)
+    for state in State.objects.all():
+        if request.GET.get(state, False):
+            persons = persons.exclude(state=state)
     response = [p.to_json() for p in persons]
     return HttpResponse(json.dumps(response), content_type="application/json")
 

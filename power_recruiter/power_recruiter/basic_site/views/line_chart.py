@@ -1,44 +1,47 @@
 import datetime
 
 from django.shortcuts import render
-from power_recruiter.basic_site.workflow import get_states_dict
-from power_recruiter.candidate.models import Person, OldState
+from power_recruiter.candidate.models import Person, OldState, State
 
 
-def add_to_double_directory(first_directory, date, value, min_date, max_date):
+def add_to_dictionary_return_minmax(state_dict, date, value, min_date, max_date):
 
-    if date in first_directory:
-        first_directory[date] += value
+    if date in state_dict:
+        state_dict[date] += value
     else:
-        first_directory[date] = value
+        state_dict[date] = value
 
     if date < min_date:
         min_date = date
     if date > max_date:
         max_date = date
+
     return min_date, max_date
 
 
 def line_chart(request):
-    db_states = get_states_dict()
+    # Begining and end of statistics (x-axis)
+    min_date = datetime.date(year=datetime.MAXYEAR, month=1, day=1)
+    max_date = datetime.date(year=datetime.MINYEAR, month=1, day=1)
+
+    # Double dictionary: state -> {date -> numberOfCandidates}
     state_dict = {}
-    for _, state in db_states.iteritems():
+    for state in State.objects.all():
         state_dict[state.get_name()] = {}
 
-    max_date = datetime.date(year=datetime.MINYEAR, month=1, day=1)
-    min_date = datetime.date(year=datetime.MAXYEAR, month=1, day=1)
-
+    # Add all current states
     for person in Person.objects.all():
-        (min_date, max_date) = add_to_double_directory(
-            state_dict[state.get_name()],
+        (min_date, max_date) = add_to_dictionary_return_minmax(
+            state_dict[person.state.get_name()],
             person.current_state_started.date(),
             1,
             min_date,
             max_date
-            )
+        )
 
+    # Add all old states
     for old_state in OldState.objects.all():
-        (min_date, max_date) = add_to_double_directory(
+        (min_date, max_date) = add_to_dictionary_return_minmax(
             state_dict[old_state.state.get_name()],
             old_state.start_date.date(),
             1,
@@ -46,7 +49,7 @@ def line_chart(request):
             max_date
             )
 
-        (min_date, max_date) = add_to_double_directory(
+        (min_date, max_date) = add_to_dictionary_return_minmax(
             state_dict[old_state.state.get_name()],
             old_state.change_date.date(),
             -1,
@@ -54,6 +57,7 @@ def line_chart(request):
             max_date
             )
 
+    # Generate results
     result = {}
 
     for state in state_dict:
