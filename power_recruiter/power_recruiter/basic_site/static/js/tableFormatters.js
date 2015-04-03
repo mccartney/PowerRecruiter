@@ -1,20 +1,22 @@
 function notifyFormatter(notifications){
-    if(notifications.length == 0){
+    if(notifications == undefined || notifications.length == 0){
         return "";
     }
     toReturn = '<div class="notification-icon"><span class="glyphicon glyphicon glyphicon-warning-sign notification-icon-span"';
-    toReturn += 'data-placement="bottom" data-toggle="popover" data-trigger="hover" title="Notifications" ';
+    toReturn += 'data-placement="bottom" data-html="true" data-toggle="popover" data-trigger="hover" title="Notifications" ';
     toReturn += 'data-content="';
     notifications.forEach(function(notification){
-        toReturn += notification.message;
+        toReturn += notification.message + "<br>";
     });
     toReturn += '"></span></div>';
     return toReturn;
 }
 
 function photoFormatter(value) {
-    var DEFAULT_SRC = 'https://static.licdn.com/scds/common/u/images/themes/katy/ghosts/person/ghost_person_200x200_v1.png';
-    var src = value.photo == '' ? DEFAULT_SRC : value.photo;
+    var src = 'https://static.licdn.com/scds/common/u/images/themes/katy/ghosts/person/ghost_person_200x200_v1.png';
+    if (value.photo && value.photo != ""){
+        src = value.photo;
+    }
     var imageDiv = '<div class="imageDiv"><img src="' + src + '"/></div>';
     return notifyFormatter(value.notifications) + imageDiv;
 }
@@ -23,7 +25,7 @@ function idFormatter(value){
     return value.id;
 }
 
-function shortenDisplayName(name){
+function shortenName(name){
     if(name.length > 16) {
         return name.substr(0, 13) + "...";
     }
@@ -35,7 +37,7 @@ function attachmentsListFormatterWithoutCSRF(value, uploadUrl, csrfToken) {
     toReturn += '<form id="my-awesome-dropzone" class="dropzone" action="' + uploadUrl +'" method="post" enctype="multipart/form-data">';
     toReturn += '(' + value.attachments.length + ') attachment(s)';
     toReturn += csrfToken;
-    toReturn += '<input type="hidden" name="person" value="'+ value.candidateId +'">';
+    toReturn += '<input type="hidden" name="person" value="'+ value.candidate_id +'">';
     toReturn += '</form>';
     i = 0;
     value.attachments.forEach(function(){
@@ -45,7 +47,7 @@ function attachmentsListFormatterWithoutCSRF(value, uploadUrl, csrfToken) {
         toReturn += '</a>';
 
         toReturn += '<a href="candidate/attachment/get/' + value.attachments[i].pk + '">';
-        toReturn += shortenDisplayName(value.attachments[i].display_name);
+        toReturn += shortenName(value.attachments[i].display_name);
         toReturn += '</a><br>';
         toReturn += '</div>';
         i++;
@@ -56,10 +58,10 @@ function attachmentsListFormatterWithoutCSRF(value, uploadUrl, csrfToken) {
 }
 
 function contactFormatter(value) {
-    linkedinIcon = new stateIcon("static/img/icon_linkedin.png", value.linkedin, 'linkedin', value.candidateId, value.candidateName);
-    goldenlineIcon = new stateIcon("static/img/icon_goldenline.png", value.goldenline, 'goldenline', value.candidateId, value.candidateName);
-    emailIcon = new stateIcon("static/img/icon_email.png", value.email, 'email', value.candidateId, value.candidateName);
-    return "<div class='blockTableEvent contactIcons'>" + linkedinIcon + goldenlineIcon + emailIcon + "</div>";
+    linkedinIcon = new stateIcon("static/img/icon_linkedin.png", value.linkedin, 'linkedin', value.candidate_id, value.candidate_name);
+    goldenlineIcon = new stateIcon("static/img/icon_goldenline.png", value.goldenline, 'goldenline', value.candidate_id, value.candidate_name);
+    emailIcon = new stateIcon("static/img/icon_email.png", value.email, 'email', value.candidate_id, value.candidate_name);
+    return '<div class="blockTableEvent contactIcons">' + linkedinIcon + goldenlineIcon + emailIcon + '</div>';
 }
 
 function openDeleteCandidateModal(id, name){
@@ -78,14 +80,14 @@ function candidateRemoveHtml(id, name){
 }
 
 function caveatsFormatter(value) {
-    var toReturn = '<div class="innertd"><textarea class="caveatsArea" id="caveats-'+ value.candidateId + '">' + value.caveats + '</textarea></div>';
+    var toReturn = '<div class="innertd"><textarea class="caveatsArea" id="caveats-'+ value.candidate_id + '">' + value.caveats + '</textarea></div>';
     //add remove person button to the right of table
-    toReturn = candidateRemoveHtml(value.candidateId, value.candidateName) + toReturn;
+    toReturn = candidateRemoveHtml(value.candidate_id, value.candidate_name) + toReturn;
     return toReturn;
 }
 
 function nameFormatter(value) {
-    var nameField = new NameField(value.candidateId, value.candidateName);
+    var nameField = new NameField(value.candidate_id, value.candidate_name);
     setTimeout(function () { nameField.updateEventListeners() }, 100);
     return nameField;
 }

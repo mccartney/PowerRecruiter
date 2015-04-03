@@ -8,9 +8,27 @@
 <body>
   <div id="qunit"></div>
   <div id="qunit-fixture"></div>
+
+  <!-- QUnit includes -->
+  <script src="../../jquery/jquery-2.1.3.min.js"></script>
   <script src="lib/qunit/qunit.js"></script>
   <script src="lib/qunit-reporter/qunit-reporter-junit.js"></script>
+
+  <!-- Source includes -->
+  <script src="../tableSorters.js"></script>
+  <script src="../tableFormatters.js"></script>
+  <script src="../stateIcon.js"></script>
+  <script src="../nameField.js"></script>
+  <script src="../globalFunctions.js"></script>
+
+  <!-- Test includes -->
   <script src="tests/simpleTest.js"></script>
+  <script src="tests/tableSortersTest.js"></script>
+  <script src="tests/tableFormattersTest.js"></script>
+  <script src="tests/stateIconTest.js"></script>
+  <script src="tests/nameFieldTest.js"></script>
+
+  <!-- Report for Jenkins -->
   <script>
   QUnit.jUnitReport = function(report) {
     console.log(report.xml);

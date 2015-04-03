@@ -5,8 +5,8 @@ function idSorter(a, b) {
 }
 
 function nameSorter(a, b) {
-    if (a.candidateName > b.candidateName) return 1;
-    if (a.candidateName < b.candidateName) return -1;
+    if (a.candidate_name > b.candidate_name) return 1;
+    if (a.candidate_name < b.candidate_name) return -1;
     return 0;
 }
 
