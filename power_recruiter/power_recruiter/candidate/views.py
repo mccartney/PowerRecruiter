@@ -4,13 +4,13 @@ import sys
 import datetime
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import redirect, render_to_response, \
-    get_object_or_404
+from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django import forms
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
+
 from power_recruiter.candidate.models import Attachment, Person, OldState, State
 from power_recruiter.basic_site.workflow import are_nodes_connected
 

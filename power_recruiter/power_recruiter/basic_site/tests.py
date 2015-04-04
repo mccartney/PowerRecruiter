@@ -1,6 +1,6 @@
 from django.test import TestCase
-from power_recruiter.basic_site.models import State
 
+from power_recruiter.basic_site.models import State
 from power_recruiter.basic_site.workflow import get_next_nodes, get_previous_nodes, are_nodes_connected
 
 def get_state_by_name(name):
@@ -8,6 +8,7 @@ def get_state_by_name(name):
 
 class TestWorkflow(TestCase):
     fixtures = ['graph.json']
+
     def test_state_num(self):
         self.assertEqual(len(State.objects.all()), 11)
 

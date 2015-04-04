@@ -1,4 +1,5 @@
 from django.shortcuts import render
+
 from power_recruiter.candidate.models import Person, State
 
 
