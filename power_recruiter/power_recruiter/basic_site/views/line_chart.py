@@ -22,9 +22,23 @@ def get_data_bounds(state_dict):
 def add_to_dictionary(state_dict, date, value):
     state_dict[date] += value
 
+def generate_result(state_dict, min_date, max_date):
+    result = {}
 
-def line_chart(request):
+    for state in state_dict:
+        current_state = []
+        value = 0
+        current_date = min_date
+        while current_date <= max_date:
+            if current_date in state_dict[state]:
+                value += state_dict[state][current_date]
+            current_state.append((str(current_date), value))
+            current_date += datetime.timedelta(days=1)
+        result[state] = current_state
 
+    return result
+
+def generate_context_dicts():
     # Double dictionary: state -> {date -> numberOfCandidates}
     state_dict = {}
     for state in State.objects.all():
@@ -52,23 +66,9 @@ def line_chart(request):
             -1
         )
 
-    (min_date, max_date) = get_data_bounds(state_dict)
+    min_date, max_date = get_data_bounds(state_dict)
+    return generate_result(state_dict, min_date, max_date)
 
-    # Generate results
-    result = {}
-
-    for state in state_dict:
-        current_state = []
-        value = 0
-        current_date = min_date
-        while current_date <= max_date:
-            if current_date in state_dict[state]:
-                value += state_dict[state][current_date]
-            current_state.append((str(current_date), value))
-            current_date += datetime.timedelta(days=1)
-        result[state] = current_state
-
-    context = {
-        'dicts': result
-    }
+def line_chart(request):
+    context = { 'dicts': generate_context_dicts() }
     return render(request, "line_chart.html", context)
