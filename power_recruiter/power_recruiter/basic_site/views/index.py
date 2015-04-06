@@ -1,7 +1,6 @@
 from django.shortcuts import render
 
-from power_recruiter.basic_site.workflow import get_states_dict
-from power_recruiter.candidate.models import Person
+from power_recruiter.candidate.models import Person, State
 
 
 def index(request):
@@ -10,8 +9,7 @@ def index(request):
     for person in Person.objects.all():
         notifications_num += len(person.get_person_notifications())
 
-    states = get_states_dict()
     return render(request, "main.html", {
-        "states": states,
+        "states": State.objects.all(),
         "notifications": notifications_num
     })
