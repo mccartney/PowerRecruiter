@@ -90,20 +90,20 @@ class Person(Model):
         }
 
         candidate_name = {
-            'candidateId': self.pk,
-            'candidateName': str(self),
+            'candidate_id': self.pk,
+            'candidate_name': str(self),
         }
 
         contact = {
-            'candidateId': self.pk,
-            'candidateName': str(self),
+            'candidate_id': self.pk,
+            'candidate_name': str(self),
             'linkedin': self.linkedin,
             'goldenline': self.goldenline,
             'email': self.email,
         }
 
         attachments = {
-            'candidateId': self.pk,
+            'candidate_id': self.pk,
             'attachments': [{
                 'display_name': str(a),
                 'pk': a.pk
@@ -135,15 +135,15 @@ class Person(Model):
         }
 
         caveats = {
-            'candidateId': self.pk,
-            'candidateName': str(self),
+            'candidate_id': self.pk,
+            'candidate_name': str(self),
             'caveats': self.caveats
         }
 
         return {
             'id': id,
             'photo': photo,
-            'candidateName': candidate_name,
+            'candidate_name': candidate_name,
             'contact': contact,
             'state': state,
             'attachments': attachments,

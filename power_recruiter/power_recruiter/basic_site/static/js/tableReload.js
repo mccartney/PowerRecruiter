@@ -1,10 +1,9 @@
 function reloadTable(){
-
     if(setAutosize()) {
         $("#maintable tr").each(function () {
             currentTr = $(this);
             if (currentlyOpened != null) {
-                if(currentTr.find('td:nth-child(2)').text() == currentlyOpened.find('td:nth-child(2)').text()){ //nth-child(2) == td of candidateId
+                if(currentTr.find('td:nth-child(2)').text() == currentlyOpened.find('td:nth-child(2)').text()){ //nth-child(2) == td of candidate_id
                     openLargeTd($(this));
                     currentlyOpened = $(this);
                 }
