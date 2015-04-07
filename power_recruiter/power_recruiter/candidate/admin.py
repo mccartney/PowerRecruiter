@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from power_recruiter.candidate.models import Person, Attachment
-
+from power_recruiter.basic_site.admin import admin_auto_login_site
 
 class PersonForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -27,7 +27,5 @@ class PersonAdmin(admin.ModelAdmin):
     )
     form = PersonForm
 
-admin.site.register(Person, PersonAdmin)
-
-
-admin.site.register(Attachment)
+admin_auto_login_site.register(Person, PersonAdmin)
+admin_auto_login_site.register(Attachment)
