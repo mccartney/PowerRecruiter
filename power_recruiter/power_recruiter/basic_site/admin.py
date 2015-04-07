@@ -7,12 +7,10 @@ from django.contrib.auth.models import User
 
 class AutoLoginAdminSite(AdminSite):
 
-
     def login(self, request, extra_context=None):
         user = authenticate(username='root', password='root')
         auth_login(request, user)
         return super(AutoLoginAdminSite, self).login(request)
-
 
     def get_urls(self):
         urls = super(AutoLoginAdminSite, self).get_urls()
