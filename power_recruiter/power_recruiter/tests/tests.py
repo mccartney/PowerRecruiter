@@ -26,10 +26,8 @@ class UrlsTest(unittest.TestCase):
     def test_pie_chart(self):
         self.run_url("/pieChart")
 
-
     def test_line_chart(self):
         self.run_url("/lineChart")
-
 
     def test_admin(self):
         self.run_auto_login("/admin")
