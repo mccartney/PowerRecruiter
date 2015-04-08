@@ -40,7 +40,7 @@ class Person(Model):
     photo_url = CharField(max_length=200)
     linkedin = URLField(null=True, unique=True)
     goldenline = URLField(null=True, unique=True)
-    email = EmailField(null=True, unique=True)
+    email = EmailField(null=True, unique=False)
     caveats = TextField(max_length=1000, blank=True)
     conflict_resolved = BooleanField(default=False)
 

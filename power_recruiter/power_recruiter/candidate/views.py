@@ -143,7 +143,6 @@ def change_state(request):
 
 @csrf_exempt  # Do we need it?
 def add_candidate(request):
-    db_states = get_states_dict()
     args = []
     for i in xrange(3):
         args.append(request.POST['args[%d]' % i])
@@ -161,7 +160,7 @@ def add_candidate(request):
         return HttpResponse(
             status=418,
             content_type="plain/text",
-            content=db_states[person.state].name
+            content=Person.objects.all()[person.state].name
         )
     else:
         Person.objects.create_person(
