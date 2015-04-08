@@ -26,6 +26,7 @@ class PersonManager(Manager):
             )
 
         return self.create(
+            state=State.objects.get(id=0),
             first_name=first_name,
             last_name=last_name,
             photo_url=photo_url
