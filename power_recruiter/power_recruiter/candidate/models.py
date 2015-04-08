@@ -58,6 +58,7 @@ class Person(Model):
                 last_name=c.last_name
             )
             if len(candidates) > 1:
+                return candidates
                 return list(candidates)
         return []
 

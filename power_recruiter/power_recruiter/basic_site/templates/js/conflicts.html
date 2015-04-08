@@ -3,16 +3,26 @@
         $.get(
                 '/candidate/get_conflicts/',
                 function (data) {
-                    if (data[0].length > 0)
-                        show_conflicts_modal(data);
+                    if (data[0].length > 0) {
+                        var name = data[0][0]['candidate_name']['candidate_name']
+                        var id0 = data[0][0]['id']['id']
+                        var id1 = data[0][1]['id']['id']
+                        show_conflicts_modal(name);
+                        put_ids_modal(id0, id1);
+                    }
                 }
         );
     }
 
     function show_conflicts_modal(data) {
         var $conflicts_modal = $('#conflicts_modal');
-        $conflicts_modal.find('.modal-body').text(JSON.stringify(data));
+        $conflicts_modal.find('.modal-body').text(data);
         $conflicts_modal.modal('show');
+    }
+
+    function put_ids_modal(id0, id1) {
+        $('#id0').val(id0);
+        $('#id1').val(id1);
     }
 
     function merge(person_ids) {
@@ -30,12 +40,12 @@
                     'person_ids': JSON.stringify(person_ids),
                     'merge': merge
                 },
-                get_conflicts
+                function() {$('#conflicts_modal').modal('toggle'); get_conflicts();}
         );
     }
 
     function get_person_ids_from_conflicts_modal() {
-        // TODO
+        return [$('#id0').val(), $('#id1').val()]
     }
 
     $('#conflicts_modal_merge').on('click', function (e) {
