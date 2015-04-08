@@ -149,27 +149,13 @@ def add_candidate(request):
     names = args[0].split(' ')
     first_name = names[0]
     last_name = names[-1]
-    if Person.objects.filter(
-            first_name=first_name,
-            last_name=last_name
-    ).exists():
-        person = Person.objects.filter(
-            first_name=first_name,
-            last_name=last_name
-        ).first()
-        return HttpResponse(
-            status=418,
-            content_type="plain/text",
-            content=Person.objects.all()[person.state].name
-        )
-    else:
-        Person.objects.create_person(
-            first_name,
-            last_name,
-            args[2],
-            args[1]
-        )
-        return HttpResponse(status=200, content=200, content_type="plain/text")
+    Person.objects.create_person(
+        first_name,
+        last_name,
+        args[2],
+        args[1]
+    )
+    return HttpResponse(status=200, content=200, content_type="plain/text")
 
 
 def get_conflicts(request):
