@@ -8,28 +8,19 @@ from power_recruiter.basic_site.models import Notification, State
 
 
 class PersonManager(Manager):
-    def create_person(self, first_name, last_name, link, photo_url):
-        if "linkedin" in link:
-            return self.create(
-                first_name=first_name,
-                last_name=last_name,
-                linkedin=link,
-                photo_url=photo_url
-            )
-
-        if "goldenline" in link:
-            return self.create(
-                first_name=first_name,
-                last_name=last_name,
-                goldenline=link,
-                photo_url=photo_url
-            )
-
+    # def create_person(self, first_name, last_name, link, photo_url):
+    def create_person(self, first_name, last_name, photo_url="", l_link="", g_link="", m_link=""):
+        l_link = None if not l_link else l_link
+        g_link = None if not g_link else g_link
+        m_link = None if not m_link else m_link
         return self.create(
             state=State.objects.get(id=0),
             first_name=first_name,
             last_name=last_name,
-            photo_url=photo_url
+            photo_url=photo_url,
+            linkedin=l_link,
+            goldenline=g_link,
+            email=m_link
         )
 
 
@@ -41,7 +32,7 @@ class Person(Model):
     photo_url = CharField(max_length=200)
     linkedin = URLField(null=True, unique=True)
     goldenline = URLField(null=True, unique=True)
-    email = EmailField(null=True, unique=False)
+    email = EmailField(null=True, unique=True)
     caveats = TextField(max_length=1000, blank=True)
     conflict_resolved = BooleanField(default=False)
 

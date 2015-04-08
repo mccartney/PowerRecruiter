@@ -149,11 +149,29 @@ def add_candidate(request):
     names = args[0].split(' ')
     first_name = names[0]
     last_name = names[-1]
+    l_link=""
+    g_link=""
+    link = args[2]
+    if "linkedin" in link:
+        l_link = link
+    if "goldenline" in link:
+        g_link = link
     Person.objects.create_person(
-        first_name,
-        last_name,
-        args[2],
-        args[1]
+        first_name=first_name,
+        last_name=last_name,
+        photo_url=args[1],
+        l_link=l_link,
+        g_link=g_link
+    )
+    return HttpResponse(status=200, content=200, content_type="plain/text")
+
+def add_candidate_from_app(request):
+    Person.objects.create_person(
+        first_name=request.POST['first_name'],
+        last_name=request.POST['last_name'],
+        g_link=request.POST['goldenline_link'],
+        l_link=request.POST['linkedin_link'],
+        m_link=request.POST['email_link']
     )
     return HttpResponse(status=200, content=200, content_type="plain/text")
 
