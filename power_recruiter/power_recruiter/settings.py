@@ -12,15 +12,11 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-TEMPLATE_DIRS = (
-    BASE_DIR + '/power_recruiter/basic_site/templates/',
-)
+TEMPLATE_DIRS = (BASE_DIR + '/power_recruiter/basic_site/templates/',)
 
 TEMPLATE_LOADERS = (
-
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-
 )
 
 # Quick-start development settings - unsuitable for production
@@ -51,7 +47,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'power_recruiter',
     'power_recruiter.basic_site',
-    'power_recruiter.candidate'
+    'power_recruiter.candidate',
+    'power_recruiter.tests'
 )
 
 MIDDLEWARE_CLASSES = (

@@ -3,8 +3,7 @@ from django.db.models import Manager, Model, CharField, ForeignKey, \
     FileField, DateTimeField, TextField, URLField, EmailField, IntegerField, BooleanField
 from django.template.loader import render_to_string
 
-from power_recruiter.basic_site.workflow import get_next_nodes, \
-    get_previous_nodes, get_states_dict
+from power_recruiter.basic_site.workflow import get_next_nodes, get_previous_nodes
 from power_recruiter.basic_site.models import Notification, State
 
 
@@ -77,7 +76,6 @@ class Person(Model):
             p.save()
 
     def to_json(self):
-        db_states = get_states_dict()
         id = {
             'id': self.pk,
         }
@@ -90,30 +88,29 @@ class Person(Model):
         }
 
         candidate_name = {
-            'candidateId': self.pk,
-            'candidateName': str(self),
+            'candidate_id': self.pk,
+            'candidate_name': str(self),
         }
 
         contact = {
-            'candidateId': self.pk,
-            'candidateName': str(self),
+            'candidate_id': self.pk,
+            'candidate_name': str(self),
             'linkedin': self.linkedin,
             'goldenline': self.goldenline,
             'email': self.email,
         }
 
         attachments = {
-            'candidateId': self.pk,
+            'candidate_id': self.pk,
             'attachments': [{
                 'display_name': str(a),
                 'pk': a.pk
             } for a in Attachment.objects.filter(person_id=self.pk)]
         }
 
-        previous_states = {k: db_states[k]
-                           for k in get_previous_nodes(self.state)}
-        next_states = {k: db_states[k]
-                       for k in get_next_nodes(self.state)}
+        previous_states = get_previous_nodes(self.state)
+
+        next_states = get_next_nodes(self.state)
 
         state = {
             'state_name': str(self.state),
@@ -123,27 +120,26 @@ class Person(Model):
                 'previous_states': previous_states,
                 'next_states': next_states,
                 'state_view': str(self.state)
-                }),
+            }),
             'state_history':  [
                 {
                     'start_date': str(oldState.start_date.date()),
                     'change_date': str(oldState.change_date.date()),
                     'state': str(oldState.state)
-                } for oldState in OldState.objects.filter(
-                    person_id=self.pk).order_by('-change_date')
+                } for oldState in OldState.objects.filter(person_id=self.pk).order_by('-change_date')
             ]
         }
 
         caveats = {
-            'candidateId': self.pk,
-            'candidateName': str(self),
+            'candidate_id': self.pk,
+            'candidate_name': str(self),
             'caveats': self.caveats
         }
 
         return {
             'id': id,
             'photo': photo,
-            'candidateName': candidate_name,
+            'candidate_name': candidate_name,
             'contact': contact,
             'state': state,
             'attachments': attachments,

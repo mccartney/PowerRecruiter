@@ -1,59 +1,28 @@
+from collections import defaultdict
 import datetime
 
 from django.shortcuts import render
-from power_recruiter.basic_site.workflow import get_states_dict
-from power_recruiter.candidate.models import Person, OldState
+from power_recruiter.candidate.models import Person, OldState, State
 
 
-def add_to_double_directory(first_directory, date, value, min_date, max_date):
+def get_data_bounds(state_dict):
+    min_date = datetime.date(year=datetime.MAXYEAR, month=1, day=1)
+    max_date = datetime.date(year=datetime.MINYEAR, month=1, day=1)
 
-    if date in first_directory:
-        first_directory[date] += value
-    else:
-        first_directory[date] = value
+    for date_dict in state_dict.values():
+        for date, value in date_dict.iteritems():
+            if date < min_date:
+                min_date = date
+            if date > max_date:
+                max_date = date
 
-    if date < min_date:
-        min_date = date
-    if date > max_date:
-        max_date = date
     return min_date, max_date
 
 
-def line_chart(request):
-    db_states = get_states_dict()
-    state_dict = {}
-    for _, state in db_states.iteritems():
-        state_dict[state.get_name()] = {}
+def add_to_dictionary(state_dict, date, value):
+    state_dict[date] += value
 
-    max_date = datetime.date(year=datetime.MINYEAR, month=1, day=1)
-    min_date = datetime.date(year=datetime.MAXYEAR, month=1, day=1)
-
-    for person in Person.objects.all():
-        (min_date, max_date) = add_to_double_directory(
-            state_dict[state.get_name()],
-            person.current_state_started.date(),
-            1,
-            min_date,
-            max_date
-            )
-
-    for old_state in OldState.objects.all():
-        (min_date, max_date) = add_to_double_directory(
-            state_dict[old_state.state.get_name()],
-            old_state.start_date.date(),
-            1,
-            min_date,
-            max_date
-            )
-
-        (min_date, max_date) = add_to_double_directory(
-            state_dict[old_state.state.get_name()],
-            old_state.change_date.date(),
-            -1,
-            min_date,
-            max_date
-            )
-
+def generate_result(state_dict, min_date, max_date):
     result = {}
 
     for state in state_dict:
@@ -67,7 +36,39 @@ def line_chart(request):
             current_date += datetime.timedelta(days=1)
         result[state] = current_state
 
-    context = {
-        'dicts': result
-    }
+    return result
+
+def generate_context_dicts():
+    # Double dictionary: state -> {date -> numberOfCandidates}
+    state_dict = {}
+    for state in State.objects.all():
+        state_dict[state.get_name()] = defaultdict(int)
+
+    # Add all current states
+    for person in Person.objects.all():
+        add_to_dictionary(
+            state_dict[person.state.get_name()],
+            person.current_state_started.date(),
+            1
+        )
+
+    # Add all old states
+    for old_state in OldState.objects.all():
+        add_to_dictionary(
+            state_dict[old_state.state.get_name()],
+            old_state.start_date.date(),
+            1
+        )
+
+        add_to_dictionary(
+            state_dict[old_state.state.get_name()],
+            old_state.change_date.date(),
+            -1
+        )
+
+    min_date, max_date = get_data_bounds(state_dict)
+    return generate_result(state_dict, min_date, max_date)
+
+def line_chart(request):
+    context = { 'dicts': generate_context_dicts() }
     return render(request, "line_chart.html", context)
