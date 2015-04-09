@@ -1,4 +1,8 @@
 <script>
+    $('#conflicts_modal').on('hidden.bs.modal', function (e) {
+        get_conflicts();
+    });
+
     function get_conflicts() {
         $.get(
                 '/candidate/get_conflicts/',
@@ -40,7 +44,7 @@
                     'person_ids': JSON.stringify(person_ids),
                     'merge': merge
                 },
-                function() {$('#conflicts_modal').modal('toggle'); get_conflicts();}
+                function() { $('#conflicts_modal').modal('hide'); reloadData(); }
         );
     }
 

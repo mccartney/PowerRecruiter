@@ -18,14 +18,14 @@ class TestPerson(unittest.TestCase):
         new_person1 = Person.objects.create_person(
             first_name=first_name,
             last_name=last_name,
-            link="http://www.linkedin.com/costam1",
+            l_link="http://www.linkedin.com/costam1",
             photo_url=photo_url,
         )
         new_person1.save()
         new_person2 = Person.objects.create_person(
             first_name=first_name,
             last_name=last_name,
-            link="http://www.linkedin.com/costam2",
+            l_link="http://www.linkedin.com/costam2",
             photo_url=photo_url,
         )
         new_person2.save()
