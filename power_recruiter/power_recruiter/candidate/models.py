@@ -8,7 +8,6 @@ from power_recruiter.basic_site.models import Notification, State
 
 
 class PersonManager(Manager):
-    # def create_person(self, first_name, last_name, link, photo_url):
     def create_person(self, first_name, last_name, photo_url="", l_link="", g_link="", m_link=""):
         l_link = None if not l_link else l_link
         g_link = None if not g_link else g_link

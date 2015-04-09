@@ -8,10 +8,44 @@
             </div>
             <input type="hidden" id="id0" value="">
             <input type="hidden" id="id1" value="">
-            <div>
-                Possible conflict has been found
-            </div>
-            <div class="modal-body"></div>
+            <input type="hidden" id="checked-img" value="0">
+            <input type="hidden" id="checked-status" value="0">
+
+            <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Choose a photo</h4>
+                    </div>
+                </div>
+                <div class="row conflict-imgs">
+                    <div class="col-md-4 col-md-offset-2">
+                        <div class="imageDiv">
+                            <a href="javascript:checkImage(0);"><img id="img0" class="checked" src="https://static.licdn.com/scds/common/u/images/themes/katy/ghosts/person/ghost_person_200x200_v1.png"></a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="imageDiv">
+                            <a href="javascript:checkImage(1);"><img id="img1" src="https://static.licdn.com/scds/common/u/images/themes/katy/ghosts/person/ghost_person_200x200_v1.png"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Choose a status</h4>
+                    </div>
+                </div>
+                <div class="row conflict-status">
+                    <div class="col-md-10 col-md-offset-1">
+                        <ul class="nav nav-pills">
+                        <li id="status0" role="presentation" class="active"><a href="javascript:checkStatus(0);"></a></li>
+                        <li id="status1" role="presentation"><a href="javascript:checkStatus(1);"></a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div> <!-- container -->
+            </div> <!-- modal-body -->
             <div class="modal-footer">
                 <button id="conflicts_modal_dont_merge" type="button" class="btn btn-warning">Don't merge</button>
                 <button id="conflicts_modal_merge" type="button" class="btn btn-primary">Merge</button>
@@ -19,3 +53,17 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<script>
+    function checkImage(k) {
+        $('#checked-img').val(k);
+        $('#img'+k).addClass("checked");
+        $('#img'+(1-k)).removeClass("checked");
+    }
+
+    function checkStatus(k) {
+        $('#checked-status').val(k);
+        $('#status'+k).addClass("active");
+        $('#status'+(1-k)).removeClass("active");
+    }
+</script>
