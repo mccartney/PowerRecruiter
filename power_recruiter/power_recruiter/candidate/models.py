@@ -1,10 +1,12 @@
 from django.utils import timezone
 from django.db.models import Manager, Model, CharField, ForeignKey, \
-    FileField, DateTimeField, TextField, URLField, EmailField, IntegerField, BooleanField
+    FileField, DateTimeField, TextField, URLField, EmailField, BooleanField
 from django.template.loader import render_to_string
+from django.shortcuts import get_object_or_404
 
 from power_recruiter.basic_site.workflow import get_next_nodes, get_previous_nodes
 from power_recruiter.basic_site.models import Notification, State
+import datetime
 
 
 class PersonManager(Manager):
@@ -29,9 +31,9 @@ class Person(Model):
     current_state_started = DateTimeField(default=timezone.now)
     state = ForeignKey(State, null=True)
     photo_url = CharField(max_length=200)
-    linkedin = URLField(null=True, unique=True)
-    goldenline = URLField(null=True, unique=True)
-    email = EmailField(null=True, unique=True)
+    linkedin = URLField(null=True, unique=False)
+    goldenline = URLField(null=True, unique=False)
+    email = EmailField(null=True, unique=False)
     caveats = TextField(max_length=1000, blank=True)
     conflict_resolved = BooleanField(default=False)
 
@@ -50,15 +52,27 @@ class Person(Model):
             )
             if len(candidates) > 1:
                 return candidates
-                return list(candidates)
         return []
 
     @classmethod
-    def merge(cls, ids):
-        # FIXME
-        for person_id in ids[1:]:
-            p = cls.objects.get(pk=person_id)
-            p.delete()
+    def merge(cls, ids, photo, state):
+        rids = []
+        for i in ids:
+            rids.append(int(i))
+        photo = int(photo)
+        state = int(state)
+        right_person = Person.objects.get(id=rids[0])
+        wrong_person = Person.objects.get(id=rids[1])
+        state_person = Person.objects.get(id=rids[state])
+        if right_person.state != state_person.state:
+            right_person.update_state(state_person.state.id)
+        right_person.photo_url = Person.objects.get(id=rids[photo]).photo_url
+        old_atts = Attachment.objects.filter(person=wrong_person)
+        for o in old_atts:
+            o.person = right_person
+        right_person.save()
+        wrong_person.delete()
+
 
     @classmethod
     def dont_merge(cls, ids):
@@ -66,6 +80,21 @@ class Person(Model):
             p = cls.objects.get(pk=person_id)
             p.conflict_resolved = True
             p.save()
+
+
+
+    def update_state(self, new_state_id):
+        old_state = OldState(
+            person=self,
+            start_date=self.current_state_started,
+            change_date=datetime.datetime.now(),
+            state=self.state
+        )
+        old_state.save()
+        self.state = get_object_or_404(State, id=new_state_id)
+        self.current_state_started = datetime.datetime.now()
+        self.save()
+
 
     def to_json(self):
         id = {
@@ -105,6 +134,7 @@ class Person(Model):
         next_states = get_next_nodes(self.state)
 
         state = {
+            'raw_state_name': str(self.state.get_name()),
             'state_name': str(self.state),
             'current_state_started': str(self.current_state_started.date()),
             'state_view': render_to_string('state.html', {

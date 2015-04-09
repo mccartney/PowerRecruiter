@@ -1,7 +1,6 @@
 import json
 import logging
 import sys
-import datetime
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import redirect, render_to_response, get_object_or_404
@@ -11,7 +10,7 @@ from django import forms
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
-from power_recruiter.candidate.models import Attachment, Person, OldState, State
+from power_recruiter.candidate.models import Attachment, Person, State
 from power_recruiter.basic_site.workflow import are_nodes_connected
 
 
@@ -127,16 +126,7 @@ def change_state(request):
         raise Http404
     person = get_object_or_404(Person, id=person_id)
     if are_nodes_connected(new_state_id, person.state):
-        old_state = OldState(
-            person=person,
-            start_date=person.current_state_started,
-            change_date=datetime.datetime.now(),
-            state=person.state
-        )
-        old_state.save()
-        person.state = get_object_or_404(State, id=new_state_id)
-        person.current_state_started = datetime.datetime.now()
-        person.save()
+        person.update_state(new_state_id)
         return HttpResponse(200, content_type="plain/text")
     raise Http404
 
@@ -186,9 +176,11 @@ def get_conflicts(request):
 def resolve_conflicts(request):
     person_ids_json = request.POST.get('person_ids')
     person_ids = json.loads(person_ids_json)
+    photo = request.POST.get('person_img')
+    state = request.POST.get('person_state')
     merge = json.loads(request.POST.get('merge'))
     if merge:
-        Person.merge(person_ids)
+        Person.merge(person_ids, photo, state)
     else:
         Person.dont_merge(person_ids)
     return HttpResponse(status=200, content=200, content_type="plain/text")

@@ -14,3 +14,4 @@ def multiton(cls):
             i = instances[instance_name] = cls(*args, **kwargs)
         return i
     return get_instance
+

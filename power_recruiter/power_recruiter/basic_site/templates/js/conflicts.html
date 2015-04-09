@@ -1,4 +1,6 @@
 <script>
+    GHOST_PIC = 'https://static.licdn.com/scds/common/u/images/themes/katy/ghosts/person/ghost_person_200x200_v1.png';
+
     $('#conflicts_modal').on('hidden.bs.modal', function (e) {
         get_conflicts();
     });
@@ -11,8 +13,8 @@
                         var name = data[0][0]['candidate_name']['candidate_name'];
                         var img0 = data[0][0]['photo']['photo'];
                         var img1 = data[0][1]['photo']['photo'];
-                        var state0 = data[0][0]['state']['state_name'];
-                        var state1 = data[0][1]['state']['state_name']
+                        var state0 = data[0][0]['state']['raw_state_name'];
+                        var state1 = data[0][1]['state']['raw_state_name'];
                         var id0 = data[0][0]['id']['id'];
                         var id1 = data[0][1]['id']['id'];
                         show_conflicts_modal(name, img0, img1, state0, state1);
@@ -25,11 +27,12 @@
     function show_conflicts_modal(name, img0, img1, state0, state1) {
         var $conflicts_modal = $('#conflicts_modal');
         $('#conflict_modal_name').text(name);
+        img0 = img0 ? img0 : GHOST_PIC;
+        img1 = img1 ? img1 : GHOST_PIC;
         $('#img0').attr('src', img0);
         $('#img1').attr('src', img1);
         $('#status0 a').text(state0);
         $('#status1 a').text(state1);
-        console.log(state0);
         $conflicts_modal.modal('show');
     }
 
@@ -48,12 +51,14 @@
 
     function resolve_conflicts(merge) {
         var person_ids = get_person_ids_from_conflicts_modal();
-        var person_img = get_person_image_from_conflicts_modal()
+        var person_img = get_person_image_from_conflicts_modal();
+        var person_state = get_person_state_from_conflicts_modal();
         $.post(
                 '/candidate/resolve_conflicts/',
                 {
                     'person_ids': JSON.stringify(person_ids),
-                    'person_img': JSON.stringify(person_img),
+                    'person_img': person_img,
+                    'person_state': person_state,
                     'merge': merge
                 },
                 function() { $('#conflicts_modal').modal('hide'); reloadData(); }
@@ -66,6 +71,10 @@
 
     function get_person_image_from_conflicts_modal() {
         return $('#checked-img').val();
+    }
+
+    function get_person_state_from_conflicts_modal() {
+        return $('#checked-status').val();
     }
 
     $('#conflicts_modal_merge').on('click', function (e) {

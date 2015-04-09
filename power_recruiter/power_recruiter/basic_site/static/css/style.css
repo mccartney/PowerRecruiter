@@ -358,10 +358,10 @@ tr.maintable-row-large > td > span > a > div.removePersonButton{
 .conflict-imgs img.checked{
     border-style: solid;
     border-width: 10px;
-    -moz-border-image: url(../img/border.png) 12 round;
-    -webkit-border-image: url(../img/border.png) 12 round;
-    -o-border-image: url(../img/border.png) 12 round;
-    border-image: url(../img/border.png) 12 round;
+    -moz-border-image: url(../img/border2.jpg) 12 round;
+    -webkit-border-image: url(../img/border2.jpg) 12 round;
+    -o-border-image: url(../img/border2.jpg) 12 round;
+    border-image: url(../img/border2.jpg) 12 round;
 }
 
 .conflict-status ul {
