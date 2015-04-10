@@ -1,8 +1,8 @@
+import subprocess, time, urllib2, os
 import django.test as unittest
 from django.test.utils import override_settings
 from power_recruiter.settings import BASE_DIR
-import subprocess, os, signal
-__author__ = 'shadowsword'
+
 
 class UrlsTest(unittest.TestCase):
 
@@ -36,7 +36,7 @@ class UrlsTest(unittest.TestCase):
         self.run_auto_login("/admin")
 
     @override_settings(DEBUG=True)
-    def test_404(self):
+    def test_404_debug(self):
         self.run_url("/ssssdfasdf", 404)
 
     @override_settings(DEBUG=False)
@@ -48,6 +48,11 @@ class UrlsTest(unittest.TestCase):
 class WsgiTest(unittest.TestCase):
 
     def test_wsgi(self):
-        proc = subprocess.Popen([BASE_DIR + "/manage.py",  "runserver"])
+        FNULL = open(os.devnull, 'w')
+        proc = subprocess.Popen([BASE_DIR + "/manage.py",  "runserver"], stdout=FNULL, stderr=FNULL)
+        time.sleep(5)
         self.assertGreater(proc.pid, 0)
+        response = urllib2.urlopen("http://127.0.0.1:8000/")
+        self.assertEqual(response.getcode(), 200)
         proc.kill()
+
