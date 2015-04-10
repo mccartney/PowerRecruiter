@@ -1,12 +1,11 @@
-import unittest
-
+from django.test import TestCase
 
 from power_recruiter.candidate.models import Person
 
 
-class TestPerson(unittest.TestCase):
+class TestPerson(TestCase):
 
-    fixtures = ['required.json']
+    fixtures = ['graph.json', 'required.json']
 
     def test_get_conflicts(self):
         self.assertTrue(Person.get_conflicts() == [])

@@ -83,7 +83,7 @@ def remove_person(request):
 def candidate_json(request):
     persons = Person.objects.all()
     for state in State.objects.all():
-        if request.GET.get(state, False):
+        if not int(request.GET.get("state%d" % state.pk, 1)):
             persons = persons.exclude(state=state)
     response = [p.to_json() for p in persons]
     return HttpResponse(json.dumps(response), content_type="application/json")

@@ -15,7 +15,7 @@ class PersonManager(Manager):
         g_link = None if not g_link else g_link
         m_link = None if not m_link else m_link
         return self.create(
-            state=State.objects.get(id=0),
+            state=State.objects.get(pk=1),
             first_name=first_name,
             last_name=last_name,
             photo_url=photo_url,
@@ -73,15 +73,12 @@ class Person(Model):
         right_person.save()
         wrong_person.delete()
 
-
     @classmethod
     def dont_merge(cls, ids):
         for person_id in ids:
             p = cls.objects.get(pk=person_id)
             p.conflict_resolved = True
             p.save()
-
-
 
     def update_state(self, new_state_id):
         old_state = OldState(
@@ -94,7 +91,6 @@ class Person(Model):
         self.state = get_object_or_404(State, id=new_state_id)
         self.current_state_started = datetime.datetime.now()
         self.save()
-
 
     def to_json(self):
         id = {
