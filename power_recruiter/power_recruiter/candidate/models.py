@@ -171,6 +171,9 @@ class Person(Model):
                 notifications.append(notification.get_message(self))
         return notifications
 
+    def get_state_view(self):
+        return self.state.get_view()
+    get_state_view.allow_tags = True
 
 class Attachment(Model):
     person = ForeignKey(Person)

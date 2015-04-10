@@ -4,6 +4,7 @@ from django.contrib.admin import AdminSite
 from power_recruiter.basic_site.models import Notification, Edge, State
 from django.contrib.auth import login as auth_login
 
+
 class AutoLoginAdminSite(AdminSite):
 
     def login(self, request, extra_context=None):
