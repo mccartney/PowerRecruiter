@@ -1,14 +1,17 @@
 import django.test as unittest
+from django.test.utils import override_settings
+from power_recruiter.settings import BASE_DIR
+import subprocess, os, signal
 __author__ = 'shadowsword'
 
 class UrlsTest(unittest.TestCase):
 
     fixtures = ['admin.json']
 
-    def run_url(self, url):
+    def run_url(self, url, code=200):
         client = unittest.Client()
         response = client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, code)
 
     def run_auto_login(self, url):
         client = unittest.Client()
@@ -31,3 +34,20 @@ class UrlsTest(unittest.TestCase):
 
     def test_admin(self):
         self.run_auto_login("/admin")
+
+    @override_settings(DEBUG=True)
+    def test_404(self):
+        self.run_url("/ssssdfasdf", 404)
+
+    @override_settings(DEBUG=False)
+    # Show handler404
+    def test_404(self):
+        self.run_url("/ssssdfasdf", 200)
+
+
+class WsgiTest(unittest.TestCase):
+
+    def test_wsgi(self):
+        proc = subprocess.Popen([BASE_DIR + "/manage.py",  "runserver"])
+        self.assertGreater(proc.pid, 0)
+        proc.kill()
