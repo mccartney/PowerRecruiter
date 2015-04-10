@@ -181,11 +181,13 @@
 
     $("#save-candidate").click(function() {
         var resp = sendAjax(
-                'candidate/add/',
+                'candidate/add_from_app/',
                 {
-                    'args[0]': $("#input-first-name").val() + " " + $("#input-last-name").val(),
-                    'args[1]': "",
-                    'args[2]': ""
+                    'first_name': $('#input-first-name').val(),
+                    'last_name': $('#input-last-name').val(),
+                    'linkedin_link': $('#linkedin-link').val(),
+                    'goldenline_link': $('#goldenline-link').val(),
+                    'email_link': $('#email-link').val()
                 },
                 function (data) {
                     $("#creation-modal").modal('toggle');

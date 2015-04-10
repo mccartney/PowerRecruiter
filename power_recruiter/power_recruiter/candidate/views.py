@@ -1,7 +1,6 @@
 import json
 import logging
 import sys
-import datetime
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import redirect, render_to_response, get_object_or_404
@@ -11,7 +10,7 @@ from django import forms
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 
-from power_recruiter.candidate.models import Attachment, Person, OldState, State
+from power_recruiter.candidate.models import Attachment, Person, State
 from power_recruiter.basic_site.workflow import are_nodes_connected
 
 
@@ -127,50 +126,44 @@ def change_state(request):
         raise Http404
     person = get_object_or_404(Person, id=person_id)
     if are_nodes_connected(new_state_id, person.state):
-        old_state = OldState(
-            person=person,
-            start_date=person.current_state_started,
-            change_date=datetime.datetime.now(),
-            state=person.state
-        )
-        old_state.save()
-        person.state = get_object_or_404(State, id=new_state_id)
-        person.current_state_started = datetime.datetime.now()
-        person.save()
+        person.update_state(new_state_id)
         return HttpResponse(200, content_type="plain/text")
     raise Http404
 
 
 @csrf_exempt  # Do we need it?
 def add_candidate(request):
-    db_states = get_states_dict()
     args = []
     for i in xrange(3):
         args.append(request.POST['args[%d]' % i])
     names = args[0].split(' ')
     first_name = names[0]
     last_name = names[-1]
-    if Person.objects.filter(
-            first_name=first_name,
-            last_name=last_name
-    ).exists():
-        person = Person.objects.filter(
-            first_name=first_name,
-            last_name=last_name
-        ).first()
-        return HttpResponse(
-            status=418,
-            content_type="plain/text",
-            content=db_states[person.state].name
-        )
-    else:
-        Person.objects.create_person(
-            first_name,
-            last_name,
-            args[2],
-            args[1]
-        )
-        return HttpResponse(status=200, content=200, content_type="plain/text")
+    l_link=""
+    g_link=""
+    link = args[2]
+    if "linkedin" in link:
+        l_link = link
+    if "goldenline" in link:
+        g_link = link
+    Person.objects.create_person(
+        first_name=first_name,
+        last_name=last_name,
+        photo_url=args[1],
+        l_link=l_link,
+        g_link=g_link
+    )
+    return HttpResponse(status=200, content=200, content_type="plain/text")
+
+def add_candidate_from_app(request):
+    Person.objects.create_person(
+        first_name=request.POST['first_name'],
+        last_name=request.POST['last_name'],
+        g_link=request.POST['goldenline_link'],
+        l_link=request.POST['linkedin_link'],
+        m_link=request.POST['email_link']
+    )
+    return HttpResponse(status=200, content=200, content_type="plain/text")
 
 
 def get_conflicts(request):
@@ -183,9 +176,11 @@ def get_conflicts(request):
 def resolve_conflicts(request):
     person_ids_json = request.POST.get('person_ids')
     person_ids = json.loads(person_ids_json)
+    photo = request.POST.get('person_img')
+    state = request.POST.get('person_state')
     merge = json.loads(request.POST.get('merge'))
     if merge:
-        Person.merge(person_ids)
+        Person.merge(person_ids, photo, state)
     else:
         Person.dont_merge(person_ids)
     return HttpResponse(status=200, content=200, content_type="plain/text")
