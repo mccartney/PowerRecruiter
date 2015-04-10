@@ -37,8 +37,23 @@ class UrlsTest(unittest.TestCase):
     def test_admin(self):
         self.run_auto_login("/admin")
 
+    def test_admin_edge(self):
+        self.run_auto_login("/admin/basic_site/edge/")
+
+    def test_admin_notification(self):
+        self.run_auto_login("/admin/basic_site/notification/")
+
+    def test_admin_state(self):
+        self.run_auto_login("/admin/basic_site/state/")
+
+    def test_admin_attachment(self):
+        self.run_auto_login("/admin/basic_site/attachment/")
+
     def test_admin_person(self):
-        self.run_auto_login("/admin/candidate/person/")
+        self.run_auto_login("/admin/basic_site/person/")
+
+    def test_admin_person_add(self):
+        self.run_auto_login("/admin/candidate/person/add/")
 
     @override_settings(DEBUG=True)
     def test_404_debug(self):

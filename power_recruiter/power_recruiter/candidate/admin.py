@@ -18,6 +18,7 @@ class PersonForm(forms.ModelForm):
 
 class PersonAdmin(admin.ModelAdmin):
     fields = (
+        "photo_url",
         "first_name",
         "last_name",
         "state",

@@ -60,7 +60,6 @@ class TestCharts(TestCase):
         for pair in generate_context_dicts()[state]:
             if pair[0] == date:
                 return pair[1]
-        return None
 
     def test_line_chart(self):
         self.assertEqual(self.get_value_for_state_and_date("New", "2014-11-28"), 1)
