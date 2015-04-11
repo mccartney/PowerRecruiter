@@ -7,7 +7,6 @@ from power_recruiter.candidate.models import Person,Attachment, OldState
 from power_recruiter.settings import BASE_DIR
 
 
-
 class TestPerson(TestCase):
 
     fixtures = ['graph.json', 'required.json']
@@ -134,7 +133,12 @@ class TestCandidateView(TestCase):
         response_remove = c.post('/candidate/remove/', {'id': 1}, follow=True)
         self.assertEqual(response_remove.status_code, 200)
         self.assertEqual(len(Person.objects.all()), 5)
-        self.assertEqual(Person.objects.get(pk=1), None)
+
+        try:
+            not_exist = Person.objects.get_object_or_None(pk=1)
+        except:
+            not_exist = None
+        self.assertEqual(not_exist, None)
 
     @override_settings(DEBUG=True)
     def test_person_remove_404(self):
