@@ -117,14 +117,6 @@ class Person(Model):
             'email': self.email,
         }
 
-        attachments = {
-            'candidate_id': self.pk,
-            'attachments': [{
-                'display_name': str(a),
-                'pk': a.pk
-            } for a in Attachment.objects.filter(person_id=self.pk)]
-        }
-
         previous_states = get_previous_nodes(self.state)
 
         next_states = get_next_nodes(self.state)
@@ -146,6 +138,14 @@ class Person(Model):
                     'state': str(oldState.state)
                 } for oldState in OldState.objects.filter(person_id=self.pk).order_by('-change_date')
             ]
+        }
+
+        attachments = {
+            'candidate_id': self.pk,
+            'attachments': [{
+                'display_name': str(a),
+                'pk': a.pk
+            } for a in Attachment.objects.filter(person_id=self.pk)]
         }
 
         caveats = {
