@@ -66,7 +66,7 @@ def remove_attachment(request):
         attachment_id = int(request.POST['id'])
     except KeyError:
         raise Http404
-    to_remove = Attachment.objects.get(pk=attachment_id)
+    to_remove = get_object_or_404(Attachment, pk=attachment_id)
 
     # IMO the file should stay on server
     #to_remove.file.delete()
@@ -136,7 +136,7 @@ def change_state(request):
     except KeyError:
         raise Http404
     person = get_object_or_404(Person, id=person_id)
-    if are_nodes_connected(new_state_id, person.state):
+    if are_nodes_connected(new_state_id, person.state.pk):
         person.update_state(new_state_id)
         return HttpResponse(200, content_type="plain/text")
     raise Http404

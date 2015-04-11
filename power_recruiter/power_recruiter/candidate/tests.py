@@ -1,9 +1,9 @@
-import json, time
+import json, time, datetime
 
 from django.test import TestCase, Client
 from django.test.utils import override_settings
 
-from power_recruiter.candidate.models import Person,Attachment
+from power_recruiter.candidate.models import Person,Attachment, OldState
 from power_recruiter.settings import BASE_DIR
 
 
@@ -119,7 +119,7 @@ class TestCandidateView(TestCase):
         self.assertEqual(kamila.last_name, "von Kruk - Kowalska")
 
     @override_settings(DEBUG=True)
-    def test_attachment_remove_404(self):
+    def test_change_name_404(self):
         c = Client(enforce_csrf_checks=False)
         response_post = c.post('/candidate/change_name/', {'id': 8, 'name': 'A A'}, follow=True)
         self.assertEqual(response_post.status_code, 404)
@@ -132,11 +132,12 @@ class TestCandidateView(TestCase):
         self.assertEqual(len(Person.objects.all()), 6)
         self.assertNotEqual(Person.objects.get(pk=1), None)
         response_remove = c.post('/candidate/remove/', {'id': 1}, follow=True)
+        self.assertEqual(response_remove.status_code, 200)
         self.assertEqual(len(Person.objects.all()), 5)
         self.assertEqual(Person.objects.get(pk=1), None)
 
     @override_settings(DEBUG=True)
-    def test_attachment_remove_404(self):
+    def test_person_remove_404(self):
         c = Client(enforce_csrf_checks=False)
         response_post = c.post('/candidate/remove/', {'id': 9}, follow=True)
         self.assertEqual(response_post.status_code, 404)
@@ -209,7 +210,6 @@ class TestCandidateView(TestCase):
         candidate = Person.objects.get(pk=1)
         self.assertEqual(candidate.caveats, "New caveats ;)")
 
-
     @override_settings(DEBUG=True)
     def test_caveats_404(self):
         c = Client(enforce_csrf_checks=False)
@@ -220,4 +220,37 @@ class TestCandidateView(TestCase):
         response_post = c.post('/candidate/caveats/upload/', {'id': 1, 'timestamp': int(float(time.time()) * 1000 - 2000)}, follow=True)
         self.assertEqual(response_post.status_code, 404)
         response_post = c.post('/candidate/caveats/upload/', {'id': 0, 'timestamp': int(float(time.time()) * 1000 - 2000), 'caveats': "Old caveats ;)"}, follow=True)
+        self.assertEqual(response_post.status_code, 404)
+
+    def test_change(self):
+        c = Client(enforce_csrf_checks=False)
+        candidate = Person.objects.get(pk=4)
+        self.assertEqual(candidate.state.pk, 4)
+        state_history = OldState.objects.filter(person_id=candidate.pk).order_by('-change_date').all()
+        self.assertEqual(len(state_history), 2)
+
+        response_post = c.post('/candidate/change_state/', {'person_id': 4, 'new_state_id': 2}, follow=True)
+        self.assertEqual(response_post.status_code, 200)
+        candidate = Person.objects.get(pk=4)
+        self.assertEqual(candidate.state.pk, 2)
+        self.assertEqual(len(OldState.objects.filter(person_id=candidate.pk)), 3)
+
+        new_state_history = OldState.objects.filter(person_id=candidate.pk).order_by('-change_date').all()
+        last_state = new_state_history[0]
+        self.assertEqual(last_state.state.pk, 4)
+        self.assertEqual(last_state.start_date.date(), datetime.date(2014, 12, 23))
+        self.assertEqual(last_state.change_date.date(), datetime.datetime.now().date())
+        self.assertEqual(new_state_history[1], state_history[0])
+        self.assertEqual(new_state_history[2], state_history[1])
+
+    @override_settings(DEBUG=True)
+    def test_change_404(self):
+        c = Client(enforce_csrf_checks=False)
+        response_post = c.post('/candidate/change_state/', {'person_id': 4, 'new_state_id': 3}, follow=True)
+        self.assertEqual(response_post.status_code, 404)
+        response_post = c.post('/candidate/change_state/', {'person_id': 7, 'new_state_id': 3}, follow=True)
+        self.assertEqual(response_post.status_code, 404)
+        response_post = c.post('/candidate/change_state/', {'person_id': 4}, follow=True)
+        self.assertEqual(response_post.status_code, 404)
+        response_post = c.post('/candidate/change_state/', {'new_state_id': 3}, follow=True)
         self.assertEqual(response_post.status_code, 404)
