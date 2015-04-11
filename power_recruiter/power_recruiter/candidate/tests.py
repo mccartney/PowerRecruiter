@@ -21,14 +21,14 @@ class TestPerson(TestCase):
         new_person1 = Person.objects.create_person(
             first_name=first_name,
             last_name=last_name,
-            l_link="http://www.linkedin.com/costam1",
+            linkedin="http://www.linkedin.com/costam1",
             photo_url=photo_url,
         )
         new_person1.save()
         new_person2 = Person.objects.create_person(
             first_name=first_name,
             last_name=last_name,
-            l_link="http://www.linkedin.com/costam2",
+            linkedin="http://www.linkedin.com/costam2",
             photo_url=photo_url,
         )
         new_person2.save()
@@ -58,6 +58,7 @@ class TestCandidateView(TestCase):
             self.assertEquals(file_content, "12345\nala ma kota\n")
         file.closed
 
+    @override_settings(DEBUG=True)
     def test_attachment(self):
         c = Client(enforce_csrf_checks=False)
         self.assertEqual(len(Attachment.objects.all()), 0)
@@ -72,7 +73,7 @@ class TestCandidateView(TestCase):
         # There is an issue with Client downloading MEDIA_ROOT files
         # then we only get URL, then open this file with PYTHON
         response_get = c.get('/candidate/attachment/get/1', follow=True)
-        self.assertEquals(response_get.status_code, 200)
+        self.assertEquals(response_get.status_code, 404)
 
         file_path = response_get.redirect_chain[0][0][len("http://testserver/"):]
         self.verify_file_content(file_path)
@@ -105,7 +106,7 @@ class TestCandidateView(TestCase):
         response_remove = c.post('/candidate/attachment/remove/', {}, follow=True)
         self.assertEqual(response_remove.status_code, 404)
 
-
+    @override_settings(DEBUG=True)
     def test_change_name(self):
         c = Client(enforce_csrf_checks=False)
         kamila = Person.objects.get(pk=2)
@@ -125,7 +126,7 @@ class TestCandidateView(TestCase):
         response_post = c.post('/candidate/change_name/', {'name': 'A A'}, follow=True)
         self.assertEqual(response_post.status_code, 404)
 
-
+    @override_settings(DEBUG=True)
     def test_remove_person(self):
         c = Client(enforce_csrf_checks=False)
         self.assertEqual(len(Person.objects.all()), 6)
@@ -148,6 +149,7 @@ class TestCandidateView(TestCase):
         response_post = c.post('/candidate/remove/', {}, follow=True)
         self.assertEqual(response_post.status_code, 404)
 
+    @override_settings(DEBUG=True)
     def test_candidate_json(self):
         c = Client(enforce_csrf_checks=False)
         response_post = c.post('/candidate/')
@@ -195,12 +197,14 @@ class TestCandidateView(TestCase):
         correct_caveats = {"candidate_name": "Krzysztof Fudali", "caveats": "Good programmer!", "candidate_id": 1}
         self.assertEqual(first_candidate["caveats"], correct_caveats)
 
+    @override_settings(DEBUG=True)
     def test_candidate_json_filtration(self):
         c = Client()
         response = c.get("/candidate/?dummy=1&state2=0&state10=0")
         candidates = json.loads(response.content)
         self.assertEqual(len(candidates), 3)
 
+    @override_settings(DEBUG=True)
     def test_caveats(self):
         c = Client()
         candidate = Person.objects.get(pk=1)
@@ -226,6 +230,7 @@ class TestCandidateView(TestCase):
         response_post = c.post('/candidate/caveats/upload/', {'id': 0, 'timestamp': int(float(time.time()) * 1000 - 2000), 'caveats': "Old caveats ;)"}, follow=True)
         self.assertEqual(response_post.status_code, 404)
 
+    @override_settings(DEBUG=True)
     def test_change(self):
         c = Client(enforce_csrf_checks=False)
         candidate = Person.objects.get(pk=4)
@@ -257,4 +262,99 @@ class TestCandidateView(TestCase):
         response_post = c.post('/candidate/change_state/', {'person_id': 4}, follow=True)
         self.assertEqual(response_post.status_code, 404)
         response_post = c.post('/candidate/change_state/', {'new_state_id': 3}, follow=True)
+        self.assertEqual(response_post.status_code, 404)
+
+    @override_settings(DEBUG=True)
+    def test_add_from_app(self):
+        c = Client(enforce_csrf_checks=False)
+        self.assertEqual(len(Person.objects.all()), 6)
+        response_post = c.post('/candidate/add_from_app', {
+            'first_name': 'Nowy',
+            'last_name': 'Kandydat',
+            'goldenline_link': 'http://goldenline.com/test',
+            'linkedin_link': 'http://linkedin.com/test',
+            'email_link': 'test@powerrecruiter-zpp.pl'
+        })
+        self.assertEqual(response_post.status_code, 200)
+        self.assertEqual(len(Person.objects.all()), 7)
+
+        candidate = Person.objects.get(pk=7)
+        self.assertEqual(candidate.first_name, "Nowy")
+        self.assertEqual(candidate.last_name, "Kandydat")
+        self.assertEqual(candidate.current_state_started.date(), datetime.datetime.now().date())
+        self.assertEqual(candidate.state.pk, 0)
+        self.assertEqual(candidate.photo_url, "")
+        self.assertEqual(candidate.linkedin, 'http://linkedin.com/test')
+        self.assertEqual(candidate.goldenline, 'http://goldenline.com/test')
+        self.assertEqual(candidate.email, 'test@powerrecruiter-zpp.pl')
+        self.assertEqual(candidate.caveats, "")
+        self.assertEqual(candidate.caveats_timestamp.date(), datetime.datetime.now().date())
+        self.assertEqual(candidate.conflict_resolved, False)
+
+    @override_settings(DEBUG=True)
+    def test_browser_plugin_mockup(self):
+        c = Client(enforce_csrf_checks=False)
+        self.assertEqual(len(Person.objects.all()), 6)
+
+        # Add goldenline
+        response_post = c.post('/candidate/add', {
+            'args[0]': 'Nowy Kandydat',
+            'args[1]': 'http://nofoto.com/photo.png',
+            'args[2]':'http://goldenline.com/test'
+        })
+        self.assertEqual(response_post.status_code, 200)
+        self.assertEqual(len(Person.objects.all()), 7)
+
+        candidate = Person.objects.get(pk=7)
+        self.assertEqual(candidate.first_name, "Nowy")
+        self.assertEqual(candidate.last_name, "Kandydat")
+        self.assertEqual(candidate.current_state_started.date(), datetime.datetime.now().date())
+        self.assertEqual(candidate.state.pk, 0)
+        self.assertEqual(candidate.photo_url, "http://nofoto.com/photo.png")
+        self.assertEqual(candidate.linkedin, "")
+        self.assertEqual(candidate.goldenline, "http://goldenline.com/test")
+        self.assertEqual(candidate.email, "")
+        self.assertEqual(candidate.caveats, "")
+        self.assertEqual(candidate.caveats_timestamp.date(), datetime.datetime.now().date())
+        self.assertEqual(candidate.conflict_resolved, False)
+
+        # Add goldenline second time
+        response_post = c.post('/candidate/add', {
+            'args[0]': 'Nowy Kandydat',
+            'args[1]': 'http://nofoto.com/photo.png',
+            'args[2]':'http://goldenline.com/test'
+        })
+        self.assertEqual(response_post.status_code, 418)
+
+        # Add linkedin
+        response_post = c.post('/candidate/add', {
+            'args[0]': 'Kamil Linkinowiec',
+            'args[1]': 'http://nofoto.com/photo.png',
+            'args[2]': 'http://linkedin.com/test'
+        })
+        self.assertEqual(response_post.status_code, 200)
+        self.assertEqual(len(Person.objects.all()), 8)
+        candidate = Person.objects.get(pk=8)
+        self.assertEqual(candidate.linkedin, "http://linkedin.com/test")
+        self.assertEqual(candidate.goldenline, "")
+        self.assertEqual(candidate.email, "")
+
+        # Add linkedin second time
+        response_post = c.post('/candidate/add', {
+            'args[0]': 'Kamil Linkinowiec',
+            'args[1]': 'http://nofoto.com/photo.png',
+            'args[2]': 'http://linkedin.com/test'
+            })
+        self.assertEqual(response_post.status_code, 418)
+
+    @override_settings(DEBUG=True)
+    def test_browser_plugin_mockup_404(self):
+        c = Client(enforce_csrf_checks=False)
+
+        # Add goldenline
+        response_post = c.post('/candidate/add', {
+            'args[3]': 'Nowy Kandydat',
+            'args[1]': 'http://nofoto.com/photo.png',
+            'args[2]':'http://goldenline.com/test'
+        })
         self.assertEqual(response_post.status_code, 404)

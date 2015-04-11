@@ -10,18 +10,15 @@ import datetime
 
 
 class PersonManager(Manager):
-    def create_person(self, first_name, last_name, photo_url="", l_link="", g_link="", m_link=""):
-        l_link = None if not l_link else l_link
-        g_link = None if not g_link else g_link
-        m_link = None if not m_link else m_link
+    def create_person(self, first_name, last_name, photo_url="", linkedin="", goldenline="", email=""):
         return self.create(
-            state=State.objects.get(pk=1),
+            state=State.objects.get(pk=0),
             first_name=first_name,
             last_name=last_name,
             photo_url=photo_url,
-            linkedin=l_link,
-            goldenline=g_link,
-            email=m_link
+            linkedin=linkedin,
+            goldenline=goldenline,
+            email=email
         )
 
 

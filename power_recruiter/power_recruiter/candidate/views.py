@@ -144,35 +144,60 @@ def change_state(request):
 @csrf_exempt
 def add_candidate(request):
     args = []
-    for i in xrange(3):
-        args.append(request.POST['args[%d]' % i])
+    try:
+        # 1 - full name, 2 - img url, 3 - link
+        for i in xrange(3):
+            args.append(request.POST['args[%d]' % i])
+    except KeyError:
+        raise Http404
     names = args[0].split(' ')
     first_name = names[0]
-    last_name = names[-1]
-    l_link=""
-    g_link=""
+    last_name = ""
+    for last_name_part in names[1:]:
+        last_name = last_name + last_name_part
+    linkedin = ""
+    goldenline = ""
     link = args[2]
+
+    possible_people_with_link_list = [Person.objects.filter(linkedin=link), Person.objects.filter(goldenline=link)]
+
+    for possible_people_with_link in possible_people_with_link_list:
+        if len(possible_people_with_link) > 0:
+            return HttpResponse(status=418, content=possible_people_with_link[0].state.get_name(), content_type="plain/text")
+
     if "linkedin" in link:
-        l_link = link
-    if "goldenline" in link:
-        g_link = link
+        linkedin = link
+    elif "goldenline" in link:
+        goldenline = link
+
     Person.objects.create_person(
         first_name=first_name,
         last_name=last_name,
         photo_url=args[1],
-        l_link=l_link,
-        g_link=g_link
+        linkedin=linkedin,
+        goldenline=goldenline
     )
+
     return HttpResponse(status=200, content=200, content_type="plain/text")
 
 def add_candidate_from_app(request):
+    try:
+        first_name=request.POST['first_name']
+        last_name=request.POST['last_name']
+        goldenline=request.POST['goldenline_link']
+        linkedin=request.POST['linkedin_link']
+        email=request.POST['email_link']
+    except KeyError:
+        raise Http404
+
     Person.objects.create_person(
-        first_name=request.POST['first_name'],
-        last_name=request.POST['last_name'],
-        g_link=request.POST['goldenline_link'],
-        l_link=request.POST['linkedin_link'],
-        m_link=request.POST['email_link']
+        first_name=first_name,
+        last_name=last_name,
+        goldenline=goldenline,
+        linkedin=linkedin,
+        email=email
     )
+
     return HttpResponse(status=200, content=200, content_type="plain/text")
 
 
