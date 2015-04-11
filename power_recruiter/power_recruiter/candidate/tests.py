@@ -433,8 +433,104 @@ class TestCandidateView(TestCase):
 
     @override_settings(DEBUG=True)
     def test_merge(self):
-        pass
+        c = Client(enforce_csrf_checks=False)
+        conflicts = Person.get_conflicts()
+        self.assertEqual(len(conflicts), 0)
+        self.assertEqual(len(Person.objects.all()), 6)
+        new_person1 = Person.objects.create_person(
+            first_name="Taka",
+            last_name="Sama"
+        )
+        new_person1.save()
+
+        new_person2 = Person.objects.create_person(
+            first_name="Taka",
+            last_name="Sama",
+            linkedin="http://www.linkedin.com/costam2",
+            photo_url="http://japonskie_twarze.pl/taka_sama.png"
+        )
+        new_person2.save()
+
+        # caveats should concat
+        candidate1 = Person.objects.get(pk=7)
+        candidate1.caveats = "2+2="
+        candidate1.save()
+
+        candidate2 = Person.objects.get(pk=8)
+        candidate2.caveats = "2*2"
+        candidate2.save()
+
+        # attachments should concat!
+        with open(BASE_DIR + '/power_recruiter/tests/upload_files/readme.txt') as fp:
+            response_post = c.post('/candidate/attachment/upload/', {'person': '7', 'file': fp}, follow=True)
+        self.assertEqual(response_post.status_code, 200)
+        self.assertEqual(len(Attachment.objects.all()), 1)
+
+        # Add second file to same person
+        self.assertEqual(len(Attachment.objects.all()), 1)
+        with open(BASE_DIR + '/power_recruiter/tests/upload_files/list.txt') as fp:
+            response_post = c.post('/candidate/attachment/upload/', {'person': '8', 'file': fp}, follow=True)
+        self.assertEqual(response_post.status_code, 200)
+        self.assertEqual(len(Attachment.objects.all()), 2)
+
+        self.assertEqual(len(Person.objects.all()), 8)
+
+        conflicts = Person.get_conflicts()
+        self.assertEqual(len(conflicts), 2)
+        response_post = c.post('/candidate/resolve_conflicts/', {'person_ids': '[7,8]', 'person_img': 1, 'person_state': 1, 'merge': 'true'})
+        self.assertEqual(response_post.status_code, 200)
+
+        self.assertEqual(len(Person.objects.all()), 7)
+
+        candidate = Person.objects.get(pk=7)
+        self.assertEqual(candidate.first_name, "Taka")
+        self.assertEqual(candidate.last_name, "Sama")
+        self.assertEqual(candidate.current_state_started.date(), datetime.datetime.now().date())
+        self.assertEqual(candidate.state.pk, 0)
+        self.assertEqual(candidate.photo_url, "http://japonskie_twarze.pl/taka_sama.png")
+        self.assertEqual(candidate.linkedin, "")
+        self.assertEqual(candidate.goldenline, "")
+        self.assertEqual(candidate.email, "")
+        self.assertEqual(candidate.caveats, "2+2=2*2")
+        self.assertEqual(candidate.caveats_timestamp.date(), datetime.datetime.now().date())
+        self.assertEqual(candidate.conflict_resolved, False)
+        self.assertEqual(len(Attachment.objects.all().filter(person=7)), 2)
+
+        conflicts = Person.get_conflicts()
+        self.assertEqual(len(conflicts), 0)
 
     @override_settings(DEBUG=True)
     def test_dont_merge(self):
-        pass
+        c = Client(enforce_csrf_checks=False)
+        conflicts = Person.get_conflicts()
+        self.assertEqual(len(conflicts), 0)
+        self.assertEqual(len(Person.objects.all()), 6)
+        new_person1 = Person.objects.create_person(
+            first_name="Taka",
+            last_name="Sama"
+        )
+        new_person1.save()
+
+        new_person2 = Person.objects.create_person(
+            first_name="Taka",
+            last_name="Sama",
+            linkedin="http://www.linkedin.com/costam2",
+            photo_url="http://japonskie_twarze.pl/taka_sama.png"
+        )
+        new_person2.save()
+
+        self.assertEqual(len(Person.objects.all()), 8)
+        all_people_list = Person.objects.all()
+
+        conflicts = Person.get_conflicts()
+        self.assertEqual(len(conflicts), 2)
+        response_post = c.post('/candidate/resolve_conflicts/', {'person_ids': '[7,8]', 'person_img': 0, 'person_state': 0, 'merge': 'false'})
+        self.assertEqual(response_post.status_code, 200)
+
+        new_all_people_list = Person.objects.all()
+        self.assertEqual(len(all_people_list), len(new_all_people_list))
+        for i in xrange(len(all_people_list)):
+            self.assertEqual(all_people_list[i], new_all_people_list[i])
+
+        conflicts = Person.get_conflicts()
+        self.assertEqual(len(conflicts), 0)

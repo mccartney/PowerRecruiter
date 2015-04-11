@@ -68,6 +68,8 @@ class Person(Model):
         old_atts = Attachment.objects.filter(person=wrong_person)
         for o in old_atts:
             o.person = right_person
+            o.save()
+        right_person.caveats = right_person.caveats + wrong_person.caveats
         right_person.save()
         wrong_person.delete()
 

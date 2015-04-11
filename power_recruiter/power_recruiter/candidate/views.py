@@ -207,11 +207,15 @@ def get_conflicts(request):
 
 @require_POST
 def resolve_conflicts(request):
-    person_ids_json = request.POST.get('person_ids')
-    person_ids = json.loads(person_ids_json)
-    photo = request.POST.get('person_img')
-    state = request.POST.get('person_state')
-    merge = json.loads(request.POST.get('merge'))
+    try:
+        person_ids_json = request.POST.get('person_ids')
+        person_ids = json.loads(person_ids_json)
+        photo = request.POST.get('person_img')
+        state = request.POST.get('person_state')
+        merge = json.loads(request.POST.get('merge'))
+    except KeyError:
+        raise Http404
+
     if merge:
         Person.merge(person_ids, photo, state)
     else:
