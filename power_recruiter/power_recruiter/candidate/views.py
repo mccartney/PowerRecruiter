@@ -200,12 +200,10 @@ def add_candidate_from_app(request):
 
     return HttpResponse(status=200, content=200, content_type="plain/text")
 
-
 def get_conflicts(request):
     conflicting_candidates = Person.get_conflicts()
     response = [c.to_json() for c in conflicting_candidates],
     return HttpResponse(json.dumps(response), content_type="application/json")
-
 
 @require_POST
 def resolve_conflicts(request):

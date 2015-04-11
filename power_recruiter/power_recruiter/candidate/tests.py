@@ -292,6 +292,49 @@ class TestCandidateView(TestCase):
         self.assertEqual(candidate.conflict_resolved, False)
 
     @override_settings(DEBUG=True)
+    def test_add_from_app_404(self):
+        c = Client(enforce_csrf_checks=False)
+        response_post = c.post('/candidate/add_from_app', {
+            'last_name': 'Kandydat',
+            'goldenline_link': 'http://goldenline.com/test',
+            'linkedin_link': 'http://linkedin.com/test',
+            'email_link': 'test@powerrecruiter-zpp.pl'
+        })
+        self.assertEqual(response_post.status_code, 404)
+
+        response_post = c.post('/candidate/add_from_app', {
+            'first_name': 'Nowy',
+            'goldenline_link': 'http://goldenline.com/test',
+            'linkedin_link': 'http://linkedin.com/test',
+            'email_link': 'test@powerrecruiter-zpp.pl'
+        })
+        self.assertEqual(response_post.status_code, 404)
+
+        response_post = c.post('/candidate/add_from_app', {
+            'first_name': 'Nowy',
+            'last_name': 'Kandydat',
+            'linkedin_link': 'http://linkedin.com/test',
+            'email_link': 'test@powerrecruiter-zpp.pl'
+        })
+        self.assertEqual(response_post.status_code, 404)
+
+        response_post = c.post('/candidate/add_from_app', {
+            'first_name': 'Nowy',
+            'last_name': 'Kandydat',
+            'goldenline_link': 'http://goldenline.com/test',
+            'email_link': 'test@powerrecruiter-zpp.pl'
+        })
+        self.assertEqual(response_post.status_code, 404)
+
+        response_post = c.post('/candidate/add_from_app', {
+            'first_name': 'Nowy',
+            'last_name': 'Kandydat',
+            'goldenline_link': 'http://goldenline.com/test',
+            'linkedin_link': 'http://linkedin.com/test',
+        })
+        self.assertEqual(response_post.status_code, 404)
+
+    @override_settings(DEBUG=True)
     def test_browser_plugin_mockup(self):
         c = Client(enforce_csrf_checks=False)
         self.assertEqual(len(Person.objects.all()), 6)
@@ -358,3 +401,40 @@ class TestCandidateView(TestCase):
             'args[2]':'http://goldenline.com/test'
         })
         self.assertEqual(response_post.status_code, 404)
+
+    @override_settings(DEBUG=True)
+    def test_get_conflicts(self):
+        c = Client(enforce_csrf_checks=False)
+        response = c.get('/candidate/get_conflicts/')
+        self.assertEqual(response.status_code, 200)
+        conflicts = json.loads(response.content)
+        self.assertEqual(len(conflicts), 1)
+        self.assertEqual(len(conflicts[0]), 0)
+
+        new_person1 = Person.objects.create_person(
+            first_name="Taka",
+            last_name="Sama"
+        )
+        new_person1.save()
+
+        new_person2 = Person.objects.create_person(
+            first_name="Taka",
+            last_name="Sama",
+            linkedin="http://www.linkedin.com/costam2",
+            photo_url="http://japonskie_twarze.pl/taka_sama.png"
+        )
+        new_person2.save()
+
+        response = c.get('/candidate/get_conflicts/')
+        self.assertEqual(response.status_code, 200)
+        conflicts = json.loads(response.content)
+        self.assertEqual(len(conflicts), 1)
+        self.assertEqual(len(conflicts[0]), 2)
+
+    @override_settings(DEBUG=True)
+    def test_merge(self):
+        pass
+
+    @override_settings(DEBUG=True)
+    def test_dont_merge(self):
+        pass
