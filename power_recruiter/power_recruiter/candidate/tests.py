@@ -127,7 +127,7 @@ class TestCandidateView(TestCase):
         self.assertEqual(response_post.status_code, 404)
 
 
-    def remove_person(self):
+    def test_remove_person(self):
         c = Client(enforce_csrf_checks=False)
         self.assertEqual(len(Person.objects.all()), 6)
         self.assertNotEqual(Person.objects.get(pk=1), None)
