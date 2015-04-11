@@ -180,7 +180,7 @@ class Attachment(Model):
     file = FileField(upload_to='attachments/%Y/%m/%d')
 
     def __unicode__(self):
-        return self.file.name[23:]
+        return self.file.name[len("attachments/YYYY/MM/DD/"):]
 
 
 class OldState(Model):

@@ -5,8 +5,10 @@ from power_recruiter.basic_site.workflow import get_next_nodes, get_previous_nod
 from power_recruiter.basic_site.views.pie_chart import create_pie_chart_context
 from power_recruiter.basic_site.views.line_chart import generate_context_dicts
 
+
 def get_state_by_name(name):
     return State.objects.get(name=name)
+
 
 class TestWorkflow(TestCase):
 
@@ -35,6 +37,7 @@ class TestWorkflow(TestCase):
         self.assertTrue(are_nodes_connected(get_state_by_name("Negative response"), get_state_by_name("First message")))
         self.assertFalse(are_nodes_connected(get_state_by_name("Negative response"), get_state_by_name("No response")))
         self.assertFalse(are_nodes_connected(get_state_by_name("Hired"), get_state_by_name("New")))
+
 
 class TestCharts(TestCase):
 

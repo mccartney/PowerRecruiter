@@ -36,10 +36,28 @@ class UploadFileForm(forms.ModelForm):
         model = Attachment
 
 
+def upload_attachment(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            person = Person.objects.get(id=request.POST['person'])
+            uploaded_file = request.FILES['file']
+            new_file = Attachment(person=person, file=uploaded_file)
+            new_file.save()
+            return HttpResponseRedirect(reverse('upload'))
+    else:
+        form = UploadFileForm()
+
+    data = {'form': form}
+    return render_to_response(
+        'main.html',
+        data,
+        context_instance=RequestContext(request)
+    )
+
 def get_attachment(request, attachment_id):
     attachment = Attachment.objects.get(pk=attachment_id)
     return redirect(attachment.file.url)
-
 
 @require_POST
 def remove_attachment(request):
@@ -48,10 +66,12 @@ def remove_attachment(request):
     except KeyError:
         raise Http404
     to_remove = Attachment.objects.get(pk=attachment_id)
-    to_remove.file.delete()
+
+    # IMO the file should stay on server
+    #to_remove.file.delete()
+
     to_remove.delete()
     return HttpResponse(200, content_type="plain/text")
-
 
 @require_POST
 def change_name(request):
@@ -96,25 +116,6 @@ def caveats_upload(request):
     person.caveats = request.POST['caveats']
     person.save()
     return HttpResponseRedirect(reverse('caveats_upload'))
-
-
-def upload(request):
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            person = Person.objects.get(id=request.POST['person'])
-            uploaded_file = request.FILES['file']
-            new_file = Attachment(person=person, file=uploaded_file)
-            new_file.save()
-            return HttpResponseRedirect(reverse('upload'))
-    else:
-        form = UploadFileForm()
-    data = {'form': form}
-    return render_to_response(
-        'main.html',
-        data,
-        context_instance=RequestContext(request)
-    )
 
 
 @require_POST
