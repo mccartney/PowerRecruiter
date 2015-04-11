@@ -1,4 +1,4 @@
-import json
+import json, time
 
 from django.test import TestCase, Client
 from django.test.utils import override_settings
@@ -103,6 +103,9 @@ class TestCandidateView(TestCase):
         c = Client(enforce_csrf_checks=False)
         response_remove = c.post('/candidate/attachment/remove/', {'id': 1}, follow=True)
         self.assertEqual(response_remove.status_code, 404)
+        response_remove = c.post('/candidate/attachment/remove/', {}, follow=True)
+        self.assertEqual(response_remove.status_code, 404)
+
 
     def test_change_name(self):
         c = Client(enforce_csrf_checks=False)
@@ -120,6 +123,9 @@ class TestCandidateView(TestCase):
         c = Client(enforce_csrf_checks=False)
         response_post = c.post('/candidate/change_name/', {'id': 8, 'name': 'A A'}, follow=True)
         self.assertEqual(response_post.status_code, 404)
+        response_post = c.post('/candidate/change_name/', {'name': 'A A'}, follow=True)
+        self.assertEqual(response_post.status_code, 404)
+
 
     def remove_person(self):
         c = Client(enforce_csrf_checks=False)
@@ -133,6 +139,8 @@ class TestCandidateView(TestCase):
     def test_attachment_remove_404(self):
         c = Client(enforce_csrf_checks=False)
         response_post = c.post('/candidate/remove/', {'id': 9}, follow=True)
+        self.assertEqual(response_post.status_code, 404)
+        response_post = c.post('/candidate/remove/', {}, follow=True)
         self.assertEqual(response_post.status_code, 404)
 
     def test_candidate_json(self):
@@ -187,3 +195,29 @@ class TestCandidateView(TestCase):
         response = c.get("/candidate/?dummy=1&state2=0&state10=0")
         candidates = json.loads(response.content)
         self.assertEqual(len(candidates), 3)
+
+    def test_caveats(self):
+        c = Client()
+        candidate = Person.objects.get(pk=1)
+        self.assertEqual(candidate.caveats, "Good programmer!")
+        response_post = c.post('/candidate/caveats/upload/', {'id': 1, 'timestamp': int(float(time.time()) * 1000), 'caveats': "New caveats ;)"}, follow=True)
+        self.assertEqual(response_post.status_code, 200)
+        candidate = Person.objects.get(pk=1)
+        self.assertEqual(candidate.caveats, "New caveats ;)")
+        response_post = c.post('/candidate/caveats/upload/', {'id': 1, 'timestamp': int(float(time.time()) * 1000 - 2000), 'caveats': "Old caveats ;)"}, follow=True)
+        self.assertEqual(response_post.status_code, 200)
+        candidate = Person.objects.get(pk=1)
+        self.assertEqual(candidate.caveats, "New caveats ;)")
+
+
+    @override_settings(DEBUG=True)
+    def test_caveats_404(self):
+        c = Client(enforce_csrf_checks=False)
+        response_post = c.post('/candidate/caveats/upload/', {'timestamp': int(float(time.time()) * 1000), 'caveats': "New caveats ;)"}, follow=True)
+        self.assertEqual(response_post.status_code, 404)
+        response_post = c.post('/candidate/caveats/upload/', {'id': 1, 'caveats': "New caveats ;)"}, follow=True)
+        self.assertEqual(response_post.status_code, 404)
+        response_post = c.post('/candidate/caveats/upload/', {'id': 1, 'timestamp': int(float(time.time()) * 1000 - 2000)}, follow=True)
+        self.assertEqual(response_post.status_code, 404)
+        response_post = c.post('/candidate/caveats/upload/', {'id': 0, 'timestamp': int(float(time.time()) * 1000 - 2000), 'caveats': "Old caveats ;)"}, follow=True)
+        self.assertEqual(response_post.status_code, 404)

@@ -1,6 +1,7 @@
 import json
 import logging
 import sys
+import datetime
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import redirect, render_to_response, get_object_or_404
@@ -110,12 +111,21 @@ def candidate_json(request):
 
 
 @require_POST
-@csrf_exempt  # Do we need it? I think we have csrf ajax done at js level
 def caveats_upload(request):
-    person = Person.objects.get(id=request.POST['id'])
-    person.caveats = request.POST['caveats']
-    person.save()
-    return HttpResponseRedirect(reverse('caveats_upload'))
+    try:
+        person_id = int(request.POST['id'])
+        caveats = request.POST['caveats']
+        #Dividing by 1000 is required, cuz js and python have different timestamps
+        timestamp = datetime.datetime.fromtimestamp(int(request.POST['timestamp'])/1000.0)
+    except KeyError:
+        raise Http404
+    person = get_object_or_404(Person, id=person_id)
+
+    if timestamp > person.caveats_timestamp.replace(tzinfo=None):
+        person.caveats = caveats
+        person.save()
+
+    return HttpResponse(200, content_type="plain/text")
 
 
 @require_POST
@@ -131,8 +141,7 @@ def change_state(request):
         return HttpResponse(200, content_type="plain/text")
     raise Http404
 
-
-@csrf_exempt  # Do we need it?
+@csrf_exempt
 def add_candidate(request):
     args = []
     for i in xrange(3):

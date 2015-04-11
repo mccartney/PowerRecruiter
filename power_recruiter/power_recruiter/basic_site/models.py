@@ -29,13 +29,6 @@ class State(Model):
     def __unicode__(self):
         return self.get_view()
 
-    def to_json(self):
-        return self.get_view()
-
-    @staticmethod
-    def get_instance_name(name, hired=False, rejected=False):
-        return ''.join([name, str(hired), str(rejected)])
-
 
 class Edge(Model):
     state_out = ForeignKey(State, related_name='s_out')

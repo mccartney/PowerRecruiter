@@ -35,6 +35,7 @@ class Person(Model):
     goldenline = URLField(null=True, unique=False)
     email = EmailField(null=True, unique=False)
     caveats = TextField(max_length=1000, blank=True)
+    caveats_timestamp = DateTimeField(default=timezone.now)
     conflict_resolved = BooleanField(default=False)
 
     objects = PersonManager()

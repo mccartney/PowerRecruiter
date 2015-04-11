@@ -25,33 +25,43 @@ class UrlsTest(unittest.TestCase):
         response = client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(DEBUG=True)
     def test_root(self):
         self.run_url("/")
 
+    @override_settings(DEBUG=True)
     def test_pie_chart(self):
         self.run_url("/pieChart")
 
+    @override_settings(DEBUG=True)
     def test_line_chart(self):
         self.run_url("/lineChart")
 
+    @override_settings(DEBUG=True)
     def test_admin(self):
         self.run_auto_login("/admin")
 
+    @override_settings(DEBUG=True)
     def test_admin_edge(self):
         self.run_auto_login("/admin/basic_site/edge/")
 
+    @override_settings(DEBUG=True)
     def test_admin_notification(self):
         self.run_auto_login("/admin/basic_site/notification/")
 
+    @override_settings(DEBUG=True)
     def test_admin_state(self):
         self.run_auto_login("/admin/basic_site/state/")
 
+    @override_settings(DEBUG=True)
     def test_admin_attachment(self):
-        self.run_auto_login("/admin/basic_site/attachment/")
+        self.run_auto_login("/admin/candidate/attachment/")
 
+    @override_settings(DEBUG=True)
     def test_admin_person(self):
-        self.run_auto_login("/admin/basic_site/person/")
+        self.run_auto_login("/admin/candidate/person/")
 
+    @override_settings(DEBUG=True)
     def test_admin_person_add(self):
         self.run_auto_login("/admin/candidate/person/add/")
 
