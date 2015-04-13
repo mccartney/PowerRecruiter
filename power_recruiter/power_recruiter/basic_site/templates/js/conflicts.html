@@ -1,5 +1,5 @@
 <script>
-    GHOST_PIC = 'https://static.licdn.com/scds/common/u/images/themes/katy/ghosts/person/ghost_person_200x200_v1.png';
+    GHOST_PIC = 'static/img/ghost.png';
 
     $('#conflicts_modal').on('hidden.bs.modal', function (e) {
         get_conflicts();
@@ -10,29 +10,44 @@
                 '/candidate/get_conflicts/',
                 function (data) {
                     if (data[0].length > 0) {
-                        var name = data[0][0]['candidate_name']['candidate_name'];
                         var img0 = data[0][0]['photo']['photo'];
                         var img1 = data[0][1]['photo']['photo'];
-                        var state0 = data[0][0]['state']['raw_state_name'];
-                        var state1 = data[0][1]['state']['raw_state_name'];
-                        var id0 = data[0][0]['id']['id'];
-                        var id1 = data[0][1]['id']['id'];
-                        show_conflicts_modal(name, img0, img1, state0, state1);
-                        put_ids_modal(id0, id1);
+                        img0 = img0 ? img0 : GHOST_PIC;
+                        img1 = img1 ? img1 : GHOST_PIC;
+                        args = [];
+                        args['img0'] = img0;
+                        args['img1'] = img1;
+                        args['name'] = data[0][0]['candidate_name']['candidate_name'];
+                        args['state0'] = data[0][0]['state']['raw_state_name'];
+                        args['state1'] = data[0][1]['state']['raw_state_name'];
+                        args['id0'] = data[0][0]['id']['id'];
+                        args['id1'] = data[0][1]['id']['id'];
+                        args['linkedin0'] = data[0][0]['contact']['linkedin'];
+                        args['linkedin1'] = data[0][1]['contact']['linkedin'];
+                        args['goldenline0'] = data[0][0]['contact']['goldenline'];
+                        args['goldenline1'] = data[0][1]['contact']['goldenline'];
+                        args['email0'] = data[0][0]['contact']['email'];
+                        args['email1'] = data[0][1]['contact']['email'];
+                        show_conflicts_modal(args);
+                        put_ids_modal(args['id0'], args['id1']);
                     }
                 }
         );
     }
 
-    function show_conflicts_modal(name, img0, img1, state0, state1) {
+    function show_conflicts_modal(d) {
         var $conflicts_modal = $('#conflicts_modal');
-        $('#conflict_modal_name').text(name);
-        img0 = img0 ? img0 : GHOST_PIC;
-        img1 = img1 ? img1 : GHOST_PIC;
-        $('#img0').attr('src', img0);
-        $('#img1').attr('src', img1);
-        $('#status0 a').text(state0);
-        $('#status1 a').text(state1);
+        $('#conflict_modal_name').text(d['name']);
+        $('#img0').attr('src', d['img0']);
+        $('#img1').attr('src', d['img1']);
+        $('#status0 a').text(d['state0']);
+        $('#status1 a').text(d['state1']);
+        $('#linkedin0 a').text(d['linkedin0']);
+        $('#linkedin1 a').text(d['linkedin1']);
+        $('#goldenline0 a').text(d['goldenline0']);
+        $('#goldenline1 a').text(d['goldenline1']);
+        $('#email0 a').text(d['email0']);
+        $('#email1 a').text(d['email1']);
         $conflicts_modal.modal('show');
     }
 
@@ -50,9 +65,12 @@
     }
 
     function resolve_conflicts(merge) {
-        var person_ids = get_person_ids_from_conflicts_modal();
-        var person_img = get_person_image_from_conflicts_modal();
-        var person_state = get_person_state_from_conflicts_modal();
+        var person_ids = get_ids_from_modal();
+        var person_img = $('#checked-img').val();
+        var person_state = $('#checked-status').val();
+        var person_linkedin = $('#checked-linkedin').val();
+        var person_goldenline = $('#checked-goldenline').val();
+        var person_email = $('#checked-email').val();
         $.post(
                 '/candidate/resolve_conflicts/',
                 {
@@ -65,16 +83,8 @@
         );
     }
 
-    function get_person_ids_from_conflicts_modal() {
-        return [$('#id0').val(), $('#id1').val()]
-    }
-
-    function get_person_image_from_conflicts_modal() {
-        return $('#checked-img').val();
-    }
-
-    function get_person_state_from_conflicts_modal() {
-        return $('#checked-status').val();
+    function get_ids_from_modal() {
+        return [$('#id0').val(), $('#id1').val()];
     }
 
     $('#conflicts_modal_merge').on('click', function (e) {
