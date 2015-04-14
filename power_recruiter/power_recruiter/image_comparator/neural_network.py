@@ -58,8 +58,37 @@ SAVE_FILE_NAME = os.path.join(__location__, 'network.bin')
 PHOTOS_ROOT_DIR = "lfw/"
 
 
-def _open_image_as_bw(path):
-    return Image.open(path).convert('L').getdata()
+def _convert_to_black_and_white(im):
+    return im.convert('L')
+
+
+def _adjust_size(im):
+    width, height = im.size
+    if width > height:
+        new_height = IMG_HEIGHT
+        new_width = new_height * width / height
+    else:
+        new_width = IMG_WIDTH
+        new_height = new_width * height / width
+    return im.resize((new_width, new_height), Image.ANTIALIAS)
+
+
+def _crop_center(im):
+    width, height = im.size
+    box_side = min(im.size)
+    left = (width - box_side) / 2
+    top = (height - box_side) / 2
+    crop_box = (left, top, left + box_side, top + box_side)
+    return im.crop(crop_box)
+
+
+def _prepare_image(path):
+    im = Image.open(path)
+    if im.size != (IMG_WIDTH, IMG_HEIGHT):
+        im = _adjust_size(im)
+        im = _crop_center(im)
+    im = _convert_to_black_and_white(im)
+    return im.getdata()
 
 
 def _save_network_to_file(net):
@@ -171,8 +200,8 @@ def _get_network():
 
 
 def get_input_image(path1, path2):
-    first_image = _open_image_as_bw(path1)
-    second_image = _open_image_as_bw(path2)
+    first_image = _prepare_image(path1)
+    second_image = _prepare_image(path2)
     return numpy.concatenate((first_image, second_image), axis=0).flat
 
 
