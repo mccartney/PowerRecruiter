@@ -17,7 +17,8 @@ class PersonForm(forms.ModelForm):
 
 
 class PersonAdmin(admin.ModelAdmin):
-    list_display = (
+    fields = (
+        "photo_url",
         "first_name",
         "last_name",
         "state",
@@ -25,6 +26,16 @@ class PersonAdmin(admin.ModelAdmin):
         "goldenline",
         "email"
     )
+
+    list_display = (
+        "first_name",
+        "last_name",
+        "get_state_view",
+        "linkedin",
+        "goldenline",
+        "email"
+    )
+
     form = PersonForm
 
 admin_auto_login_site.register(Person, PersonAdmin)

@@ -50,6 +50,7 @@ $.ajaxSetup({
 });
 
 function sendAjax(url, data, done) {
+    done = done || function(){};
     var msg = "";
     var jqxhr = $.ajax(url, {
         type: "POST",

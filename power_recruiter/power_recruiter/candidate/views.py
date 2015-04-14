@@ -1,6 +1,7 @@
 import json
 import logging
 import sys
+import datetime
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import redirect, render_to_response, get_object_or_404
@@ -36,10 +37,28 @@ class UploadFileForm(forms.ModelForm):
         model = Attachment
 
 
+def upload_attachment(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            person = Person.objects.get(id=request.POST['person'])
+            uploaded_file = request.FILES['file']
+            new_file = Attachment(person=person, file=uploaded_file)
+            new_file.save()
+            return HttpResponseRedirect(reverse('upload'))
+    else:
+        form = UploadFileForm()
+
+    data = {'form': form}
+    return render_to_response(
+        'main.html',
+        data,
+        context_instance=RequestContext(request)
+    )
+
 def get_attachment(request, attachment_id):
     attachment = Attachment.objects.get(pk=attachment_id)
     return redirect(attachment.file.url)
-
 
 @require_POST
 def remove_attachment(request):
@@ -47,11 +66,13 @@ def remove_attachment(request):
         attachment_id = int(request.POST['id'])
     except KeyError:
         raise Http404
-    to_remove = Attachment.objects.get(pk=attachment_id)
-    to_remove.file.delete()
+    to_remove = get_object_or_404(Attachment, pk=attachment_id)
+
+    # IMO the file should stay on server
+    #to_remove.file.delete()
+
     to_remove.delete()
     return HttpResponse(200, content_type="plain/text")
-
 
 @require_POST
 def change_name(request):
@@ -83,38 +104,28 @@ def remove_person(request):
 def candidate_json(request):
     persons = Person.objects.all()
     for state in State.objects.all():
-        if request.GET.get(state, False):
+        if not int(request.GET.get("state%d" % state.pk, 1)):
             persons = persons.exclude(state=state)
     response = [p.to_json() for p in persons]
     return HttpResponse(json.dumps(response), content_type="application/json")
 
 
 @require_POST
-@csrf_exempt  # Do we need it? I think we have csrf ajax done at js level
 def caveats_upload(request):
-    person = Person.objects.get(id=request.POST['id'])
-    person.caveats = request.POST['caveats']
-    person.save()
-    return HttpResponseRedirect(reverse('caveats_upload'))
+    try:
+        person_id = int(request.POST['id'])
+        caveats = request.POST['caveats']
+        #Dividing by 1000 is required, cuz js and python have different timestamps
+        timestamp = datetime.datetime.fromtimestamp(int(request.POST['timestamp'])/1000.0)
+    except KeyError:
+        raise Http404
+    person = get_object_or_404(Person, id=person_id)
 
+    if timestamp > person.caveats_timestamp.replace(tzinfo=None):
+        person.caveats = caveats
+        person.save()
 
-def upload(request):
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            person = Person.objects.get(id=request.POST['person'])
-            uploaded_file = request.FILES['file']
-            new_file = Attachment(person=person, file=uploaded_file)
-            new_file.save()
-            return HttpResponseRedirect(reverse('upload'))
-    else:
-        form = UploadFileForm()
-    data = {'form': form}
-    return render_to_response(
-        'main.html',
-        data,
-        context_instance=RequestContext(request)
-    )
+    return HttpResponse(200, content_type="plain/text")
 
 
 @require_POST
@@ -125,60 +136,93 @@ def change_state(request):
     except KeyError:
         raise Http404
     person = get_object_or_404(Person, id=person_id)
-    if are_nodes_connected(new_state_id, person.state):
+    if are_nodes_connected(new_state_id, person.state.pk):
         person.update_state(new_state_id)
         return HttpResponse(200, content_type="plain/text")
     raise Http404
 
-
-@csrf_exempt  # Do we need it?
+@csrf_exempt
 def add_candidate(request):
     args = []
-    for i in xrange(3):
-        args.append(request.POST['args[%d]' % i])
+    try:
+        # args from Firefox Addon
+        # 1 - full name, 2 - img url, 3 - link
+        for i in xrange(3):
+            args.append(request.POST['args[%d]' % i])
+    except KeyError:
+        raise Http404
     names = args[0].split(' ')
     first_name = names[0]
-    last_name = names[-1]
-    l_link=""
-    g_link=""
+    last_name = ""
+    last_name = "".join(names[1:])
+    linkedin = ""
+    goldenline = ""
     link = args[2]
+
+    possible_people_with_link_list = [
+        Person.objects.filter(linkedin=link),
+        Person.objects.filter(goldenline=link)
+    ]
+
+    for possible_people_with_link in possible_people_with_link_list:
+        if len(possible_people_with_link) > 0:
+            return HttpResponse(
+                status=418,
+                content=possible_people_with_link[0].state.get_name(),
+                content_type="plain/text"
+            )
+
     if "linkedin" in link:
-        l_link = link
-    if "goldenline" in link:
-        g_link = link
+        linkedin = link
+    elif "goldenline" in link:
+        goldenline = link
+
     Person.objects.create_person(
         first_name=first_name,
         last_name=last_name,
         photo_url=args[1],
-        l_link=l_link,
-        g_link=g_link
+        linkedin=linkedin,
+        goldenline=goldenline
     )
+
     return HttpResponse(status=200, content=200, content_type="plain/text")
 
 def add_candidate_from_app(request):
-    Person.objects.create_person(
-        first_name=request.POST['first_name'],
-        last_name=request.POST['last_name'],
-        g_link=request.POST['goldenline_link'],
-        l_link=request.POST['linkedin_link'],
-        m_link=request.POST['email_link']
-    )
-    return HttpResponse(status=200, content=200, content_type="plain/text")
+    try:
+        first_name=request.POST['first_name']
+        last_name=request.POST['last_name']
+        goldenline=request.POST['goldenline_link']
+        linkedin=request.POST['linkedin_link']
+        email=request.POST['email_link']
+    except KeyError:
+        raise Http404
 
+    Person.objects.create_person(
+        first_name=first_name,
+        last_name=last_name,
+        goldenline=goldenline,
+        linkedin=linkedin,
+        email=email
+    )
+
+    return HttpResponse(status=200, content=200, content_type="plain/text")
 
 def get_conflicts(request):
     conflicting_candidates = Person.get_conflicts()
     response = [c.to_json() for c in conflicting_candidates],
     return HttpResponse(json.dumps(response), content_type="application/json")
 
-
 @require_POST
 def resolve_conflicts(request):
-    person_ids_json = request.POST.get('person_ids')
-    person_ids = json.loads(person_ids_json)
-    photo = request.POST.get('person_img')
-    state = request.POST.get('person_state')
-    merge = json.loads(request.POST.get('merge'))
+    try:
+        person_ids_json = request.POST.get('person_ids')
+        person_ids = json.loads(person_ids_json)
+        photo = request.POST.get('person_img')
+        state = request.POST.get('person_state')
+        merge = json.loads(request.POST.get('merge'))
+    except KeyError:
+        raise Http404
+
     if merge:
         Person.merge(person_ids, photo, state)
     else:

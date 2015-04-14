@@ -10,18 +10,15 @@ import datetime
 
 
 class PersonManager(Manager):
-    def create_person(self, first_name, last_name, photo_url="", l_link="", g_link="", m_link=""):
-        l_link = None if not l_link else l_link
-        g_link = None if not g_link else g_link
-        m_link = None if not m_link else m_link
+    def create_person(self, first_name, last_name, photo_url="", linkedin="", goldenline="", email=""):
         return self.create(
-            state=State.objects.get(id=0),
+            state=State.objects.get(pk=0),
             first_name=first_name,
             last_name=last_name,
             photo_url=photo_url,
-            linkedin=l_link,
-            goldenline=g_link,
-            email=m_link
+            linkedin=linkedin,
+            goldenline=goldenline,
+            email=email
         )
 
 
@@ -35,6 +32,7 @@ class Person(Model):
     goldenline = URLField(null=True, unique=False)
     email = EmailField(null=True, unique=False)
     caveats = TextField(max_length=1000, blank=True)
+    caveats_timestamp = DateTimeField(default=timezone.now)
     conflict_resolved = BooleanField(default=False)
 
     objects = PersonManager()
@@ -70,9 +68,10 @@ class Person(Model):
         old_atts = Attachment.objects.filter(person=wrong_person)
         for o in old_atts:
             o.person = right_person
+            o.save()
+        right_person.caveats = right_person.caveats + wrong_person.caveats
         right_person.save()
         wrong_person.delete()
-
 
     @classmethod
     def dont_merge(cls, ids):
@@ -80,8 +79,6 @@ class Person(Model):
             p = cls.objects.get(pk=person_id)
             p.conflict_resolved = True
             p.save()
-
-
 
     def update_state(self, new_state_id):
         old_state = OldState(
@@ -94,7 +91,6 @@ class Person(Model):
         self.state = get_object_or_404(State, id=new_state_id)
         self.current_state_started = datetime.datetime.now()
         self.save()
-
 
     def to_json(self):
         id = {
@@ -121,14 +117,6 @@ class Person(Model):
             'email': self.email,
         }
 
-        attachments = {
-            'candidate_id': self.pk,
-            'attachments': [{
-                'display_name': str(a),
-                'pk': a.pk
-            } for a in Attachment.objects.filter(person_id=self.pk)]
-        }
-
         previous_states = get_previous_nodes(self.state)
 
         next_states = get_next_nodes(self.state)
@@ -150,6 +138,14 @@ class Person(Model):
                     'state': str(oldState.state)
                 } for oldState in OldState.objects.filter(person_id=self.pk).order_by('-change_date')
             ]
+        }
+
+        attachments = {
+            'candidate_id': self.pk,
+            'attachments': [{
+                'display_name': str(a),
+                'pk': a.pk
+            } for a in Attachment.objects.filter(person_id=self.pk)]
         }
 
         caveats = {
@@ -175,13 +171,16 @@ class Person(Model):
                 notifications.append(notification.get_message(self))
         return notifications
 
+    def get_state_view(self):
+        return self.state.get_view()
+    get_state_view.allow_tags = True
 
 class Attachment(Model):
     person = ForeignKey(Person)
     file = FileField(upload_to='attachments/%Y/%m/%d')
 
     def __unicode__(self):
-        return self.file.name[23:]
+        return self.file.name[len("attachments/YYYY/MM/DD/"):]
 
 
 class OldState(Model):

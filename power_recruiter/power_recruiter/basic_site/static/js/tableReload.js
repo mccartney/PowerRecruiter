@@ -31,6 +31,32 @@ function reloadData(url) {
     reloadTable();
 }
 
+function triggerIdGeneratorFunction(){
+    this.id = 0;
+    this.getNextId = function(){
+        this.id++;
+        return this.id;
+    }
+    this.getCurrentId = function(){
+        return this.id;
+    }
+}
+
+var triggerIsFired = 0;
+var triggerIdGenerator = new triggerIdGeneratorFunction();
+
+function triggerSaveAfterHalfSecond(id, content){
+    var myId = triggerIdGenerator.getNextId();
+    console.log("ID:" + myId);
+    setTimeout(function(){
+        console.log("called back ID:" + myId);
+        if (myId == triggerIdGenerator.getCurrentId()) {
+            console.log("FIRED ID:" + myId);
+            sendAjax( "/candidate/caveats/upload/", { id: id, caveats: content, timestamp: new Date().getTime() });
+        }
+    }, 500);
+}
+
 function setAutosize(){
     $(document).ready(function(){
         $('textarea').autosize();
@@ -38,11 +64,10 @@ function setAutosize(){
     $('textarea').bind('input propertychange', function() {
         id = $(this).attr('id').substr('caveats-'.length, $(this).attr('id').lenght);
         content = $(this).val();
-        $.post( "/candidate/caveats/upload/", { id: id, caveats: content });
+        triggerSaveAfterHalfSecond(id, content)
     });
     $('textarea').click(function(){
-        if($(this).parents('.maintable-row-large').length)
-        {
+        if($(this).parents('.maintable-row-large').length) {
             return false;
         }
     })
