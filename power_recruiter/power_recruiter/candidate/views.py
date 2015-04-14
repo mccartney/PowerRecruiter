@@ -145,6 +145,7 @@ def change_state(request):
 def add_candidate(request):
     args = []
     try:
+        # args from Firefox Addon
         # 1 - full name, 2 - img url, 3 - link
         for i in xrange(3):
             args.append(request.POST['args[%d]' % i])
@@ -153,17 +154,23 @@ def add_candidate(request):
     names = args[0].split(' ')
     first_name = names[0]
     last_name = ""
-    for last_name_part in names[1:]:
-        last_name = last_name + last_name_part
+    last_name = "".join(names[1:])
     linkedin = ""
     goldenline = ""
     link = args[2]
 
-    possible_people_with_link_list = [Person.objects.filter(linkedin=link), Person.objects.filter(goldenline=link)]
+    possible_people_with_link_list = [
+        Person.objects.filter(linkedin=link),
+        Person.objects.filter(goldenline=link)
+    ]
 
     for possible_people_with_link in possible_people_with_link_list:
         if len(possible_people_with_link) > 0:
-            return HttpResponse(status=418, content=possible_people_with_link[0].state.get_name(), content_type="plain/text")
+            return HttpResponse(
+                status=418,
+                content=possible_people_with_link[0].state.get_name(),
+                content_type="plain/text"
+            )
 
     if "linkedin" in link:
         linkedin = link

@@ -1,4 +1,8 @@
-import subprocess, time, urllib2, os
+import subprocess
+import time
+import urllib2
+import os
+
 import django.test as unittest
 from django.test.utils import override_settings
 from power_recruiter.settings import BASE_DIR
