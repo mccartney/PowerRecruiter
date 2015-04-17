@@ -187,7 +187,7 @@ def _generate_new_network():
     net = _build_network()
     _run_training(net, data_set)
     _save_network_to_file(net)
-    return network
+    return net
 
 
 def _get_network():
