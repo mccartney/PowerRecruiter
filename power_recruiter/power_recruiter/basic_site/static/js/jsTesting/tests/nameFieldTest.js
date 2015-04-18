@@ -1,4 +1,6 @@
-QUnit.test("nameField toString", function( assert ) {
+QUnit.test("nameField toString", function( assert ) {QUnit.test("nameField change mode", function( assert ) {
+  var nameField = new NameField(12, "Jan Kowalski");
+  assert.ok(nameField.editMode == false, "started false");
   var nameField = new NameField(12, "Jan Kowalski");
   correctNameFieldHtml = '<div id="nameContainerUnique-12"><div id="nameInnerContainer-12">Jan Kowalski<span class="glyphicon glyphicon-pencil edit-pencil" id="nameContainerPencil-12" aria-hidden="true"></span></div></div>';
   assert.ok(nameField + "" == correctNameFieldHtml, "nameField toString");
