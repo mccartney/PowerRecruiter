@@ -579,7 +579,7 @@ require.register("dropzone/lib/dropzone.js", function (exports, module) {
         throw new Error("Invalid dropzone element.");
       }
       if (this.element.dropzone) {
-        throw new Error("Dropzone already attached.");
+        return;
       }
       Dropzone.instances.push(this);
       this.element.dropzone = this;

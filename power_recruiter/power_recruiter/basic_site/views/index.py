@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.conf import settings
 from power_recruiter.candidate.models import Person, State
 
 
@@ -12,5 +12,6 @@ def index(request):
     k = len(states)
     return render(request, "main.html", {
         "states": dict(zip(range(k), states)),
-        "notifications": notifications_num
+        "notifications": notifications_num,
+        "static_js": settings.STATIC_JS_PATH
     })
