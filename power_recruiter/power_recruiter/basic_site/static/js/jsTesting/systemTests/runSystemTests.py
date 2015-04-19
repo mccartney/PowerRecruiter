@@ -1,6 +1,8 @@
 import time
 import subprocess
 import os
+import psutil
+
 
 FNULL = open(os.devnull, 'w')
 
@@ -19,5 +21,8 @@ my_env["REMOTE_DJANGO_STATIC"] = str(1)
 test_process = subprocess.Popen(["phantomjs", "./systemTests/run-jscover-system-test.js", "http://localhost:8000", "tests/indexTest.js"], env=my_env)
 test_process.wait()
 print "Test complete"
-django_process.kill()
 
+parent = psutil.Process(django_process.pid)
+for child in parent.children(recursive=True):  # or parent.children() for recursive=False
+    child.kill()
+parent.kill()
