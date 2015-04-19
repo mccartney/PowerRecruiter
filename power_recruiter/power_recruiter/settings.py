@@ -45,7 +45,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'httpproxy',
     'power_recruiter',
     'power_recruiter.basic_site',
     'power_recruiter.candidate',
@@ -106,9 +105,9 @@ JENKINS_TASKS = (
 
 PYLINT_RCFILE = '.pylintrc'
 
-STATIC_JS_ROOT = BASE_DIR + '/power_recruiter/basic_site/static/js/'
-STATIC_JS_URL = '/staticjs/'
-
 MEDIA_ROOT = BASE_DIR + '/files/'
 MEDIA_URL = '/files/'
-REMOTE_DJANGO_STATIC = os.environ.get('REMOTE_DJANGO_STATIC', 0)
+if int(os.environ.get('REMOTE_DJANGO_STATIC', 0)):
+    STATIC_JS_PATH = "http://127.0.0.1:8081/"
+else:
+    STATIC_JS_PATH = '/static/js/'

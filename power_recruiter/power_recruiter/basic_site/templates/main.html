@@ -5,11 +5,11 @@
 <link href="{% static 'dropzone/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
 <script src="{% static 'dropzone/dropzone.js' %}"></script>
 
-<script src="staticjs/stateIcon.js"></script>
-<script src="staticjs/tableFormatters.js"></script>
-<script src="staticjs/tableSorters.js"></script>
-<script src="staticjs/tableReload.js"></script>
-<script src="staticjs/nameField.js"></script>
+<script src="{{ static_js}}stateIcon.js"></script>
+<script src="{{ static_js}}tableFormatters.js"></script>
+<script src="{{ static_js}}tableSorters.js"></script>
+<script src="{{ static_js}}tableReload.js"></script>
+<script src="{{ static_js}}nameField.js"></script>
 {% endblock %}
 
 {% block content %}
