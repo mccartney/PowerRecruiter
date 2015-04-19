@@ -59,54 +59,48 @@ page.open(system.args[1], function(status){
         console.log("Unable to access network");
         phantom.exit(1);
     } else {
-        if (page.injectJs('../lib/qunit/qunit.js')) {
-            if (page.injectJs('../lib/qunit-reporter/qunit-reporter-junit.js')) {
-                if (page.injectJs(system.args[2])) {
-                    page.evaluate(function(){
-                        //Setup qUnit test
-                        var reportNum = 0;
-                        $("body").prepend('<div id="qunit"></div><div id="qunit-fixture"></div>');
-                        QUnit.jUnitReport = function(report) {
-                            reportNum++;
-                            //Dunno why on Django sites test execute two time - second time with error
-                            if (reportNum == 1)
-                                console.log(report.xml);
-                        };
-                        QUnit.load();
-                    });
-                    waitFor(function(){
-                        return page.evaluate(function(){
-                            var el = document.getElementById('qunit-testresult');
-                            if (el && el.innerText.match('completed')) {
-                                return true;
-                            }
-                            return false;
-                        });
-                    }, function(){
-                        var failedNum = page.evaluate(function(){
-                            var el = document.getElementById('qunit-testresult');
-                            console.log(el.innerText);
-                            try {
-                                return el.getElementsByClassName('failed')[0].innerHTML;
-                            } catch (e) { }
-                            return 10000;
-                        });
-                        page.evaluate(function(){
-                            jscoverage_report('phantom');
-                        });
-                        phantom.exit((parseInt(failedNum, 10) > 0) ? 1 : 0);
-                    });
-                }
-                else {
-                    console.log("Cannot load test script")
-                }
-            }
-            else {
-                console.log("Cannot load qunit-reporter")
-            }
+        page.injectJs('../lib/qunit/qunit.js');
+        page.injectJs('../lib/qunit-reporter/qunit-reporter-junit.js');
+        if (page.injectJs(system.args[2])) {
+            page.evaluate(function(){
+                //Setup qUnit test
+                var reportNum = 0;
+                $("body").prepend('<div id="qunit"></div><div id="qunit-fixture"></div>');
+                QUnit.jUnitReport = function(report) {
+                    reportNum++;
+                    //Dunno why on Django sites test execute two time - second time with error
+                    if (reportNum == 1)
+                        console.log(report.xml);
+                };
+                QUnit.load();
+            });
+            waitFor(function(){
+                return page.evaluate(function(){
+                    var el = document.getElementById('qunit-testresult');
+                    if (el && el.innerText.match('completed')) {
+                        return true;
+                    }
+                    return false;
+                });
+            }, function(){
+                var failedNum = page.evaluate(function(){
+                    var el = document.getElementById('qunit-testresult');
+                    console.log(el.innerText);
+                    try {
+                        return el.getElementsByClassName('failed')[0].innerHTML;
+                    } catch (e) { }
+                    return 10000;
+                });
+                page.evaluate(function(){
+                    if (window.jscoverage_report) {
+                        jscoverage_report("djangoIntegration");
+                    }
+                });
+                phantom.exit((parseInt(failedNum, 10) > 0) ? 1 : 0);
+            });
         }
         else {
-            console.log("Cannot load qUnit");
+            console.log("Cannot load test script")
         }
     }
 });

@@ -72,7 +72,8 @@ page.open(system.args[1], function(status){
                 return 10000;
             });
             page.evaluate(function(){
-                jscoverage_report('phantom');
+                console.log("start report");
+                jscoverage_report('qunit');
             });
             phantom.exit((parseInt(failedNum, 10) > 0) ? 1 : 0);
         });

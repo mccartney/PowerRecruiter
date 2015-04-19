@@ -9,7 +9,7 @@ django-appconf==0.6
 django-bootstrap3==4.11.0
 django-compressor==1.4
 django-jenkins==0.16.3
-django-jquery==1.9.1
+django-http-proxy==0.4
 ipython==2.3.0
 logilab-common==0.62.1
 pep8==1.5.7

@@ -25,11 +25,10 @@ var NameField = function(candidate_id, candidate_name){
 
     this.clickOk = function(){
         var new_name = $("#changeNameInputUnique-" + this.candidate_id).val();
-        var resp = sendAjax('candidate/change_name/', {
+        var resp = sendAjax('/candidate/change_name/', {
             'id': this.candidate_id,
             'name': new_name
-            }, function(data) {
-        })
+            }, function(data){})
         this.candidate_name = new_name;
         this.editMode = false;
         this.refresh();

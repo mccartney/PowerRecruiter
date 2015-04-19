@@ -33,7 +33,7 @@ function test_row_expanding( assert ){
     assert.ok($("tr[data-index=0] td div img").height() == 25, "img not expanded height");
     assert.ok($("tr[data-index=0] td div img").width() == 25, "img not expanded width");
     assert.ok($("tr[data-index=0] td .oldStateContainer").css('display') == 'none', "img not expanded width");
-    $("tr[data-index=0] td").trigger( "click" );
+    $("tr[data-index=0] td .imageDiv").trigger( "click" );
     assert.ok($("tr[data-index=0]").attr('class') == "maintable-row-large", "tr expanded class");
     assert.ok($("tr[data-index=0]").height() == 92, "tr expanded height");
     assert.ok($("tr[data-index=0] td div img").height() == 50, "img not expanded height");
@@ -59,6 +59,6 @@ function test_change_state ( assert ){
         setTimeout(function(){
             assert.ok($("tr[data-index=1] td:nth-child(5) span:nth-child(2)").text().indexOf("Hired") > -1, "new state is hired");
             start();
-        }, 500);
-    }, 500);
+        }, 1000);
+    }, 1000);
 }
