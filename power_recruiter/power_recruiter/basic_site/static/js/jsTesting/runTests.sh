@@ -2,7 +2,7 @@ rm -rf qunit/
 rm -rf djangoIntegration/
 rm -rf summary/
 phantomjs run-jscover-qunit.js http://localhost:8081/jsTesting/testView.html > qunit-report.xml
-python ./systemTests/runSystemTests.py
+REMOTE_DJANGO_STATIC=1 python ./systemTests/runSystemTests.py
 java -cp JSCover-all.jar jscover.report.Main --merge qunit djangoIntegration summary
 java -cp JSCover-all.jar jscover.report.Main --format=COBERTURAXML summary summary
 head -n -3 qunit-report.xml > qunit-report2.xml

@@ -17,7 +17,6 @@ time.sleep(5)
 print "Django started"
 
 my_env = os.environ.copy()
-my_env["REMOTE_DJANGO_STATIC"] = str(1)
 test_process = subprocess.Popen(["phantomjs", "./systemTests/run-jscover-system-test.js", "http://localhost:8000", "tests/indexTest.js"], env=my_env)
 test_process.wait()
 print "Test complete"

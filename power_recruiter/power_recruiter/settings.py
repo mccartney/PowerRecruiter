@@ -111,5 +111,4 @@ STATIC_JS_URL = '/staticjs/'
 
 MEDIA_ROOT = BASE_DIR + '/files/'
 MEDIA_URL = '/files/'
-
-REMOTE_DJANGO_STATIC = int(os.environ.get('REMOTE_DJANGO_STATIC', 0))
+REMOTE_DJANGO_STATIC = os.environ.get('REMOTE_DJANGO_STATIC', 0)
