@@ -47,7 +47,7 @@
     }
 
     $('.stateCheckbox').change(function() {
-        url = {% url 'json' %} + '?dummy=1';
+        url = '{% url 'json' %}?dummy=1';
         $('.stateCheckbox').each(function(){
             if(!$(this).is(":checked")){
                 url += "&" + encodeURIComponent(this.name) + "=0";
