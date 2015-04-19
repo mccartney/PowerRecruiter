@@ -70,3 +70,15 @@ function setAutosize(){
     })
     return true;
 }
+
+$(document).ready(function(){
+    $('.stateCheckbox').change(function() {
+        url = 'candidate/?dummy=1';
+        $('.stateCheckbox').each(function(){
+            if(!$(this).is(':checked')){
+                url += "&" + encodeURIComponent(this.name) + "=0";
+            }
+        });
+        reloadData(url);
+    });
+});

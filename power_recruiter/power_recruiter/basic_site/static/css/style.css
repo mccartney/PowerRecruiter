@@ -371,3 +371,8 @@ tr.maintable-row-large > td > span > a > div.removePersonButton{
 .conflict-status li {
     width: 49%;
 }
+
+.pull-left{
+    float: left;
+    width: 100%;
+}

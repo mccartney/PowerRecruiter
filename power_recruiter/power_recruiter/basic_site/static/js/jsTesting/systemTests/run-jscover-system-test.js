@@ -14,7 +14,7 @@ var system = require('system');
  * @param timeOutMillis the max amount of time to wait. If not specified, 10 sec is used.
  */
 function waitFor(testFx, onReady, timeOutMillis) {
-    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 10001, //< Default Max Timout is 10s
+    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 40001, //< Default Max Timout is 10s
         start = new Date().getTime(),
         condition = false,
         interval = setInterval(function() {
@@ -93,7 +93,8 @@ page.open(system.args[1], function(status){
                 });
                 page.evaluate(function(){
                     if (window.jscoverage_report) {
-                        jscoverage_report("djangoIntegration");
+                        var timestamp = new Date().getTime();
+                        jscoverage_report("djangoIntegration-" + timestamp);
                     }
                 });
                 phantom.exit((parseInt(failedNum, 10) > 0) ? 1 : 0);

@@ -9,5 +9,5 @@ urlpatterns = patterns(
     url(r'^$', index, name='home'),
     url(r'^pieChart$', pie_chart, name='pieChart'),
     url(r'^lineChart$', line_chart, name='lineChart'),
-    url(r'^jscoverage-store/djangoIntegration$', jscoverage, name='jscoverage')
+    url(r'^jscoverage-store/(?P<filename>.+)$', jscoverage, name='jscoverage')
 )
