@@ -1,5 +1,5 @@
 rm -rf qunit/
-rm -rf django-integration/
+rm -rf djangoIntegration/
 rm -rf summary/
 phantomjs run-jscover-qunit.js http://localhost:8081/jsTesting/testView.html > qunit-report.xml
 python ./systemTests/runSystemTests.py
