@@ -34,7 +34,7 @@
                 <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">Filter states <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     {% for k, v in states.iteritems %}
-                    <li><input type="checkbox" class="stateCheckbox" name="{{ k }}" id="{{ k }}" checked /><label for="{{ k }}">{{ v | safe }}</label></li>
+                    <li><input type="checkbox" class="stateCheckbox" name="state{{ k }}" id="state{{ k }}" checked /><label for="state{{ k }}">{{ v | safe }}</label></li>
                     {% endfor %}
                 </ul>
             </div>
