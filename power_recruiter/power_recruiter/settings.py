@@ -107,3 +107,7 @@ PYLINT_RCFILE = '.pylintrc'
 
 MEDIA_ROOT = BASE_DIR + '/files/'
 MEDIA_URL = '/files/'
+if int(os.environ.get('REMOTE_DJANGO_STATIC', 0)):
+    STATIC_JS_PATH = "http://127.0.0.1:8081/"
+else:
+    STATIC_JS_PATH = '/static/js/'

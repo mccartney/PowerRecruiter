@@ -11,10 +11,10 @@ var system = require('system');
  * @param onReady what to do when testFx condition is fulfilled,
  * it can be passed in as a string (e.g.: "1 == 1" or "$('#bar').is(':visible')" or
  * as a callback function.
- * @param timeOutMillis the max amount of time to wait. If not specified, 3 sec is used.
+ * @param timeOutMillis the max amount of time to wait. If not specified, 10 sec is used.
  */
 function waitFor(testFx, onReady, timeOutMillis) {
-    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3001, //< Default Max Timout is 3s
+    var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 10001, //< Default Max Timout is 10s
         start = new Date().getTime(),
         condition = false,
         interval = setInterval(function() {
@@ -37,12 +37,17 @@ function waitFor(testFx, onReady, timeOutMillis) {
 };
 
 
-if (system.args.length !== 2) {
-    console.log('Usage: run-qunit.js URL');
+if (system.args.length !== 3) {
+    console.log('Usage: run-jscover-system-test.js DJANGO-URL TEST-SCRIPT');
     phantom.exit(1);
 }
 
 var page = require('webpage').create();
+
+page.viewportSize = {
+  width: 1600,
+  height: 900
+};
 
 // Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
 page.onConsoleMessage = function(msg) {
@@ -54,27 +59,48 @@ page.open(system.args[1], function(status){
         console.log("Unable to access network");
         phantom.exit(1);
     } else {
-        waitFor(function(){
-            return page.evaluate(function(){
-                var el = document.getElementById('qunit-testresult');
-                if (el && el.innerText.match('completed')) {
-                    return true;
-                }
-                return false;
-            });
-        }, function(){
-            var failedNum = page.evaluate(function(){
-                var el = document.getElementById('qunit-testresult');
-                console.log(el.innerText);
-                try {
-                    return el.getElementsByClassName('failed')[0].innerHTML;
-                } catch (e) { }
-                return 10000;
-            });
+        page.injectJs('../lib/qunit/qunit.js');
+        page.injectJs('../lib/qunit-reporter/qunit-reporter-junit.js');
+        if (page.injectJs(system.args[2])) {
             page.evaluate(function(){
-                jscoverage_report('qunit');
+                //Setup qUnit test
+                var reportNum = 0;
+                $("body").prepend('<div id="qunit"></div><div id="qunit-fixture"></div>');
+                QUnit.jUnitReport = function(report) {
+                    reportNum++;
+                    //Dunno why on Django sites test execute two time - second time with error
+                    if (reportNum == 1)
+                        console.log(report.xml);
+                };
+                QUnit.load();
             });
-            phantom.exit((parseInt(failedNum, 10) > 0) ? 1 : 0);
-        });
+            waitFor(function(){
+                return page.evaluate(function(){
+                    var el = document.getElementById('qunit-testresult');
+                    if (el && el.innerText.match('completed')) {
+                        return true;
+                    }
+                    return false;
+                });
+            }, function(){
+                var failedNum = page.evaluate(function(){
+                    var el = document.getElementById('qunit-testresult');
+                    console.log(el.innerText);
+                    try {
+                        return el.getElementsByClassName('failed')[0].innerHTML;
+                    } catch (e) { }
+                    return 10000;
+                });
+                page.evaluate(function(){
+                    if (window.jscoverage_report) {
+                        jscoverage_report("djangoIntegration");
+                    }
+                });
+                phantom.exit((parseInt(failedNum, 10) > 0) ? 1 : 0);
+            });
+        }
+        else {
+            console.log("Cannot load test script")
+        }
     }
 });

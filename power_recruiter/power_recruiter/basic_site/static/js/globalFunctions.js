@@ -70,13 +70,13 @@ function sendAjax(url, data, done) {
 }
 
 function removeAttachment(id) {
-    var resp = sendAjax('candidate/attachment/remove/', {'id': id}, function(data) {
+    var resp = sendAjax('/candidate/attachment/remove/', {'id': id}, function(data) {
         reloadData();
     })
 }
 
 function removePerson(id) {
-    var resp = sendAjax('candidate/remove/', {'id' : id}, function(data) {
+    var resp = sendAjax('/candidate/remove/', {'id' : id}, function(data) {
         reloadData();
     })
 }

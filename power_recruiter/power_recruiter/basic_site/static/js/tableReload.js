@@ -47,11 +47,8 @@ var triggerIdGenerator = new triggerIdGeneratorFunction();
 
 function triggerSaveAfterHalfSecond(id, content){
     var myId = triggerIdGenerator.getNextId();
-    console.log("ID:" + myId);
     setTimeout(function(){
-        console.log("called back ID:" + myId);
         if (myId == triggerIdGenerator.getCurrentId()) {
-            console.log("FIRED ID:" + myId);
             sendAjax( "/candidate/caveats/upload/", { id: id, caveats: content, timestamp: new Date().getTime() });
         }
     }, 500);
