@@ -194,9 +194,7 @@ def add_candidate_from_app(request):
         goldenline=request.POST['goldenline_link']
         linkedin=request.POST['linkedin_link']
         email=request.POST['email_link']
-        goldenline = None if not goldenline else goldenline
-        linkedin = None if not linkedin else linkedin
-        email = None if not email else email
+
     except KeyError:
         raise Http404
 

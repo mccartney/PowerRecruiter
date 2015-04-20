@@ -11,7 +11,7 @@ var stateIcon = function (imgSource, content, type, candidate_id, candidate_name
 
     this.imageTag = function() {
         iconHiddenClass = "";
-        if (this.content == null) {
+        if (!this.content) {
             iconHiddenClass = " icon-hidden";
         }
         return '<img class="source-icon' + iconHiddenClass + '" src="' + this.imgSource+ '">';
@@ -19,7 +19,7 @@ var stateIcon = function (imgSource, content, type, candidate_id, candidate_name
 
     this.mailLink = function() {
         hrefLink = "mailto:" + this.content;
-        if (this.content == null) {
+        if (!this.content) {
             hrefLink = "#";
         }
         return '<a href="'+ hrefLink + '">' + this.imageTag() + '</a>';
@@ -27,7 +27,7 @@ var stateIcon = function (imgSource, content, type, candidate_id, candidate_name
 
     this.socialLink = function() {
         hrefLink = this.content;
-        if (hrefLink == null) {
+        if (!hrefLink) {
             hrefLink = this.googleLink();
         }
         return '<a href="' + hrefLink + '">' + this.imageTag() + '</a>';
