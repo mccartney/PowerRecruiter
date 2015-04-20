@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-fpm -s dir -t deb -n power-recruiter -v 0.8.823 \
+fpm -s dir -t deb -n power-recruiter -v 0.9.0 \
     -C . \
     -d "python (>=2.7)" \
     -d "python-pip" \
@@ -12,4 +12,4 @@ fpm -s dir -t deb -n power-recruiter -v 0.8.823 \
     --after-install after_install.sh \
     --after-upgrade after_upgrade.sh \
     -m "Filip Ochnik <filip.ochnik@gmail.com>" \
-    power_recruiter requirements.txt
+    power_recruiter requirements.txt bin power-recruiter.conf
