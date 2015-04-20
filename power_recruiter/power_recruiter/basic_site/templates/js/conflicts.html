@@ -42,18 +42,57 @@
         $('#img1').attr('src', d['img1']);
         $('#status0 a').text(d['state0']);
         $('#status1 a').text(d['state1']);
-        $('#linkedin0 a').text(d['linkedin0']);
-        $('#linkedin1 a').text(d['linkedin1']);
-        $('#goldenline0 a').text(d['goldenline0']);
-        $('#goldenline1 a').text(d['goldenline1']);
-        $('#email0 a').text(d['email0']);
-        $('#email1 a').text(d['email1']);
+
+{#        if (!d['linkedin0'] && !d['linkedin1']) {#}
+{#            $('#linkedin-div').hide()#}
+{#        } else {#}
+{#            $('#linkedin0 a').text(d['linkedin0']);#}
+{#            $('#linkedin1 a').text(d['linkedin1']);#}
+{#        }#}
+{#        $('#goldenline0 a').text(d['goldenline0']);#}
+{#        $('#goldenline1 a').text(d['goldenline1']);#}
+{#        $('#email0 a').text(d['email0']);#}
+{#        $('#email1 a').text(d['email1']);#}
+
         $conflicts_modal.modal('show');
+        show_or_hide_section(d['linkedin0'], d['linkedin1'], '#linkedin0', '#linkedin1', '#linkedin-div');
+        show_or_hide_section(d['goldenline0'], d['goldenline1'], '#goldenline0', '#goldenline1', '#goldenline-div');
+        show_or_hide_section(d['email0'], d['email1'], '#email0', '#email1', '#email-div');
+    }
+
+    function show_or_hide_section(val0, val1, val0_div, val1_div, section_div) {
+        if (!val0 && !val1) {
+            $(section_div).hide();
+        } else {
+            show_or_hide_button(val0, val0_div);
+            show_or_hide_button(val1, val1_div);
+
+        }
+    }
+
+    function show_or_hide_button(val, div) {
+        if (val) {
+            $(div + ' a').text(val);
+        } else {
+            $(div + ' a').text('blank');
+        }
     }
 
     function put_ids_modal(id0, id1) {
         $('#id0').val(id0);
         $('#id1').val(id1);
+    }
+
+    function checkImage(k) {
+        $('#checked-img').val(k);
+        $('#img'+k).addClass("checked");
+        $('#img'+(1-k)).removeClass("checked");
+    }
+
+    function checkNav(hidden_id, div_id, k) {
+        $(hidden_id).val(k);
+        $(div_id+k).addClass("active");
+        $(div_id+(1-k)).removeClass("active");
     }
 
     function merge(person_ids) {
@@ -65,18 +104,21 @@
     }
 
     function resolve_conflicts(merge) {
-        var person_ids = get_ids_from_modal();
-        var person_img = $('#checked-img').val();
-        var person_state = $('#checked-status').val();
-        var person_linkedin = $('#checked-linkedin').val();
-        var person_goldenline = $('#checked-goldenline').val();
-        var person_email = $('#checked-email').val();
+        var ids = get_ids_from_modal();
+        var img = $('#checked-img').val();
+        var state = $('#checked-status').val();
+        var linkedin = $('#checked-linkedin').val();
+        var goldenline = $('#checked-goldenline').val();
+        var email = $('#checked-email').val();
         $.post(
                 '/candidate/resolve_conflicts/',
                 {
-                    'person_ids': JSON.stringify(person_ids),
-                    'person_img': person_img,
-                    'person_state': person_state,
+                    'ids': JSON.stringify(ids),
+                    'img': img,
+                    'state': state,
+                    'linkedin': linkedin,
+                    'goldenline': goldenline,
+                    'email': email,
                     'merge': merge
                 },
                 function() { $('#conflicts_modal').modal('hide'); reloadData(); }
