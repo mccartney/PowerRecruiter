@@ -12,11 +12,11 @@
 					$(show_id).fadeIn('slow');
 				} else {
 					$(show_id).show();
-				};
+				}
 			} else {
 				$(show_id).hide();
 			}
-		}
+		};
 		_show_if_checked(show_id, checked_id);
 		$(checked_id).change(function(e) {
 			_show_if_checked(show_id, checked_id, true);
@@ -29,9 +29,10 @@
         var linkedin = $('#linkedin-link').val();
         var goldenline = $('#goldenline-link').val();
         var email = $('#email-link').val();
+        $('#validation-errs').html('');
+        $('.highlight').removeClass('highlight');
 
-        var errs = validate(first_name, last_name, linkedin, goldenline, email);
-        if (errs.length == 0) {
+        if (validate(first_name, last_name, linkedin, goldenline, email)) {
             var resp = sendAjax(
                     'candidate/add_from_app/',
                     {
@@ -45,12 +46,6 @@
                         $("#creation-modal").modal('toggle');
                         reloadData();
                     });
-
-        } else {
-            $('#validation-errs').html('');
-            $.map( errs, function( val, i ) {
-                show_error(val);
-            });
         }
     });
 
@@ -61,23 +56,33 @@
     }
 
     function validate(first_name, last_name, linkedin, goldenline, email) {
-        var errs = []
+        var result = true;
         if (!first_name) {
-            errs.push(EMPTY_FIRST_NAME_ERROR);
+            result = false;
+            show_error(EMPTY_FIRST_NAME_ERROR);
+            highlight('#input-first-name');
         }
         if (!last_name) {
-            errs.push(EMPTY_LAST_NAME_ERROR);
+            result = false;
+            show_error(EMPTY_LAST_NAME_ERROR);
+            highlight('#input-last-name');
         }
-        if (linkedin && !is_valid_url(linkedin)) {
-            errs.push(WRONG_LINKEDIN_ERROR);
+        if (linkedin && !(is_valid_url(linkedin) && includes(linkedin, 'linkedin'))) {
+            result = false;
+            show_error(WRONG_LINKEDIN_ERROR);
+            highlight('#linkedin-link');
         }
-        if (goldenline && !is_valid_url(goldenline)) {
-            errs.push(WRONG_GOLDENLINE_ERROR);
+        if (goldenline && !(is_valid_url(goldenline) && includes(goldenline, 'goldenline'))) {
+            result = false;
+            show_error(WRONG_GOLDENLINE_ERROR);
+            highlight('#goldenline-link');
         }
         if (email && !is_valid_email(email)) {
-            errs.push(WRONG_EMAIL_ERROR);
+            result = false;
+            show_error(WRONG_EMAIL_ERROR);
+            highlight('#email-link');
         }
-        return errs;
+        return result;
     }
 
     function is_valid_url(url) {
@@ -89,13 +94,23 @@
         return re.test(email);
     }
 
+    function includes(str, substr) {
+        return str.indexOf(substr) > -1;
+    }
+
+    function highlight(div) {
+        $(div).addClass('highlight');
+    }
+
     function cleanup_modal() {
         $('#input-first-name').val('');
         $('#input-last-name').val('');
         $('#linkedin-link').val('');
         $('#goldenline-link').val('');
         $('#email-link').val('');
+        $('.highlight').removeClass('highlight');
         $('#validation-errs').html('');
+
     }
 
     $('#creation-modal').on('show.bs.modal', cleanup_modal);
