@@ -1,9 +1,16 @@
 {
-  "name": "firefox-addon",
-  "title": "firefox-addon",
+  "name": "power-recruiter-addon",
+  "title": "Power Recruiter add-on",
   "id": "jid1-RYmdy6sjeffBmA",
-  "description": "a basic add-on",
-  "author": "",
+  "description": "Export add-on for Power Recruiter",
+  "author": "Krzysztof Fudali, Andrzej Jackowski, Cezary Kosko, Filip Ochnik",
   "license": "MPL 2.0",
-  "version": "0.1"
+  "version": "0.9",
+  "preferences": [{
+        "name": "serverAddr",
+        "title": "Server Address",
+        "description": "Address of the Power Recruiter server",
+        "type": "string",
+        "value": "127.0.0.1"
+    }]
 }

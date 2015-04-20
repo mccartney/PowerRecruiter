@@ -1,7 +1,9 @@
 function loadProfile(elem) {
     var Request = require("sdk/request").Request;
+    var url = require("sdk/simple-prefs").prefs.serverAddr;
+
     Request({
-      url: "http://localhost:8000/candidate/add",
+	    url: (!/^(f|ht)tps?:\/\//i.test(url) ? "http://" + url : url) + "/candidate/add",
       content: {'args':elem},
       onComplete: function (response) {
         console.log('load status: ' + response.text);
