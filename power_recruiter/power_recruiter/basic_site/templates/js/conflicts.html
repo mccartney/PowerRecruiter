@@ -1,29 +1,26 @@
 <script>
     $('#conflicts_modal').on('hidden.bs.modal', function (e) {
         get_conflicts();
-        if (data[0].length > 0) {
-            show_conflicts_modal(data);
-        }
     });
 
     function get_conflicts() {
-        var resdata = 0;
         $.get(
             '/candidate/get_conflicts/',
             function (data) {
-                resdata = data;
-                var modal_content = new ConflictModalContent(data);
+                if (data[0].length > 0) {
+                    var modal_data = new ConflictModalContent(data);
+                    show_conflicts_modal(modal_data);
+                }
             }
         );
-        return resdata;
     }
 
     function show_conflicts_modal(modal_content) {
         set_values_on_modal(modal_content);
         $('#conflicts_modal').modal('show');
-        show_or_hide_section(linkedins, '#linkedin0', '#linkedin1', '#linkedin-div');
-        show_or_hide_section(goldenlines, '#goldenline0', '#goldenline1', '#goldenline-div');
-        show_or_hide_section(emails, '#email0', '#email1', '#email-div');
+        show_or_hide_section(modal_content.linkedin, '#linkedin0', '#linkedin1', '#linkedin-div');
+        show_or_hide_section(modal_content.goldenline, '#goldenline0', '#goldenline1', '#goldenline-div');
+        show_or_hide_section(modal_content.email, '#email0', '#email1', '#email-div');
     }
 
     function set_values_on_modal(modal_content) {
