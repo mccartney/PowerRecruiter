@@ -42,18 +42,6 @@
         $('#img1').attr('src', d['img1']);
         $('#status0 a').text(d['state0']);
         $('#status1 a').text(d['state1']);
-
-{#        if (!d['linkedin0'] && !d['linkedin1']) {#}
-{#            $('#linkedin-div').hide()#}
-{#        } else {#}
-{#            $('#linkedin0 a').text(d['linkedin0']);#}
-{#            $('#linkedin1 a').text(d['linkedin1']);#}
-{#        }#}
-{#        $('#goldenline0 a').text(d['goldenline0']);#}
-{#        $('#goldenline1 a').text(d['goldenline1']);#}
-{#        $('#email0 a').text(d['email0']);#}
-{#        $('#email1 a').text(d['email1']);#}
-
         $conflicts_modal.modal('show');
         show_or_hide_section(d['linkedin0'], d['linkedin1'], '#linkedin0', '#linkedin1', '#linkedin-div');
         show_or_hide_section(d['goldenline0'], d['goldenline1'], '#goldenline0', '#goldenline1', '#goldenline-div');

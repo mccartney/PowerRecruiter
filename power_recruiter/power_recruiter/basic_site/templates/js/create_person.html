@@ -1,0 +1,106 @@
+<script>
+    EMPTY_FIRST_NAME_ERROR = "First name cannot be empty";
+    EMPTY_LAST_NAME_ERROR = "Last name cannot be empty";
+    WRONG_LINKEDIN_ERROR = "It's not a valid linkedin url";
+    WRONG_GOLDENLINE_ERROR = "It's not a valid goldenline url";
+    WRONG_EMAIL_ERROR = "It's not a valid email address";
+
+    function show_if_checked(show_id, checked_id) {
+        _show_if_checked = function(show_id, checked_id, fade) {
+            if ($(checked_id).prop('checked')) {
+            if (fade == true) {
+					$(show_id).fadeIn('slow');
+				} else {
+					$(show_id).show();
+				};
+			} else {
+				$(show_id).hide();
+			}
+		}
+		_show_if_checked(show_id, checked_id);
+		$(checked_id).change(function(e) {
+			_show_if_checked(show_id, checked_id, true);
+		});
+	}
+
+    $("#save-candidate").click(function() {
+        var first_name = $('#input-first-name').val();
+        var last_name = $('#input-last-name').val();
+        var linkedin = $('#linkedin-link').val();
+        var goldenline = $('#goldenline-link').val();
+        var email = $('#email-link').val();
+
+        var errs = validate(first_name, last_name, linkedin, goldenline, email);
+        if (errs.length == 0) {
+            var resp = sendAjax(
+                    'candidate/add_from_app/',
+                    {
+                        'first_name': first_name,
+                        'last_name': last_name,
+                        'linkedin_link': linkedin,
+                        'goldenline_link': goldenline,
+                        'email_link': email
+                    },
+                    function (data) {
+                        $("#creation-modal").modal('toggle');
+                        reloadData();
+                    });
+
+        } else {
+            $('#validation-errs').html('');
+            $.map( errs, function( val, i ) {
+                show_error(val);
+            });
+        }
+    });
+
+    function show_error(text) {
+        var entity = document.createElement("p");    // Create with DOM
+        entity.innerHTML = text;
+        $('#validation-errs').append(entity);
+    }
+
+    function validate(first_name, last_name, linkedin, goldenline, email) {
+        var errs = []
+        if (!first_name) {
+            errs.push(EMPTY_FIRST_NAME_ERROR);
+        }
+        if (!last_name) {
+            errs.push(EMPTY_LAST_NAME_ERROR);
+        }
+        if (linkedin && !is_valid_url(linkedin)) {
+            errs.push(WRONG_LINKEDIN_ERROR);
+        }
+        if (goldenline && !is_valid_url(goldenline)) {
+            errs.push(WRONG_GOLDENLINE_ERROR);
+        }
+        if (email && !is_valid_email(email)) {
+            errs.push(WRONG_EMAIL_ERROR);
+        }
+        return errs;
+    }
+
+    function is_valid_url(url) {
+        return url.match(/^(ht|f)tps?:\/\/[a-z0-9-\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?$/);
+    }
+
+    function is_valid_email(email) {
+        var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+        return re.test(email);
+    }
+
+    function cleanup_modal() {
+        $('#input-first-name').val('');
+        $('#input-last-name').val('');
+        $('#linkedin-link').val('');
+        $('#goldenline-link').val('');
+        $('#email-link').val('');
+        $('#validation-errs').html('');
+    }
+
+    $('#creation-modal').on('show.bs.modal', cleanup_modal);
+
+    show_if_checked('#linkedin-section', '#linkedin-checkbox');
+    show_if_checked('#goldenline-section', '#goldenline-checkbox');
+    show_if_checked('#email-section', '#email-checkbox');
+</script>

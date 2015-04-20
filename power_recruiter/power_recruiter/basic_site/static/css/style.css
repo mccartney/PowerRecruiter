@@ -377,3 +377,7 @@ tr.maintable-row-large > td > span > a > div.removePersonButton{
     width: auto;
     padding-bottom: 10px;
 }
+
+#validation-errs p {
+    color: #F00;
+}
