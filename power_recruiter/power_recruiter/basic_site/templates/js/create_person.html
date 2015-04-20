@@ -8,15 +8,15 @@
     function show_if_checked(show_id, checked_id) {
         _show_if_checked = function(show_id, checked_id, fade) {
             if ($(checked_id).prop('checked')) {
-            if (fade == true) {
-					$(show_id).fadeIn('slow');
-				} else {
-					$(show_id).show();
-				}
-			} else {
-				$(show_id).hide();
-			}
-		};
+                if (fade == true) {
+                    $(show_id).fadeIn('slow');
+                } else {
+                    $(show_id).show();
+                }
+            } else {
+                $(show_id).hide();
+            }
+        };
 		_show_if_checked(show_id, checked_id);
 		$(checked_id).change(function(e) {
 			_show_if_checked(show_id, checked_id, true);
@@ -34,18 +34,19 @@
 
         if (validate(first_name, last_name, linkedin, goldenline, email)) {
             var resp = sendAjax(
-                    'candidate/add_from_app/',
-                    {
-                        'first_name': first_name,
-                        'last_name': last_name,
-                        'linkedin_link': linkedin,
-                        'goldenline_link': goldenline,
-                        'email_link': email
-                    },
-                    function (data) {
-                        $("#creation-modal").modal('toggle');
-                        reloadData();
-                    });
+                'candidate/add_from_app/',
+                {
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'linkedin_link': linkedin,
+                    'goldenline_link': goldenline,
+                    'email_link': email
+                },
+                function (data) {
+                    $("#creation-modal").modal('toggle');
+                    reloadData();
+                }
+            );
         }
     });
 

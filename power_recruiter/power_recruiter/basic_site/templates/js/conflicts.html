@@ -1,60 +1,63 @@
 <script>
-    GHOST_PIC = 'static/img/ghost.png';
-
     $('#conflicts_modal').on('hidden.bs.modal', function (e) {
         get_conflicts();
+        if (data[0].length > 0) {
+            show_conflicts_modal(data);
+        }
     });
 
     function get_conflicts() {
+        var resdata = 0;
         $.get(
-                '/candidate/get_conflicts/',
-                function (data) {
-                    if (data[0].length > 0) {
-                        var img0 = data[0][0]['photo']['photo'];
-                        var img1 = data[0][1]['photo']['photo'];
-                        img0 = img0 ? img0 : GHOST_PIC;
-                        img1 = img1 ? img1 : GHOST_PIC;
-                        args = [];
-                        args['img0'] = img0;
-                        args['img1'] = img1;
-                        args['name'] = data[0][0]['candidate_name']['candidate_name'];
-                        args['state0'] = data[0][0]['state']['raw_state_name'];
-                        args['state1'] = data[0][1]['state']['raw_state_name'];
-                        args['id0'] = data[0][0]['id']['id'];
-                        args['id1'] = data[0][1]['id']['id'];
-                        args['linkedin0'] = data[0][0]['contact']['linkedin'];
-                        args['linkedin1'] = data[0][1]['contact']['linkedin'];
-                        args['goldenline0'] = data[0][0]['contact']['goldenline'];
-                        args['goldenline1'] = data[0][1]['contact']['goldenline'];
-                        args['email0'] = data[0][0]['contact']['email'];
-                        args['email1'] = data[0][1]['contact']['email'];
-                        show_conflicts_modal(args);
-                        put_ids_modal(args['id0'], args['id1']);
-                    }
-                }
+            '/candidate/get_conflicts/',
+            function (data) {
+                resdata = data;
+                var modal_content = new ConflictModalContent(data);
+            }
         );
+        return resdata;
     }
 
-    function show_conflicts_modal(d) {
-        var $conflicts_modal = $('#conflicts_modal');
-        $('#conflict_modal_name').text(d['name']);
-        $('#img0').attr('src', d['img0']);
-        $('#img1').attr('src', d['img1']);
-        $('#status0 a').text(d['state0']);
-        $('#status1 a').text(d['state1']);
-        $conflicts_modal.modal('show');
-        show_or_hide_section(d['linkedin0'], d['linkedin1'], '#linkedin0', '#linkedin1', '#linkedin-div');
-        show_or_hide_section(d['goldenline0'], d['goldenline1'], '#goldenline0', '#goldenline1', '#goldenline-div');
-        show_or_hide_section(d['email0'], d['email1'], '#email0', '#email1', '#email-div');
+    function show_conflicts_modal(modal_content) {
+        set_values_on_modal(modal_content);
+        $('#conflicts_modal').modal('show');
+        show_or_hide_section(linkedins, '#linkedin0', '#linkedin1', '#linkedin-div');
+        show_or_hide_section(goldenlines, '#goldenline0', '#goldenline1', '#goldenline-div');
+        show_or_hide_section(emails, '#email0', '#email1', '#email-div');
     }
 
-    function show_or_hide_section(val0, val1, val0_div, val1_div, section_div) {
-        if (!val0 && !val1) {
+    function set_values_on_modal(modal_content) {
+        set_name(modal_content.name);
+        set_ids(modal_content.ids);
+        set_images(modal_content.images);
+        set_states(modal_content.states);
+    }
+
+    function set_name(name) {
+        $('#conflict_modal_name').text(name);
+    }
+
+    function set_ids(ids) {
+        $('#id0').val(ids.first);
+        $('#id1').val(ids.second);
+    }
+
+    function set_images(images) {
+        $('#img0').attr('src', images.first);
+        $('#img1').attr('src', images.second);
+    }
+
+    function set_states(states) {
+        $('#status0 a').text(states.first);
+        $('#status1 a').text(states.second);
+    }
+
+    function show_or_hide_section(pair, fst_div, snd_div, section_div) {
+        if (!pair.first && !pair.second) {
             $(section_div).hide();
         } else {
-            show_or_hide_button(val0, val0_div);
-            show_or_hide_button(val1, val1_div);
-
+            show_or_hide_button(pair.first, fst_div);
+            show_or_hide_button(pair.second, snd_div);
         }
     }
 
@@ -64,11 +67,6 @@
         } else {
             $(div + ' a').text('blank');
         }
-    }
-
-    function put_ids_modal(id0, id1) {
-        $('#id0').val(id0);
-        $('#id1').val(id1);
     }
 
     function checkImage(k) {
