@@ -12,6 +12,8 @@
 <script src="{{ static_js}}nameField.js"></script>
 <script src="{{ static_js}}conflictingPair.js"></script>
 <script src="{{ static_js}}conflictModalContent.js"></script>
+<script src="{{ static_js}}maintable.js"></script>
+<script src="{{ static_js}}addCandidate.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -55,7 +57,7 @@
             <th data-field="photo" data-formatter="photoFormatter" data-sortable="false" class="col-md-1" data-align="center"></th>
             <th data-field="id" data-formatter="idFormatter" data-sortable="true" data-sorter="idSorter" class="col-md-1">ID</th>
             <th data-field="candidate_name" data-formatter="nameFormatter" data-sortable="true" data-sorter="nameSorter" data-align="left">Name</th>
-            <th data-field="contact" data-formatter="contactFormatter" data-align="center">Contact</th>
+            <th data-field="contact" data-formatter="contactFormatter" class="col-md-1" data-align="center">Contact</th>
             <th data-field="state" data-formatter="stateFormatter" data-sortable="true" data-sorter="stateSorter" class="col-md-3" data-align="center">State</th>
             <th data-field="attachments" data-formatter="attachmentsListFormatter" data-align="center">Attachments</th>
             <th data-field="caveats" data-formatter="caveatsFormatter" data-cell-style="caveatsTdStyle">Caveats</th>
@@ -84,7 +86,6 @@
         </div>
     </div>
 </div>
-
 
 {% include "create_person_modal.html" %}
 {% include "conflicts_modal.html" %}

@@ -19,6 +19,10 @@ print "Django started"
 my_env = os.environ.copy()
 test_process = subprocess.Popen(["phantomjs", "./systemTests/run-jscover-system-test.js", "http://localhost:8000", "tests/indexTest.js"], env=my_env)
 test_process.wait()
+test_process = subprocess.Popen(["phantomjs", "./systemTests/run-jscover-system-test.js", "http://127.0.0.1:8000/pieChart", "tests/pieChartTest.js"], env=my_env)
+test_process.wait()
+test_process = subprocess.Popen(["phantomjs", "./systemTests/run-jscover-system-test.js", "http://127.0.0.1:8000/lineChart", "tests/lineChartTest.js"], env=my_env)
+test_process.wait()
 print "Test complete"
 
 parent = psutil.Process(django_process.pid)

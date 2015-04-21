@@ -2,6 +2,7 @@ from collections import defaultdict
 import datetime
 
 from django.shortcuts import render
+from django.conf import settings
 from power_recruiter.candidate.models import Person, OldState, State
 
 
@@ -70,5 +71,5 @@ def generate_context_dicts():
     return generate_result(state_dict, min_date, max_date)
 
 def line_chart(request):
-    context = { 'dicts': generate_context_dicts() }
+    context = { 'dicts': generate_context_dicts(), "static_js": settings.STATIC_JS_PATH }
     return render(request, "line_chart.html", context)
