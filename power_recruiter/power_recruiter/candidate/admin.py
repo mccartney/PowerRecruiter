@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from power_recruiter.candidate.models import Person, Attachment
+from power_recruiter.candidate.models import Person, Attachment, ResolvedConflict
 from power_recruiter.basic_site.admin import admin_auto_login_site
 
 class PersonForm(forms.ModelForm):
@@ -25,7 +25,6 @@ class PersonAdmin(admin.ModelAdmin):
         "linkedin",
         "goldenline",
         "email",
-        "conflict_resolved",
     )
 
     list_display = (
@@ -35,10 +34,15 @@ class PersonAdmin(admin.ModelAdmin):
         "linkedin",
         "goldenline",
         "email",
-        "conflict_resolved",
     )
 
     form = PersonForm
 
+class ResolvedConflictAdmin(admin.ModelAdmin):
+    fields = ("person_one", "person_two")
+    list_display = ("name_first_with_id", "name_second_with_id")
+
+
 admin_auto_login_site.register(Person, PersonAdmin)
 admin_auto_login_site.register(Attachment)
+admin_auto_login_site.register(ResolvedConflict, ResolvedConflictAdmin)

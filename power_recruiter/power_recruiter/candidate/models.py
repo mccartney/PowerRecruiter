@@ -1,6 +1,6 @@
 from django.utils import timezone
 from django.db.models import Manager, Model, CharField, ForeignKey, \
-    FileField, DateTimeField, TextField, URLField, EmailField, BooleanField
+    FileField, DateTimeField, TextField, URLField, EmailField
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
 
@@ -36,23 +36,28 @@ class Person(Model):
     email = EmailField(null=True, unique=False)
     caveats = TextField(max_length=1000, blank=True)
     caveats_timestamp = DateTimeField(default=timezone.now)
-    conflict_resolved = BooleanField(default=False)
 
     objects = PersonManager()
 
     def __unicode__(self):
         return self.first_name + " " + self.last_name
 
+    def name_with_id(self):
+        return str(self) + " (%d)" % self.pk
+
     @classmethod
     def get_conflicts(cls):
-        all_candidates = cls.objects.filter(conflict_resolved=False)
+        all_candidates = cls.objects.all()
         for c in all_candidates:
             candidates = cls.objects.filter(
                 first_name=c.first_name,
                 last_name=c.last_name
             )
-            if len(candidates) > 1:
-                return candidates
+            for first_candidate in candidates:
+                for second_candidate in candidates:
+                    if first_candidate != second_candidate:
+                        if not ResolvedConflict.conflict_was_resolved(first_candidate, second_candidate):
+                            return [first_candidate, second_candidate]
         return []
 
     @classmethod
@@ -86,10 +91,11 @@ class Person(Model):
 
     @classmethod
     def dont_merge(cls, ids):
-        for person_id in ids:
-            p = cls.objects.get(pk=person_id)
-            p.conflict_resolved = True
-            p.save()
+        resolved_conflicts = ResolvedConflict(
+            person_one=Person.objects.get(pk=ids[0]),
+            person_two=Person.objects.get(pk=ids[1])
+        )
+        resolved_conflicts.save()
 
     def update_state(self, new_state_id):
         old_state = OldState(
@@ -199,3 +205,19 @@ class OldState(Model):
     start_date = DateTimeField(default=timezone.now)
     change_date = DateTimeField(default=timezone.now)
     state = ForeignKey(State, null=True)
+
+class ResolvedConflict(Model):
+    person_one = ForeignKey(Person, related_name='person_one')
+    person_two = ForeignKey(Person, related_name='person_two')
+
+    @classmethod
+    def conflict_was_resolved(cls, id1, id2):
+        candidates_num = len(cls.objects.filter(person_one=id1, person_two=id2))
+        candidates_num += len(cls.objects.filter(person_one=id2, person_two=id1))
+        return candidates_num > 0
+
+    def name_first_with_id(self):
+        return self.person_one.name_with_id()
+
+    def name_second_with_id(self):
+        return self.person_two.name_with_id()

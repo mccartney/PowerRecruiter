@@ -51,7 +51,7 @@ NUM_PHOTO_PAIRS_NOT_SAME = 500
 NUM_PHOTO_PAIRS = NUM_PHOTO_PAIRS_SAME + NUM_PHOTO_PAIRS_NOT_SAME
 
 # Number of trainings
-NUM_EPOCHS = 200
+NUM_EPOCHS = 40
 
 SAVE_FILE_NAME = os.path.join(__location__, 'network.bin')
 

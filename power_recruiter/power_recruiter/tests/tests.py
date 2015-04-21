@@ -66,6 +66,10 @@ class UrlsTest(unittest.TestCase):
         self.run_auto_login("/admin/candidate/person/")
 
     @override_settings(DEBUG=True)
+    def test_admin_resolved_conflict(self):
+        self.run_auto_login("/admin/candidate/resolvedconflict/")
+
+    @override_settings(DEBUG=True)
     def test_admin_person_add(self):
         self.run_auto_login("/admin/candidate/person/add/")
 

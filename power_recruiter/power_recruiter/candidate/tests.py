@@ -5,7 +5,7 @@ import datetime
 from django.test import TestCase, Client
 from django.test.utils import override_settings
 
-from power_recruiter.candidate.models import Person,Attachment, OldState
+from power_recruiter.candidate.models import Person,Attachment, OldState, ResolvedConflict
 from power_recruiter.settings import BASE_DIR
 
 
@@ -36,16 +36,13 @@ class TestPerson(TestCase):
         new_person2.save()
 
         conflicts = Person.get_conflicts()
-
         self.assertEqual(set(conflicts), {new_person1, new_person2})
 
-        new_person1.conflict_resolved = True
-        new_person1.save()
-
-        self.assertEqual(set(conflicts), {new_person1, new_person2})
-
-        new_person2.conflict_resolved = True
-        new_person2.save()
+        resolved_conflicts = resolved_conflicts = ResolvedConflict(
+            person_one=new_person1,
+            person_two=new_person2
+        )
+        resolved_conflicts.save()
 
         self.assertTrue(Person.get_conflicts() == [])
 
@@ -291,7 +288,6 @@ class TestCandidateView(TestCase):
         self.assertEqual(candidate.email, 'test@powerrecruiter-zpp.pl')
         self.assertEqual(candidate.caveats, "")
         self.assertEqual(candidate.caveats_timestamp.date(), datetime.datetime.now().date())
-        self.assertEqual(candidate.conflict_resolved, False)
 
     @override_settings(DEBUG=True)
     def test_add_from_app_404(self):
@@ -361,7 +357,6 @@ class TestCandidateView(TestCase):
         self.assertEqual(candidate.email, None)
         self.assertEqual(candidate.caveats, "")
         self.assertEqual(candidate.caveats_timestamp.date(), datetime.datetime.now().date())
-        self.assertEqual(candidate.conflict_resolved, False)
 
         # Add goldenline second time
         response_post = c.post('/candidate/add', {
@@ -495,7 +490,6 @@ class TestCandidateView(TestCase):
         self.assertEqual(candidate.email, None)
         self.assertEqual(candidate.caveats, "2+2=2*2")
         self.assertEqual(candidate.caveats_timestamp.date(), datetime.datetime.now().date())
-        self.assertEqual(candidate.conflict_resolved, False)
         self.assertEqual(len(Attachment.objects.all().filter(person=7)), 2)
 
         conflicts = Person.get_conflicts()
