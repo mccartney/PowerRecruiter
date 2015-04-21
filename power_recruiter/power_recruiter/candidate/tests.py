@@ -356,9 +356,9 @@ class TestCandidateView(TestCase):
         self.assertEqual(candidate.current_state_started.date(), datetime.datetime.now().date())
         self.assertEqual(candidate.state.pk, 0)
         self.assertEqual(candidate.photo_url, "http://nofoto.com/photo.png")
-        self.assertEqual(candidate.linkedin, "")
+        self.assertEqual(candidate.linkedin, None)
         self.assertEqual(candidate.goldenline, "http://goldenline.com/test")
-        self.assertEqual(candidate.email, "")
+        self.assertEqual(candidate.email, None)
         self.assertEqual(candidate.caveats, "")
         self.assertEqual(candidate.caveats_timestamp.date(), datetime.datetime.now().date())
         self.assertEqual(candidate.conflict_resolved, False)
@@ -381,8 +381,8 @@ class TestCandidateView(TestCase):
         self.assertEqual(len(Person.objects.all()), 8)
         candidate = Person.objects.get(pk=8)
         self.assertEqual(candidate.linkedin, "http://linkedin.com/test")
-        self.assertEqual(candidate.goldenline, "")
-        self.assertEqual(candidate.email, "")
+        self.assertEqual(candidate.goldenline, None)
+        self.assertEqual(candidate.email, None)
 
         # Add linkedin second time
         response_post = c.post('/candidate/add', {
@@ -479,7 +479,7 @@ class TestCandidateView(TestCase):
 
         conflicts = Person.get_conflicts()
         self.assertEqual(len(conflicts), 2)
-        response_post = c.post('/candidate/resolve_conflicts/', {'person_ids': '[7,8]', 'person_img': 1, 'person_state': 1, 'merge': 'true'})
+        response_post = c.post('/candidate/resolve_conflicts/', {'ids': '[7,8]', 'img': 1, 'state': 1, 'merge': 'true'})
         self.assertEqual(response_post.status_code, 200)
 
         self.assertEqual(len(Person.objects.all()), 7)
@@ -490,9 +490,9 @@ class TestCandidateView(TestCase):
         self.assertEqual(candidate.current_state_started.date(), datetime.datetime.now().date())
         self.assertEqual(candidate.state.pk, 0)
         self.assertEqual(candidate.photo_url, "http://japonskie_twarze.pl/taka_sama.png")
-        self.assertEqual(candidate.linkedin, "")
-        self.assertEqual(candidate.goldenline, "")
-        self.assertEqual(candidate.email, "")
+        self.assertEqual(candidate.linkedin, None)
+        self.assertEqual(candidate.goldenline, None)
+        self.assertEqual(candidate.email, None)
         self.assertEqual(candidate.caveats, "2+2=2*2")
         self.assertEqual(candidate.caveats_timestamp.date(), datetime.datetime.now().date())
         self.assertEqual(candidate.conflict_resolved, False)
@@ -526,7 +526,7 @@ class TestCandidateView(TestCase):
 
         conflicts = Person.get_conflicts()
         self.assertEqual(len(conflicts), 2)
-        response_post = c.post('/candidate/resolve_conflicts/', {'person_ids': '[7,8]', 'person_img': 0, 'person_state': 0, 'merge': 'false'})
+        response_post = c.post('/candidate/resolve_conflicts/', {'ids': '[7,8]', 'img': 0, 'state': 0, 'merge': 'false'})
         self.assertEqual(response_post.status_code, 200)
 
         new_all_people_list = Person.objects.all()

@@ -153,7 +153,6 @@ def add_candidate(request):
         raise Http404
     names = args[0].split(' ')
     first_name = names[0]
-    last_name = ""
     last_name = "".join(names[1:])
     linkedin = ""
     goldenline = ""
@@ -220,9 +219,9 @@ def resolve_conflicts(request):
         person_ids = json.loads(person_ids_json)
         photo = request.POST.get('img')
         state = request.POST.get('state')
-        linkedin = request.POST.get('linkedin')
-        goldenline = request.POST.get('goldenline')
-        email = request.POST.get('email')
+        linkedin = request.POST.get('linkedin', 0)
+        goldenline = request.POST.get('goldenline', 0)
+        email = request.POST.get('email', 0)
         merge = json.loads(request.POST.get('merge'))
     except KeyError:
         raise Http404
