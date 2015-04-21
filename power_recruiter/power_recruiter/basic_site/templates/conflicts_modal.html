@@ -10,12 +10,16 @@
             <input type="hidden" id="id1" value="">
             <input type="hidden" id="checked-img" value="0">
             <input type="hidden" id="checked-status" value="0">
+            <input type="hidden" id="checked-linkedin" value="0">
+            <input type="hidden" id="checked-goldenline" value="0">
+            <input type="hidden" id="checked-email" value="0">
 
             <div class="modal-body">
+            <form>
             <div class="container-fluid">
-                <div class="row">
+                <div class="row heading">
                     <div class="col-md-12">
-                        <h4>Choose a photo</h4>
+                        <h4>Choose the photo</h4>
                     </div>
                 </div>
                 <div class="row conflict-imgs">
@@ -30,21 +34,77 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row heading">
                     <div class="col-md-12">
-                        <h4>Choose a status</h4>
+                        <h4>Choose the state</h4>
                     </div>
                 </div>
-                <div class="row conflict-status">
+                <div class="row conflict conflict-status">
                     <div class="col-md-10 col-md-offset-1">
                         <ul class="nav nav-pills">
-                        <li id="status0" role="presentation" class="active"><a href="javascript:checkStatus(0);"></a></li>
-                        <li id="status1" role="presentation"><a href="javascript:checkStatus(1);"></a></li>
+                        <li id="status0" role="presentation" class="active"><a href="javascript:checkNav('#checked-status', '#status', 0);"></a></li>
+                        <li id="status1" role="presentation"><a href="javascript:checkNav('#checked-status', '#status', 1);"></a></li>
                         </ul>
                     </div>
                 </div>
 
+                <!-- LINKEDIN SECTION -->
+                <div id="linkedin-div">
+                    <div class="row heading">
+                        <div class="col-md-12 url-link">
+                            <img src="static/img/linkedin.png" />
+                        </div>
+                    </div>
+                    <div class="row conflict conflict-urls">
+                        <div class="col-md-12">
+                            <ul class="nav nav-pills">
+                            <li id="linkedin0" role="presentation" class="active"><a href="javascript:checkNav('#checked-linkedin', '#linkedin', 0);"></a></li>
+                            <li id="linkedin1" role="presentation"><a href="javascript:checkNav('#checked-linkedin', '#linkedin', 1);"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- END OF LINKEDIN -->
+
+
+                <!-- GOLDENLINE SECTION -->
+                <div id="goldenline-div">
+                    <div class="row heading">
+                        <div class="col-md-12 url-link">
+                            <img src="static/img/goldenline.png" />
+                        </div>
+                    </div>
+                    <div class="row conflict conflict-urls">
+                        <div class="col-md-12">
+                            <ul class="nav nav-pills">
+                            <li id="goldenline0" role="presentation" class="active"><a href="javascript:checkNav('#checked-goldenline', '#goldenline', 0);"></a></li>
+                            <li id="goldenline1" role="presentation"><a href="javascript:checkNav('#checked-goldenline', '#goldenline', 1);"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- END OF GOLDENLINE -->
+
+                <!-- EMAIL SECTION -->
+                <div id="email-div">
+                    <div class="row heading">
+                        <div class="col-md-12 url-link">
+                            <img src="static/img/email.jpeg" />
+                        </div>
+                    </div>
+                    <div class="row conflict conflict-urls">
+                        <div class="col-md-12">
+                            <ul class="nav nav-pills">
+                            <li id="email0" role="presentation" class="active"><a href="javascript:checkNav('#checked-email', '#email', 0);"></a></li>
+                            <li id="email1" role="presentation"><a href="javascript:checkNav('#checked-email', '#email', 1);"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- END OF EMAIL -->
+
             </div> <!-- container -->
+            </form>
             </div> <!-- modal-body -->
             <div class="modal-footer">
                 <button id="conflicts_modal_dont_merge" type="button" class="btn btn-warning">Don't merge</button>
@@ -53,17 +113,3 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-<script>
-    function checkImage(k) {
-        $('#checked-img').val(k);
-        $('#img'+k).addClass("checked");
-        $('#img'+(1-k)).removeClass("checked");
-    }
-
-    function checkStatus(k) {
-        $('#checked-status').val(k);
-        $('#status'+k).addClass("active");
-        $('#status'+(1-k)).removeClass("active");
-    }
-</script>

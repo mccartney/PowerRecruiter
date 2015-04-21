@@ -194,6 +194,7 @@ def add_candidate_from_app(request):
         goldenline=request.POST['goldenline_link']
         linkedin=request.POST['linkedin_link']
         email=request.POST['email_link']
+
     except KeyError:
         raise Http404
 
@@ -215,16 +216,19 @@ def get_conflicts(request):
 @require_POST
 def resolve_conflicts(request):
     try:
-        person_ids_json = request.POST.get('person_ids')
+        person_ids_json = request.POST.get('ids')
         person_ids = json.loads(person_ids_json)
-        photo = request.POST.get('person_img')
-        state = request.POST.get('person_state')
+        photo = request.POST.get('img')
+        state = request.POST.get('state')
+        linkedin = request.POST.get('linkedin')
+        goldenline = request.POST.get('goldenline')
+        email = request.POST.get('email')
         merge = json.loads(request.POST.get('merge'))
     except KeyError:
         raise Http404
 
     if merge:
-        Person.merge(person_ids, photo, state)
+        Person.merge(person_ids, photo, state, linkedin, goldenline, email)
     else:
         Person.dont_merge(person_ids)
     return HttpResponse(status=200, content=200, content_type="plain/text")

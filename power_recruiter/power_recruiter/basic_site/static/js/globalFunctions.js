@@ -2,6 +2,8 @@
  * Created by shadowsword on 25.10.14.
  */
 
+GHOST_PIC = 'static/img/ghost.png';
+
 function getCookie(name) {
 	var cookieValue = null;
 	if (document.cookie && document.cookie != '') {

@@ -24,7 +24,8 @@ class PersonAdmin(admin.ModelAdmin):
         "state",
         "linkedin",
         "goldenline",
-        "email"
+        "email",
+        "conflict_resolved",
     )
 
     list_display = (
@@ -33,7 +34,8 @@ class PersonAdmin(admin.ModelAdmin):
         "get_state_view",
         "linkedin",
         "goldenline",
-        "email"
+        "email",
+        "conflict_resolved",
     )
 
     form = PersonForm

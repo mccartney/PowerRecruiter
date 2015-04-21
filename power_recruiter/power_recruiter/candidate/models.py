@@ -11,6 +11,9 @@ import datetime
 
 class PersonManager(Manager):
     def create_person(self, first_name, last_name, photo_url="", linkedin="", goldenline="", email=""):
+        goldenline = None if not goldenline else goldenline
+        linkedin = None if not linkedin else linkedin
+        email = None if not email else email
         return self.create(
             state=State.objects.get(pk=0),
             first_name=first_name,
@@ -53,18 +56,26 @@ class Person(Model):
         return []
 
     @classmethod
-    def merge(cls, ids, photo, state):
+    def merge(cls, ids, photo, state, linkedin, goldenline, email):
         rids = []
         for i in ids:
             rids.append(int(i))
         photo = int(photo)
         state = int(state)
+        linkedin = int(linkedin)
+        goldenline = int(goldenline)
+        email = int(email)
         right_person = Person.objects.get(id=rids[0])
         wrong_person = Person.objects.get(id=rids[1])
         state_person = Person.objects.get(id=rids[state])
+
         if right_person.state != state_person.state:
             right_person.update_state(state_person.state.id)
         right_person.photo_url = Person.objects.get(id=rids[photo]).photo_url
+        right_person.linkedin = Person.objects.get(id=rids[linkedin]).linkedin
+        right_person.goldenline = Person.objects.get(id=rids[goldenline]).goldenline
+        right_person.email = Person.objects.get(id=rids[email]).email
+
         old_atts = Attachment.objects.filter(person=wrong_person)
         for o in old_atts:
             o.person = right_person
