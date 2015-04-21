@@ -1,3 +1,8 @@
+import datetime
+import random
+import urllib
+import cStringIO
+
 from django.utils import timezone
 from django.db.models import Manager, Model, CharField, ForeignKey, \
     FileField, DateTimeField, TextField, URLField, EmailField
@@ -6,8 +11,7 @@ from django.shortcuts import get_object_or_404
 
 from power_recruiter.basic_site.workflow import get_next_nodes, get_previous_nodes
 from power_recruiter.basic_site.models import Notification, State
-import datetime
-
+from power_recruiter.image_comparator.image_comparator import is_same_person
 
 class PersonManager(Manager):
     def create_person(self, first_name, last_name, photo_url="", linkedin="", goldenline="", email=""):
@@ -48,6 +52,7 @@ class Person(Model):
     @classmethod
     def get_conflicts(cls):
         all_candidates = cls.objects.all()
+        #Name based conflicts
         for c in all_candidates:
             candidates = cls.objects.filter(
                 first_name=c.first_name,
@@ -58,6 +63,18 @@ class Person(Model):
                     if first_candidate != second_candidate:
                         if not ResolvedConflict.conflict_was_resolved(first_candidate, second_candidate):
                             return [first_candidate, second_candidate]
+
+        #Image base conflicts
+        try:
+            all_candidates_with_photo = cls.objects.filter(photo_url__regex = r'.{3}.*')
+            first_candidate, second_candidate = random.sample(all_candidates_with_photo, 2)
+            if not ResolvedConflict.conflict_was_resolved(first_candidate, second_candidate):
+                first_candidate_photo = cStringIO.StringIO(urllib.urlopen(first_candidate.photo_url).read())
+                second_candidate_photo = cStringIO.StringIO(urllib.urlopen(second_candidate.photo_url).read())
+                if is_same_person(first_candidate_photo, second_candidate_photo):
+                    return [first_candidate, second_candidate]
+        except:
+            pass
         return []
 
     @classmethod
