@@ -42,8 +42,8 @@ QUnit.test("idFormatter", function( assert ) {
 });
 
 QUnit.test("Shorten name", function( assert ) {
-  assert.ok(shortenName("Plik1111234.zip") == "Plik1111234.zip", "full name");
-  assert.ok(shortenName("NNPlik1111234.zip") == "NNPlik1111234...", "shorten name");
+  assert.ok(shortenName("Plik1111234.zip", 13) == "Plik1111234.zip", "full name");
+  assert.ok(shortenName("NNPlik1111234.zip", 13) == "NNPlik1111234...", "shorten name");
 });
 
 QUnit.test("attachmentsListFormatterWithoutCSRF", function( assert ) {

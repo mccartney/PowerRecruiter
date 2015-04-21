@@ -25,9 +25,12 @@ function idFormatter(value){
     return value.id;
 }
 
-function shortenName(name){
-    if(name.length > 16) {
-        return name.substr(0, 13) + "...";
+function shortenName(name, len){
+    if (name === null) {
+        return null;
+    }
+    if(name.length > len+3) {
+        return name.substr(0, len) + "...";
     }
     return name;
 }
@@ -47,7 +50,7 @@ function attachmentsListFormatterWithoutCSRF(value, uploadUrl, csrfToken) {
         toReturn += '</a>';
 
         toReturn += '<a href="candidate/attachment/get/' + value.attachments[i].pk + '">';
-        toReturn += shortenName(value.attachments[i].display_name);
+        toReturn += shortenName(value.attachments[i].display_name, 13);
         toReturn += '</a><br>';
         toReturn += '</div>';
         i++;

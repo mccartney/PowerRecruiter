@@ -53,8 +53,8 @@
         if (!pair.first && !pair.second) {
             $(section_div).hide();
         } else {
-            show_or_hide_button(pair.first, fst_div);
-            show_or_hide_button(pair.second, snd_div);
+            show_or_hide_button(shortenName(pair.first, 32), fst_div);
+            show_or_hide_button(shortenName(pair.second, 32), snd_div);
         }
     }
 
