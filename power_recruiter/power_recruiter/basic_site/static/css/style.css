@@ -357,18 +357,18 @@ tr.maintable-row-large > td > span > a > div.removePersonButton{
 
 .conflict-imgs img.checked{
     border-style: solid;
-    border-width: 10px;
-    -moz-border-image: url(../img/border2.jpg) 12 round;
-    -webkit-border-image: url(../img/border2.jpg) 12 round;
-    -o-border-image: url(../img/border2.jpg) 12 round;
-    border-image: url(../img/border2.jpg) 12 round;
+    border-width: 7px;
+    -moz-border-image: url(../img/border3.jpeg) 12 round;
+    -webkit-border-image: url(../img/border3.jpeg) 12 round;
+    -o-border-image: url(../img/border3.jpeg) 12 round;
+    border-image: url(../img/border3.jpeg) 12 round;
 }
 
-.conflict-status ul {
+.row.conflict ul {
     text-align: center;
 }
 
-.conflict-status li {
+.row.conflict li {
     width: 49%;
 }
 
@@ -376,6 +376,7 @@ tr.maintable-row-large > td > span > a > div.removePersonButton{
     height: 40px;
     width: auto;
     padding-bottom: 10px;
+    margin-top: 15px;
 }
 
 #validation-errs p {
