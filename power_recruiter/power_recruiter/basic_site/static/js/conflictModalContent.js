@@ -1,8 +1,8 @@
 var ConflictModalContent = function (data) {
     this.name = data[0][0]['candidate_name']['candidate_name'];
     this.images = new ConflictingPair(
-        GHOST_PIC || data[0][0]['photo']['photo'],
-        GHOST_PIC || data[0][1]['photo']['photo']);
+        data[0][0]['photo']['photo'] || GHOST_PIC,
+        data[0][1]['photo']['photo'] || GHOST_PIC);
     this.states = new ConflictingPair(
         data[0][0]['state']['raw_state_name'],
         data[0][1]['state']['raw_state_name']);
