@@ -22,9 +22,8 @@ __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 
-# 250px x 250px
-IMG_WIDTH = 250
-IMG_HEIGHT = 250
+IMG_WIDTH = 125
+IMG_HEIGHT = 125
 
 # We compare two faces
 IMG_NUM = 2
@@ -33,30 +32,31 @@ IMG_NUM = 2
 NUM_INPUT_UNITS = IMG_WIDTH * IMG_HEIGHT * IMG_NUM
 
 # Hidden units of network
-NUM_HIDDEN_UNITS_1 = 90
+NUM_HIDDEN_UNITS_1 = 1000
 
 # Hidden units of network
-NUM_HIDDEN_UNITS_2 = 45
+NUM_HIDDEN_UNITS_2 = 750
 
 # Hidden units of network
-NUM_HIDDEN_UNITS_3 = 30
+NUM_HIDDEN_UNITS_3 = 500
 
 # Number of pairs with same person
-NUM_PHOTO_PAIRS_SAME = 500
+NUM_PHOTO_PAIRS_SAME = 1300
 
 # Number of pairs with not same person
-NUM_PHOTO_PAIRS_NOT_SAME = 500
+NUM_PHOTO_PAIRS_NOT_SAME = NUM_PHOTO_PAIRS_SAME
 
 # Number of pairs of photos
 NUM_PHOTO_PAIRS = NUM_PHOTO_PAIRS_SAME + NUM_PHOTO_PAIRS_NOT_SAME
 
 # Number of trainings
-NUM_EPOCHS = 40
+NUM_EPOCHS = 25
 
 SAVE_FILE_NAME = os.path.join(__location__, 'network.bin')
 
 PHOTOS_ROOT_DIR = "lfw/"
 
+DIRS_USED_FOR_SAME_FACES = []
 
 def _convert_to_black_and_white(im):
     return im.convert('L')
@@ -125,12 +125,13 @@ def _build_network():
 
 def _run_training(net, data_set):
     logger.info("Running training...")
-    # Should we train on 0.1 of the data only?
-    data_set_training, _ = data_set.splitWithProportion(0.1)
+    data_set_training, data_set_test = data_set.splitWithProportion(0.1)
     trainer = BackpropTrainer(net, data_set_training)
     for epoch in xrange(NUM_EPOCHS):
         logger.info("Calculating EPOCH %d", epoch)
         logger.info("Result on training set %f", trainer.train())
+        if epoch % 5 == 0:
+            logger.info("Result on test set %f", trainer.testOnData(data_set_test))
 
 
 def _add_images_to_dataset(path1, path2, data_set, value):
@@ -139,21 +140,23 @@ def _add_images_to_dataset(path1, path2, data_set, value):
 
 
 def _add_same_photos(data_set):
+    global DIRS_USED_FOR_SAME_FACES
     pairs = 0
     # pylint: disable=W0612
     for subdir, dirs, files in os.walk(PHOTOS_ROOT_DIR):
         if len(files) <= 2:
             continue
-        for i in xrange(len(files)/2):
-            _add_images_to_dataset(
-                os.path.join(subdir, files[i]),
-                os.path.join(subdir, files[i + 1]),
-                data_set,
-                1
-            )
-            pairs += 1
-            if pairs >= NUM_PHOTO_PAIRS_SAME:
-                return
+        #logger.info(subdir)
+        _add_images_to_dataset(
+            os.path.join(subdir, files[0]),
+            os.path.join(subdir, files[1]),
+            data_set,
+            1
+        )
+        pairs += 1
+        DIRS_USED_FOR_SAME_FACES.append(subdir)
+        if pairs >= NUM_PHOTO_PAIRS_SAME:
+            return
 
 
 def _add_not_same_photos(data_set):
@@ -161,7 +164,8 @@ def _add_not_same_photos(data_set):
 
     # pylint: disable=W0612
     for subdir, dirs, files in os.walk(PHOTOS_ROOT_DIR):
-        if files:
+        if files and subdir not in DIRS_USED_FOR_SAME_FACES:
+            #logger.info(subdir)
             first_photos_from_dir.append(os.path.join(subdir, files[0]))
 
     for i in xrange(NUM_PHOTO_PAIRS_NOT_SAME):
@@ -176,7 +180,9 @@ def _add_not_same_photos(data_set):
 def _create_dataset():
     logger.info("Creating empty dataset...")
     data_set = SupervisedDataSet(NUM_INPUT_UNITS, 1)
+    logger.info("Add same photos to dataset...")
     _add_same_photos(data_set)
+    logger.info("Add not same photos to dataset...")
     _add_not_same_photos(data_set)
     logger.info("Done creating")
     return data_set
