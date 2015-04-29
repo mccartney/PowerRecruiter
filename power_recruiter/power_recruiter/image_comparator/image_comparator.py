@@ -1,5 +1,3 @@
-import sys
-
 from power_recruiter.image_comparator.neural_network import network, \
     get_input_image
 

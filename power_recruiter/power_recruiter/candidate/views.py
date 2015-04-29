@@ -56,9 +56,11 @@ def upload_attachment(request):
         context_instance=RequestContext(request)
     )
 
+
 def get_attachment(request, attachment_id):
     attachment = Attachment.objects.get(pk=attachment_id)
     return redirect(attachment.file.url)
+
 
 @require_POST
 def remove_attachment(request):
@@ -69,10 +71,11 @@ def remove_attachment(request):
     to_remove = get_object_or_404(Attachment, pk=attachment_id)
 
     # IMO the file should stay on server
-    #to_remove.file.delete()
+    # to_remove.file.delete()
 
     to_remove.delete()
     return HttpResponse(200, content_type="plain/text")
+
 
 @require_POST
 def change_name(request):
@@ -115,8 +118,9 @@ def caveats_upload(request):
     try:
         person_id = int(request.POST['id'])
         caveats = request.POST['caveats']
-        #Dividing by 1000 is required, cuz js and python have different timestamps
-        timestamp = datetime.datetime.fromtimestamp(int(request.POST['timestamp'])/1000.0)
+        # Dividing by 1000 because js and python have different timestamps
+        timestamp = datetime.datetime.fromtimestamp(
+            int(request.POST['timestamp']) / 1000.0)
     except KeyError:
         raise Http404
     person = get_object_or_404(Person, id=person_id)
@@ -140,6 +144,7 @@ def change_state(request):
         person.update_state(new_state_id)
         return HttpResponse(200, content_type="plain/text")
     raise Http404
+
 
 @csrf_exempt
 def add_candidate(request):
@@ -186,13 +191,14 @@ def add_candidate(request):
 
     return HttpResponse(status=200, content=200, content_type="plain/text")
 
+
 def add_candidate_from_app(request):
     try:
-        first_name=request.POST['first_name']
-        last_name=request.POST['last_name']
-        goldenline=request.POST['goldenline_link']
-        linkedin=request.POST['linkedin_link']
-        email=request.POST['email_link']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        goldenline = request.POST['goldenline_link']
+        linkedin = request.POST['linkedin_link']
+        email = request.POST['email_link']
 
     except KeyError:
         raise Http404
@@ -207,10 +213,12 @@ def add_candidate_from_app(request):
 
     return HttpResponse(status=200, content=200, content_type="plain/text")
 
+
 def get_conflicts(request):
     conflicting_candidates = Person.get_conflicts()
     response = [c.to_json() for c in conflicting_candidates],
     return HttpResponse(json.dumps(response), content_type="application/json")
+
 
 @require_POST
 def resolve_conflicts(request):

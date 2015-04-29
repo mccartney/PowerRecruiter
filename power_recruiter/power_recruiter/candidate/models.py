@@ -9,15 +9,15 @@ from django.db.models import Manager, Model, CharField, ForeignKey, \
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
 
-from power_recruiter.basic_site.workflow import get_next_nodes, get_previous_nodes
+from power_recruiter.basic_site.workflow import get_next_nodes, \
+    get_previous_nodes
 from power_recruiter.basic_site.models import Notification, State
 from power_recruiter.image_comparator.image_comparator import is_same_person
 
+
 class PersonManager(Manager):
-    def create_person(self, first_name, last_name, photo_url="", linkedin="", goldenline="", email=""):
-        goldenline = None if not goldenline else goldenline
-        linkedin = None if not linkedin else linkedin
-        email = None if not email else email
+    def create_person(self, first_name, last_name, photo_url=None,
+                      linkedin=None, goldenline=None, email=None):
         return self.create(
             state=State.objects.get(pk=0),
             first_name=first_name,
@@ -52,7 +52,7 @@ class Person(Model):
     @classmethod
     def get_conflicts(cls):
         all_candidates = cls.objects.all()
-        #Name based conflicts
+        # Name based conflicts
         for c in all_candidates:
             candidates = cls.objects.filter(
                 first_name=c.first_name,
@@ -61,17 +61,24 @@ class Person(Model):
             for first_candidate in candidates:
                 for second_candidate in candidates:
                     if first_candidate != second_candidate:
-                        if not ResolvedConflict.conflict_was_resolved(first_candidate, second_candidate):
+                        if not ResolvedConflict.conflict_was_resolved(
+                                first_candidate, second_candidate):
                             return [first_candidate, second_candidate]
 
-        #Image base conflicts
+        # Image base conflicts
         try:
-            all_candidates_with_photo = cls.objects.filter(photo_url__regex = r'.{3}.*')
-            first_candidate, second_candidate = random.sample(all_candidates_with_photo, 2)
-            if not ResolvedConflict.conflict_was_resolved(first_candidate, second_candidate):
-                first_candidate_photo = cStringIO.StringIO(urllib.urlopen(first_candidate.photo_url).read())
-                second_candidate_photo = cStringIO.StringIO(urllib.urlopen(second_candidate.photo_url).read())
-                if is_same_person(first_candidate_photo, second_candidate_photo):
+            all_candidates_with_photo = cls.objects.filter(
+                photo_url__regex=r'.{3}.*')
+            first_candidate, second_candidate = random.sample(
+                all_candidates_with_photo, 2)
+            if not ResolvedConflict.conflict_was_resolved(
+                    first_candidate, second_candidate):
+                first_candidate_photo = cStringIO.StringIO(
+                    urllib.urlopen(first_candidate.photo_url).read())
+                second_candidate_photo = cStringIO.StringIO(
+                    urllib.urlopen(second_candidate.photo_url).read())
+                if is_same_person(first_candidate_photo,
+                                  second_candidate_photo):
                     return [first_candidate, second_candidate]
         except:
             pass
@@ -95,7 +102,8 @@ class Person(Model):
             right_person.update_state(state_person.state.id)
         right_person.photo_url = Person.objects.get(id=rids[photo]).photo_url
         right_person.linkedin = Person.objects.get(id=rids[linkedin]).linkedin
-        right_person.goldenline = Person.objects.get(id=rids[goldenline]).goldenline
+        right_person.goldenline = Person.objects.get(
+            id=rids[goldenline]).goldenline
         right_person.email = Person.objects.get(id=rids[email]).email
 
         old_atts = Attachment.objects.filter(person=wrong_person)
@@ -170,7 +178,8 @@ class Person(Model):
                     'start_date': str(oldState.start_date.date()),
                     'change_date': str(oldState.change_date.date()),
                     'state': str(oldState.state)
-                } for oldState in OldState.objects.filter(person_id=self.pk).order_by('-change_date')
+                } for oldState in OldState.objects.filter(
+                    person_id=self.pk).order_by('-change_date')
             ]
         }
 
@@ -209,6 +218,7 @@ class Person(Model):
         return self.state.get_view()
     get_state_view.allow_tags = True
 
+
 class Attachment(Model):
     person = ForeignKey(Person)
     file = FileField(upload_to='attachments/%Y/%m/%d')
@@ -223,14 +233,17 @@ class OldState(Model):
     change_date = DateTimeField(default=timezone.now)
     state = ForeignKey(State, null=True)
 
+
 class ResolvedConflict(Model):
     person_one = ForeignKey(Person, related_name='person_one')
     person_two = ForeignKey(Person, related_name='person_two')
 
     @classmethod
     def conflict_was_resolved(cls, id1, id2):
-        candidates_num = len(cls.objects.filter(person_one=id1, person_two=id2))
-        candidates_num += len(cls.objects.filter(person_one=id2, person_two=id1))
+        candidates_num = len(cls.objects.filter(person_one=id1,
+                                                person_two=id2))
+        candidates_num += len(cls.objects.filter(person_one=id2,
+                                                 person_two=id1))
         return candidates_num > 0
 
     def name_first_with_id(self):

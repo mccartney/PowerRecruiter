@@ -8,8 +8,9 @@ handler404 = 'power_recruiter.basic_site.views.handler404.handler404'
 
 urlpatterns = patterns(
     '',
-    url(r'^admin/', include(admin_auto_login_site.get_urls(), namespace='admin')),
+    url(r'^admin/', include(admin_auto_login_site.get_urls(),
+        namespace='admin')),
     url(r'', include('power_recruiter.basic_site.urls')),
     url(r'^candidate/', include('power_recruiter.candidate.urls'))
 )
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

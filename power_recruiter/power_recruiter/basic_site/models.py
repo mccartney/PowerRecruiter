@@ -22,7 +22,7 @@ class State(Model):
             'css_class': css_class,
             'state_view': self.name
         })
-    
+
     def get_name(self):
         return self.name
 

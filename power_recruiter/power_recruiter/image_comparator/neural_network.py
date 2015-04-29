@@ -58,6 +58,7 @@ PHOTOS_ROOT_DIR = "lfw/"
 
 DIRS_USED_FOR_SAME_FACES = []
 
+
 def _convert_to_black_and_white(im):
     return im.convert('L')
 
@@ -131,7 +132,8 @@ def _run_training(net, data_set):
         logger.info("Calculating EPOCH %d", epoch)
         logger.info("Result on training set %f", trainer.train())
         if epoch % 5 == 0:
-            logger.info("Result on test set %f", trainer.testOnData(data_set_test))
+            logger.info("Result on test set %f",
+                        trainer.testOnData(data_set_test))
 
 
 def _add_images_to_dataset(path1, path2, data_set, value):
@@ -146,7 +148,6 @@ def _add_same_photos(data_set):
     for subdir, dirs, files in os.walk(PHOTOS_ROOT_DIR):
         if len(files) <= 2:
             continue
-        #logger.info(subdir)
         _add_images_to_dataset(
             os.path.join(subdir, files[0]),
             os.path.join(subdir, files[1]),
@@ -165,7 +166,6 @@ def _add_not_same_photos(data_set):
     # pylint: disable=W0612
     for subdir, dirs, files in os.walk(PHOTOS_ROOT_DIR):
         if files and subdir not in DIRS_USED_FOR_SAME_FACES:
-            #logger.info(subdir)
             first_photos_from_dir.append(os.path.join(subdir, files[0]))
 
     for i in xrange(NUM_PHOTO_PAIRS_NOT_SAME):
