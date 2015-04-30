@@ -16,8 +16,11 @@ from power_recruiter.image_comparator.image_comparator import is_same_person
 
 
 class PersonManager(Manager):
-    def create_person(self, first_name, last_name, photo_url=None,
-                      linkedin=None, goldenline=None, email=None):
+    def create_person(self, first_name, last_name, photo_url='',
+                      linkedin='', goldenline='', email=''):
+        goldenline = None if not goldenline else goldenline
+        linkedin = None if not linkedin else linkedin
+        email = None if not email else email
         return self.create(
             state=State.objects.get(pk=0),
             first_name=first_name,
