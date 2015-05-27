@@ -1,7 +1,8 @@
 from django.test import TestCase
 
 from power_recruiter.basic_site.models import State
-from power_recruiter.basic_site.workflow import get_next_nodes, get_previous_nodes, are_nodes_connected
+from power_recruiter.basic_site.workflow import get_next_nodes, \
+    get_previous_nodes, are_nodes_connected
 from power_recruiter.basic_site.views.pie_chart import create_pie_chart_context
 from power_recruiter.basic_site.views.line_chart import generate_context_dicts
 
@@ -26,17 +27,29 @@ class TestWorkflow(TestCase):
         ], get_next_nodes(get_state_by_name("First message")))
 
     def test_get_previous_nodes(self):
-         self.assertEqual([], get_previous_nodes(get_state_by_name("New")))
-         self.assertEqual([
+        self.assertEqual([], get_previous_nodes(get_state_by_name("New")))
+        self.assertEqual([
             get_state_by_name("First meeting"),
             get_state_by_name("More than one meeting")
         ], get_previous_nodes(get_state_by_name("Resigned")))
 
     def test_are_nodes_connected(self):
-        self.assertTrue(are_nodes_connected(get_state_by_name("New"), get_state_by_name("First message")))
-        self.assertTrue(are_nodes_connected(get_state_by_name("Negative response"), get_state_by_name("First message")))
-        self.assertFalse(are_nodes_connected(get_state_by_name("Negative response"), get_state_by_name("No response")))
-        self.assertFalse(are_nodes_connected(get_state_by_name("Hired"), get_state_by_name("New")))
+        self.assertTrue(are_nodes_connected(
+            get_state_by_name("New"),
+            get_state_by_name("First message")
+        ))
+        self.assertTrue(are_nodes_connected(
+            get_state_by_name("Negative response"),
+            get_state_by_name("First message"))
+        )
+        self.assertFalse(are_nodes_connected(
+            get_state_by_name("Negative response"),
+            get_state_by_name("No response"))
+        )
+        self.assertFalse(are_nodes_connected(
+            get_state_by_name("Hired"),
+            get_state_by_name("New"))
+        )
 
 
 class TestCharts(TestCase):
@@ -65,7 +78,11 @@ class TestCharts(TestCase):
                 return pair[1]
 
     def test_line_chart(self):
-        self.assertEqual(self.get_value_for_state_and_date("New", "2014-11-28"), 1)
-        self.assertEqual(self.get_value_for_state_and_date("New", "2014-12-08"), 3)
-        self.assertEqual(self.get_value_for_state_and_date("New", "2014-12-19"), 0)
-        self.assertEqual(self.get_value_for_state_and_date("Hired", "2015-03-07"), 2)
+        self.assertEqual(self.get_value_for_state_and_date("New",
+                                                           "2014-11-28"), 1)
+        self.assertEqual(self.get_value_for_state_and_date("New",
+                                                           "2014-12-08"), 3)
+        self.assertEqual(self.get_value_for_state_and_date("New",
+                                                           "2014-12-19"), 0)
+        self.assertEqual(self.get_value_for_state_and_date("Hired",
+                                                           "2015-03-07"), 2)

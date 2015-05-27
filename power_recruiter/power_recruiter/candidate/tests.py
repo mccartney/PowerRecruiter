@@ -5,12 +5,12 @@ import datetime
 from django.test import TestCase, Client
 from django.test.utils import override_settings
 
-from power_recruiter.candidate.models import Person,Attachment, OldState, ResolvedConflict
+from power_recruiter.candidate.models import Person, Attachment, OldState, \
+    ResolvedConflict
 from power_recruiter.settings import BASE_DIR
 
 
 class TestPerson(TestCase):
-
     fixtures = ['graph.json', 'required.json']
 
     def test_get_conflicts(self):
@@ -48,14 +48,13 @@ class TestPerson(TestCase):
 
 
 class TestCandidateView(TestCase):
-
     fixtures = ['graph.json', 'required.json']
 
     def verify_file_content(self, file_path):
         with open(file_path, 'r') as file:
             file_content = file.read()
             self.assertEquals(file_content, "12345\nala ma kota\n")
-        file.closed
+        self.assertTrue(file.closed)
 
     @override_settings(DEBUG=True)
     def test_attachment(self):
@@ -63,8 +62,10 @@ class TestCandidateView(TestCase):
         self.assertEqual(len(Attachment.objects.all()), 0)
 
         # Add file
-        with open(BASE_DIR + '/power_recruiter/tests/upload_files/readme.txt') as fp:
-            response_post = c.post('/candidate/attachment/upload/', {'person': '2', 'file': fp}, follow=True)
+        with open(BASE_DIR +
+                  '/power_recruiter/tests/upload_files/readme.txt') as fp:
+            response_post = c.post('/candidate/attachment/upload/',
+                                   {'person': '2', 'file': fp}, follow=True)
         self.assertEqual(response_post.status_code, 200)
         self.assertEqual(len(Attachment.objects.all()), 1)
         self.assertEqual(Attachment.objects.all()[0].pk, 1)
@@ -74,13 +75,16 @@ class TestCandidateView(TestCase):
         response_get = c.get('/candidate/attachment/get/1', follow=True)
         self.assertEquals(response_get.status_code, 404)
 
-        file_path = response_get.redirect_chain[0][0][len("http://testserver/"):]
+        file_path = response_get.redirect_chain[0][0][len(
+            "http://testserver/"):]
         self.verify_file_content(file_path)
 
         # Add second file to same person
         self.assertEqual(len(Attachment.objects.all()), 1)
-        with open(BASE_DIR + '/power_recruiter/tests/upload_files/list.txt') as fp:
-            response_post = c.post('/candidate/attachment/upload/', {'person': '3', 'file': fp}, follow=True)
+        with open(BASE_DIR +
+                  '/power_recruiter/tests/upload_files/list.txt') as fp:
+            response_post = c.post('/candidate/attachment/upload/',
+                                   {'person': '3', 'file': fp}, follow=True)
 
         self.assertEqual(response_post.status_code, 200)
         self.assertEqual(len(Attachment.objects.all()), 2)
@@ -88,11 +92,12 @@ class TestCandidateView(TestCase):
         self.assertEqual(Attachment.objects.all()[1].pk, 2)
 
         # Remove first file
-        response_remove = c.post('/candidate/attachment/remove/', {'id': 1}, follow=True)
+        c.post('/candidate/attachment/remove/', {'id': 1}, follow=True)
         self.assertEqual(response_post.status_code, 200)
         self.assertEqual(len(Attachment.objects.all()), 1)
         self.assertEqual(Attachment.objects.all()[0].pk, 2)
-        self.assertEqual("list", str(Attachment.objects.all()[0])[:len("list")])
+        self.assertEqual("list",
+                         str(Attachment.objects.all()[0])[:len("list")])
 
         # It's safe remove after all
         self.verify_file_content(file_path)
@@ -100,9 +105,11 @@ class TestCandidateView(TestCase):
     @override_settings(DEBUG=True)
     def test_attachment_remove_404(self):
         c = Client(enforce_csrf_checks=False)
-        response_remove = c.post('/candidate/attachment/remove/', {'id': 1}, follow=True)
+        response_remove = c.post('/candidate/attachment/remove/', {'id': 1},
+                                 follow=True)
         self.assertEqual(response_remove.status_code, 404)
-        response_remove = c.post('/candidate/attachment/remove/', {}, follow=True)
+        response_remove = c.post('/candidate/attachment/remove/', {},
+                                 follow=True)
         self.assertEqual(response_remove.status_code, 404)
 
     @override_settings(DEBUG=True)
@@ -111,7 +118,10 @@ class TestCandidateView(TestCase):
         kamila = Person.objects.get(pk=2)
         self.assertEqual(kamila.first_name, "Kamila")
         self.assertEqual(kamila.last_name, "Kruk")
-        response_post = c.post('/candidate/change_name/', {'id': 2, 'name': 'Kamilsha von Kruk - Kowalska'}, follow=True)
+        response_post = c.post(
+            '/candidate/change_name/',
+            {'id': 2, 'name': 'Kamilsha von Kruk - Kowalska'},
+            follow=True)
         self.assertEqual(response_post.status_code, 200)
         kamila = Person.objects.get(pk=2)
         self.assertEqual(kamila.first_name, "Kamilsha")
@@ -120,9 +130,11 @@ class TestCandidateView(TestCase):
     @override_settings(DEBUG=True)
     def test_change_name_404(self):
         c = Client(enforce_csrf_checks=False)
-        response_post = c.post('/candidate/change_name/', {'id': 8, 'name': 'A A'}, follow=True)
+        response_post = c.post('/candidate/change_name/',
+                               {'id': 8, 'name': 'A A'}, follow=True)
         self.assertEqual(response_post.status_code, 404)
-        response_post = c.post('/candidate/change_name/', {'name': 'A A'}, follow=True)
+        response_post = c.post('/candidate/change_name/', {'name': 'A A'},
+                               follow=True)
         self.assertEqual(response_post.status_code, 404)
 
     @override_settings(DEBUG=True)
@@ -158,14 +170,22 @@ class TestCandidateView(TestCase):
         first_candidate = candidates[0]
 
         # photo and notifications
-        correct_photo = {"photo": '', "notifications": [{"message": u"Co\u015b za d\u0142ugo nie ma spotkania"}]}
+        correct_photo = {
+            "photo": '',
+            "notifications": [
+                {"message": u"Co\u015b za d\u0142ugo nie ma spotkania"}
+            ]
+        }
         self.assertEqual(first_candidate["photo"], correct_photo)
 
-        #id
+        # id
         self.assertEqual(first_candidate["id"]["id"], 1)
 
-        #name
-        correct_name = {"candidate_name": "Krzysztof Fudali", "candidate_id": 1}
+        # name
+        correct_name = {
+            "candidate_name": "Krzysztof Fudali",
+            "candidate_id": 1
+        }
         self.assertEqual(first_candidate["candidate_name"], correct_name)
 
         # contact
@@ -179,7 +199,9 @@ class TestCandidateView(TestCase):
         self.assertEqual(first_candidate["contact"], correct_contact)
 
         # state
-        self.assertEqual(first_candidate["state"]["raw_state_name"], "First meeting")
+        self.assertEqual(
+            first_candidate["state"]["raw_state_name"],
+            "First meeting")
 
         # state history
         self.assertEquals(len(first_candidate["state"]["state_history"]), 5)
@@ -192,8 +214,12 @@ class TestCandidateView(TestCase):
         correct_attachments = {"candidate_id": 1, "attachments": []}
         self.assertEqual(first_candidate["attachments"], correct_attachments)
 
-        #caveats
-        correct_caveats = {"candidate_name": "Krzysztof Fudali", "caveats": "Good programmer!", "candidate_id": 1}
+        # caveats
+        correct_caveats = {
+            "candidate_name": "Krzysztof Fudali",
+            "caveats": "Good programmer!",
+            "candidate_id": 1
+        }
         self.assertEqual(first_candidate["caveats"], correct_caveats)
 
     @override_settings(DEBUG=True)
@@ -208,11 +234,19 @@ class TestCandidateView(TestCase):
         c = Client()
         candidate = Person.objects.get(pk=1)
         self.assertEqual(candidate.caveats, "Good programmer!")
-        response_post = c.post('/candidate/caveats/upload/', {'id': 1, 'timestamp': int(float(time.time()) * 1000), 'caveats': "New caveats ;)"}, follow=True)
+        response_post = c.post(
+            '/candidate/caveats/upload/',
+            {'id': 1, 'timestamp': int(float(time.time()) * 1000),
+             'caveats': "New caveats ;)"},
+            follow=True)
         self.assertEqual(response_post.status_code, 200)
         candidate = Person.objects.get(pk=1)
         self.assertEqual(candidate.caveats, "New caveats ;)")
-        response_post = c.post('/candidate/caveats/upload/', {'id': 1, 'timestamp': int(float(time.time()) * 1000 - 2000), 'caveats': "Old caveats ;)"}, follow=True)
+        response_post = c.post(
+            '/candidate/caveats/upload/',
+            {'id': 1, 'timestamp': int(float(time.time()) * 1000 - 2000),
+             'caveats': "Old caveats ;)"},
+            follow=True)
         self.assertEqual(response_post.status_code, 200)
         candidate = Person.objects.get(pk=1)
         self.assertEqual(candidate.caveats, "New caveats ;)")
@@ -220,13 +254,27 @@ class TestCandidateView(TestCase):
     @override_settings(DEBUG=True)
     def test_caveats_404(self):
         c = Client(enforce_csrf_checks=False)
-        response_post = c.post('/candidate/caveats/upload/', {'timestamp': int(float(time.time()) * 1000), 'caveats': "New caveats ;)"}, follow=True)
+        response_post = c.post(
+            '/candidate/caveats/upload/',
+            {'timestamp': int(float(time.time()) * 1000),
+             'caveats': "New caveats ;)"},
+            follow=True)
         self.assertEqual(response_post.status_code, 404)
-        response_post = c.post('/candidate/caveats/upload/', {'id': 1, 'caveats': "New caveats ;)"}, follow=True)
+        response_post = c.post(
+            '/candidate/caveats/upload/',
+            {'id': 1, 'caveats': "New caveats ;)"},
+            follow=True)
         self.assertEqual(response_post.status_code, 404)
-        response_post = c.post('/candidate/caveats/upload/', {'id': 1, 'timestamp': int(float(time.time()) * 1000 - 2000)}, follow=True)
+        response_post = c.post(
+            '/candidate/caveats/upload/',
+            {'id': 1, 'timestamp': int(float(time.time()) * 1000 - 2000)},
+            follow=True)
         self.assertEqual(response_post.status_code, 404)
-        response_post = c.post('/candidate/caveats/upload/', {'id': 0, 'timestamp': int(float(time.time()) * 1000 - 2000), 'caveats': "Old caveats ;)"}, follow=True)
+        response_post = c.post(
+            '/candidate/caveats/upload/',
+            {'id': 0, 'timestamp': int(float(time.time()) * 1000 - 2000),
+             'caveats': "Old caveats ;)"},
+            follow=True)
         self.assertEqual(response_post.status_code, 404)
 
     @override_settings(DEBUG=True)
@@ -234,33 +282,46 @@ class TestCandidateView(TestCase):
         c = Client(enforce_csrf_checks=False)
         candidate = Person.objects.get(pk=4)
         self.assertEqual(candidate.state.pk, 4)
-        state_history = OldState.objects.filter(person_id=candidate.pk).order_by('-change_date').all()
+        state_history = OldState.objects.filter(
+            person_id=candidate.pk).order_by('-change_date').all()
         self.assertEqual(len(state_history), 2)
 
-        response_post = c.post('/candidate/change_state/', {'person_id': 4, 'new_state_id': 2}, follow=True)
+        response_post = c.post(
+            '/candidate/change_state/', {'person_id': 4, 'new_state_id': 2},
+            follow=True)
         self.assertEqual(response_post.status_code, 200)
         candidate = Person.objects.get(pk=4)
         self.assertEqual(candidate.state.pk, 2)
-        self.assertEqual(len(OldState.objects.filter(person_id=candidate.pk)), 3)
+        self.assertEqual(len(OldState.objects.filter(person_id=candidate.pk)),
+                         3)
 
-        new_state_history = OldState.objects.filter(person_id=candidate.pk).order_by('-change_date').all()
+        new_state_history = OldState.objects.filter(
+            person_id=candidate.pk).order_by('-change_date').all()
         last_state = new_state_history[0]
         self.assertEqual(last_state.state.pk, 4)
-        self.assertEqual(last_state.start_date.date(), datetime.date(2014, 12, 23))
-        self.assertEqual(last_state.change_date.date(), datetime.datetime.now().date())
+        self.assertEqual(last_state.start_date.date(),
+                         datetime.date(2014, 12, 23))
+        self.assertEqual(last_state.change_date.date(),
+                         datetime.datetime.now().date())
         self.assertEqual(new_state_history[1], state_history[0])
         self.assertEqual(new_state_history[2], state_history[1])
 
     @override_settings(DEBUG=True)
     def test_change_404(self):
         c = Client(enforce_csrf_checks=False)
-        response_post = c.post('/candidate/change_state/', {'person_id': 4, 'new_state_id': 3}, follow=True)
+        response_post = c.post('/candidate/change_state/',
+                               {'person_id': 4, 'new_state_id': 3},
+                               follow=True)
         self.assertEqual(response_post.status_code, 404)
-        response_post = c.post('/candidate/change_state/', {'person_id': 7, 'new_state_id': 3}, follow=True)
+        response_post = c.post('/candidate/change_state/',
+                               {'person_id': 7, 'new_state_id': 3},
+                               follow=True)
         self.assertEqual(response_post.status_code, 404)
-        response_post = c.post('/candidate/change_state/', {'person_id': 4}, follow=True)
+        response_post = c.post('/candidate/change_state/', {'person_id': 4},
+                               follow=True)
         self.assertEqual(response_post.status_code, 404)
-        response_post = c.post('/candidate/change_state/', {'new_state_id': 3}, follow=True)
+        response_post = c.post('/candidate/change_state/', {'new_state_id': 3},
+                               follow=True)
         self.assertEqual(response_post.status_code, 404)
 
     @override_settings(DEBUG=True)
@@ -280,14 +341,16 @@ class TestCandidateView(TestCase):
         candidate = Person.objects.get(pk=7)
         self.assertEqual(candidate.first_name, "Nowy")
         self.assertEqual(candidate.last_name, "Kandydat")
-        self.assertEqual(candidate.current_state_started.date(), datetime.datetime.now().date())
+        self.assertEqual(candidate.current_state_started.date(),
+                         datetime.datetime.now().date())
         self.assertEqual(candidate.state.pk, 0)
         self.assertEqual(candidate.photo_url, "")
         self.assertEqual(candidate.linkedin, 'http://linkedin.com/test')
         self.assertEqual(candidate.goldenline, 'http://goldenline.com/test')
         self.assertEqual(candidate.email, 'test@powerrecruiter-zpp.pl')
         self.assertEqual(candidate.caveats, "")
-        self.assertEqual(candidate.caveats_timestamp.date(), datetime.datetime.now().date())
+        self.assertEqual(candidate.caveats_timestamp.date(),
+                         datetime.datetime.now().date())
 
     @override_settings(DEBUG=True)
     def test_add_from_app_404(self):
@@ -341,7 +404,7 @@ class TestCandidateView(TestCase):
         response_post = c.post('/candidate/add', {
             'args[0]': 'Nowy Kandydat',
             'args[1]': 'http://nofoto.com/photo.png',
-            'args[2]':'http://goldenline.com/test'
+            'args[2]': 'http://goldenline.com/test'
         })
         self.assertEqual(response_post.status_code, 200)
         self.assertEqual(len(Person.objects.all()), 7)
@@ -349,20 +412,22 @@ class TestCandidateView(TestCase):
         candidate = Person.objects.get(pk=7)
         self.assertEqual(candidate.first_name, "Nowy")
         self.assertEqual(candidate.last_name, "Kandydat")
-        self.assertEqual(candidate.current_state_started.date(), datetime.datetime.now().date())
+        self.assertEqual(candidate.current_state_started.date(),
+                         datetime.datetime.now().date())
         self.assertEqual(candidate.state.pk, 0)
         self.assertEqual(candidate.photo_url, "http://nofoto.com/photo.png")
         self.assertEqual(candidate.linkedin, None)
         self.assertEqual(candidate.goldenline, "http://goldenline.com/test")
         self.assertEqual(candidate.email, None)
         self.assertEqual(candidate.caveats, "")
-        self.assertEqual(candidate.caveats_timestamp.date(), datetime.datetime.now().date())
+        self.assertEqual(candidate.caveats_timestamp.date(),
+                         datetime.datetime.now().date())
 
         # Add goldenline second time
         response_post = c.post('/candidate/add', {
             'args[0]': 'Nowy Kandydat',
             'args[1]': 'http://nofoto.com/photo.png',
-            'args[2]':'http://goldenline.com/test'
+            'args[2]': 'http://goldenline.com/test'
         })
         self.assertEqual(response_post.status_code, 418)
 
@@ -384,7 +449,7 @@ class TestCandidateView(TestCase):
             'args[0]': 'Kamil Linkinowiec',
             'args[1]': 'http://nofoto.com/photo.png',
             'args[2]': 'http://linkedin.com/test'
-            })
+        })
         self.assertEqual(response_post.status_code, 418)
 
     @override_settings(DEBUG=True)
@@ -395,7 +460,7 @@ class TestCandidateView(TestCase):
         response_post = c.post('/candidate/add', {
             'args[3]': 'Nowy Kandydat',
             'args[1]': 'http://nofoto.com/photo.png',
-            'args[2]':'http://goldenline.com/test'
+            'args[2]': 'http://goldenline.com/test'
         })
         self.assertEqual(response_post.status_code, 404)
 
@@ -458,15 +523,19 @@ class TestCandidateView(TestCase):
         candidate2.save()
 
         # attachments should concat!
-        with open(BASE_DIR + '/power_recruiter/tests/upload_files/readme.txt') as fp:
-            response_post = c.post('/candidate/attachment/upload/', {'person': '7', 'file': fp}, follow=True)
+        with open(BASE_DIR +
+                  '/power_recruiter/tests/upload_files/readme.txt') as fp:
+            response_post = c.post('/candidate/attachment/upload/',
+                                   {'person': '7', 'file': fp}, follow=True)
         self.assertEqual(response_post.status_code, 200)
         self.assertEqual(len(Attachment.objects.all()), 1)
 
         # Add second file to same person
         self.assertEqual(len(Attachment.objects.all()), 1)
-        with open(BASE_DIR + '/power_recruiter/tests/upload_files/list.txt') as fp:
-            response_post = c.post('/candidate/attachment/upload/', {'person': '8', 'file': fp}, follow=True)
+        with open(BASE_DIR +
+                  '/power_recruiter/tests/upload_files/list.txt') as fp:
+            response_post = c.post('/candidate/attachment/upload/',
+                                   {'person': '8', 'file': fp}, follow=True)
         self.assertEqual(response_post.status_code, 200)
         self.assertEqual(len(Attachment.objects.all()), 2)
 
@@ -474,7 +543,9 @@ class TestCandidateView(TestCase):
 
         conflicts = Person.get_conflicts()
         self.assertEqual(len(conflicts), 2)
-        response_post = c.post('/candidate/resolve_conflicts/', {'ids': '[7,8]', 'img': 1, 'state': 1, 'merge': 'true'})
+        response_post = c.post('/candidate/resolve_conflicts/',
+                               {'ids': '[7,8]', 'img': 1, 'state': 1,
+                                'merge': 'true'})
         self.assertEqual(response_post.status_code, 200)
 
         self.assertEqual(len(Person.objects.all()), 7)
@@ -482,14 +553,17 @@ class TestCandidateView(TestCase):
         candidate = Person.objects.get(pk=7)
         self.assertEqual(candidate.first_name, "Taka")
         self.assertEqual(candidate.last_name, "Sama")
-        self.assertEqual(candidate.current_state_started.date(), datetime.datetime.now().date())
+        self.assertEqual(candidate.current_state_started.date(),
+                         datetime.datetime.now().date())
         self.assertEqual(candidate.state.pk, 0)
-        self.assertEqual(candidate.photo_url, "http://japonskie_twarze.pl/taka_sama.png")
+        self.assertEqual(candidate.photo_url,
+                         "http://japonskie_twarze.pl/taka_sama.png")
         self.assertEqual(candidate.linkedin, None)
         self.assertEqual(candidate.goldenline, None)
         self.assertEqual(candidate.email, None)
         self.assertEqual(candidate.caveats, "2+2=2*2")
-        self.assertEqual(candidate.caveats_timestamp.date(), datetime.datetime.now().date())
+        self.assertEqual(candidate.caveats_timestamp.date(),
+                         datetime.datetime.now().date())
         self.assertEqual(len(Attachment.objects.all().filter(person=7)), 2)
 
         conflicts = Person.get_conflicts()
@@ -520,7 +594,9 @@ class TestCandidateView(TestCase):
 
         conflicts = Person.get_conflicts()
         self.assertEqual(len(conflicts), 2)
-        response_post = c.post('/candidate/resolve_conflicts/', {'ids': '[7,8]', 'img': 0, 'state': 0, 'merge': 'false'})
+        response_post = c.post('/candidate/resolve_conflicts/',
+                               {'ids': '[7,8]', 'img': 0, 'state': 0,
+                                'merge': 'false'})
         self.assertEqual(response_post.status_code, 200)
 
         new_all_people_list = Person.objects.all()

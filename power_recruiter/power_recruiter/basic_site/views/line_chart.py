@@ -11,7 +11,7 @@ def get_data_bounds(state_dict):
     max_date = datetime.date(year=datetime.MINYEAR, month=1, day=1)
 
     for date_dict in state_dict.values():
-        for date, value in date_dict.iteritems():
+        for date, _ in date_dict.iteritems():
             if date < min_date:
                 min_date = date
             if date > max_date:
@@ -22,6 +22,7 @@ def get_data_bounds(state_dict):
 
 def add_to_dictionary(state_dict, date, value):
     state_dict[date] += value
+
 
 def generate_result(state_dict, min_date, max_date):
     result = {}
@@ -38,6 +39,7 @@ def generate_result(state_dict, min_date, max_date):
         result[state] = current_state
 
     return result
+
 
 def generate_context_dicts():
     # Double dictionary: state -> {date -> numberOfCandidates}
@@ -70,6 +72,10 @@ def generate_context_dicts():
     min_date, max_date = get_data_bounds(state_dict)
     return generate_result(state_dict, min_date, max_date)
 
+
 def line_chart(request):
-    context = { 'dicts': generate_context_dicts(), "static_js": settings.STATIC_JS_PATH }
+    context = {
+        'dicts': generate_context_dicts(),
+        "static_js": settings.STATIC_JS_PATH
+    }
     return render(request, "line_chart.html", context)

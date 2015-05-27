@@ -87,10 +87,10 @@ class WsgiTest(unittest.TestCase):
 
     def test_wsgi(self):
         FNULL = open(os.devnull, 'w')
-        proc = subprocess.Popen([BASE_DIR + "/manage.py",  "runserver"], stdout=FNULL, stderr=FNULL)
+        proc = subprocess.Popen([BASE_DIR + "/manage.py", "runserver"],
+                                stdout=FNULL, stderr=FNULL)
         time.sleep(5)
         self.assertGreater(proc.pid, 0)
         response = urllib2.urlopen("http://127.0.0.1:8000/")
         self.assertEqual(response.getcode(), 200)
         proc.kill()
-

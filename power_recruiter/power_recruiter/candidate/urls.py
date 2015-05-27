@@ -2,14 +2,14 @@ from django.conf.urls import patterns, url
 
 from power_recruiter.candidate.views import get_attachment, \
     remove_attachment, candidate_json, add_candidate, change_state, \
-    upload_attachment, caveats_upload, change_name, remove_person, get_conflicts, \
-    resolve_conflicts, add_candidate_from_app
+    upload_attachment, caveats_upload, change_name, remove_person, \
+    get_conflicts, resolve_conflicts, add_candidate_from_app
 
 
 urlpatterns = patterns(
     '',
     url(r'^$', candidate_json, name='json'),
-    url(r'^attachment/upload/$', upload_attachment , name='upload'),
+    url(r'^attachment/upload/$', upload_attachment, name='upload'),
     url(r'^attachment/get/(?P<attachment_id>\d+)$', get_attachment,
         name='get_attachment'),
     url(r'^attachment/remove/$', remove_attachment,

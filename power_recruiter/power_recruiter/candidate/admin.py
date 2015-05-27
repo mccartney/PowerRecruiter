@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django import forms
-from power_recruiter.candidate.models import Person, Attachment, ResolvedConflict
+from power_recruiter.candidate.models import Person, Attachment, \
+    ResolvedConflict
 from power_recruiter.basic_site.admin import admin_auto_login_site
+
 
 class PersonForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -37,6 +39,7 @@ class PersonAdmin(admin.ModelAdmin):
     )
 
     form = PersonForm
+
 
 class ResolvedConflictAdmin(admin.ModelAdmin):
     fields = ("person_one", "person_two")
