@@ -14,7 +14,7 @@ import time
 from pybrain.datasets import SupervisedDataSet
 from arac.pybrainbridge import _FeedForwardNetwork
 from pybrain.tools.xml.networkwriter import NetworkWriter
-from pybrain.tools.xml.networkreader import NetworkReader
+import pickle
 
 from pybrain.datasets import SupervisedDataSet
 from pybrain.tools.shortcuts import buildNetwork
@@ -129,7 +129,7 @@ def _save_network_to_file(net):
 def _load_network_from_file():
     logger.info("Loading network...")
     with open(SAVE_FILE_NAME, 'rb') as f:
-        net = NetworkReader.readFrom(SAVE_FILE_NAME)
+        net = pickle.load(f)
 	logger.info("ConvertingToFastNetwork")
 	net = net.convertToFastNetwork()
     gc.collect()
@@ -402,10 +402,10 @@ def _add_photos(data_set):
                         )
 
 
-		        logger.info("same:" + files[i] + " " + files[j])
+		        logger.info("same:" + files[j] + " " + files[i])
                         _add_images_to_dataset(
-                            os.path.join(subdir, files[i]),
                             os.path.join(subdir, files[j]),
+                            os.path.join(subdir, files[i]),
                             data_set,
                             [1,0]
                         )
