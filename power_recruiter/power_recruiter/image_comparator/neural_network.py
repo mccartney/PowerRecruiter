@@ -4,25 +4,21 @@ If `SAVE_FILE_NAME` does not exists, running the script will generate it.
 """
 
 import os
-import sys
 import logging
 import gc
 from pybrain import LinearLayer, FullConnection
 from pybrain import TanhLayer, SigmoidLayer, SoftmaxLayer
-import cv2
-import time
-from pybrain.datasets import SupervisedDataSet
 # Uncomment for fast version
 #from arac.pybrainbridge import _FeedForwardNetwork as FeedForwardNetwork
 from pybrain.structure.networks.feedforward import FeedForwardNetwork
 from pybrain.tools.xml.networkwriter import NetworkWriter
-import pickle
 
 from pybrain.datasets import SupervisedDataSet
-from pybrain.tools.shortcuts import buildNetwork
 from pybrain.supervised.trainers import BackpropTrainer
 from PIL import Image
 import numpy
+import cv2
+import pickle
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -42,12 +38,12 @@ SECOND_CONVOLUTION_FILTER = 7
 MERGE_FILTER = 5
 CONVOLUTION_MULTIPLIER = 2
 
-#Allowed number of pair with one person, usefull for huge datasets
-SAME_PERSON = 80
+#usefull for huge datasets
+MAX_PHOTO_FROM_ONE_DIR = 0
 
 # Number of pairs with same person
-NUM_PHOTO_PAIRS_SAME = int(sys.argv[1])  #100
-LEARNING_RATE = float(sys.argv[2])
+NUM_PHOTO_PAIRS_SAME = 10000
+LEARNING_RATE = 0.001
 
 # Number of pairs with not same person
 NUM_PHOTO_PAIRS_NOT_SAME = NUM_PHOTO_PAIRS_SAME
@@ -131,8 +127,8 @@ def _load_network_from_file():
     logger.info("Loading network...")
     with open(SAVE_FILE_NAME, 'rb') as f:
         net = pickle.load(f)
-        logger.info("ConvertingToFastNetwork")
-        net = net.convertToFastNetwork()
+        #logger.info("ConvertingToFastNetwork")
+        #net = net.convertToFastNetwork()
     gc.collect()
     logger.info("Done loading")
     return net
@@ -391,8 +387,8 @@ def _add_photos(data_set):
 
         else:
             num = 0
-            for i in xrange(min(len(files), 13) - 1):
-                for j in xrange(min(len(files), 13) - 1):
+            for i in xrange(min(len(files), MAX_PHOTO_FROM_ONE_DIR) - 1):
+                for j in xrange(min(len(files), MAX_PHOTO_FROM_ONE_DIR) - 1):
                     if i < j:
                         num = num + 1
                         pairs += 2
@@ -431,8 +427,7 @@ def _add_photos(data_set):
 
             if pairs >= NUM_PHOTO_PAIRS_SAME:
                 return
-            if num > SAME_PERSON:
-                break
+
         logger.info("NUM: " + str(pairs))
 
 
