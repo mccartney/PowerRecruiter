@@ -12,7 +12,9 @@ from pybrain import TanhLayer, SigmoidLayer, SoftmaxLayer
 import cv2
 import time
 from pybrain.datasets import SupervisedDataSet
-from arac.pybrainbridge import _FeedForwardNetwork
+# Uncomment for fast version
+#from arac.pybrainbridge import _FeedForwardNetwork as FeedForwardNetwork
+from pybrain.structure.networks.feedforward import FeedForwardNetwork
 from pybrain.tools.xml.networkwriter import NetworkWriter
 import pickle
 
@@ -26,17 +28,15 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-
-IMG_WIDTH = 60
-IMG_HEIGHT = 60
+IMG_WIDTH = 54
+IMG_HEIGHT = 54
 
 NUMBER_OF_IMAGES = 2
 
-#Convolutions should be odd numbers
+# Convolutions should be odd numbers
 FIRST_CONVOLUTION_FILTER = 5
 SECOND_CONVOLUTION_FILTER = 7
 MERGE_FILTER = 5
@@ -46,7 +46,7 @@ CONVOLUTION_MULTIPLIER = 2
 SAME_PERSON = 80
 
 # Number of pairs with same person
-NUM_PHOTO_PAIRS_SAME = int(sys.argv[1])#100
+NUM_PHOTO_PAIRS_SAME = int(sys.argv[1])  #100
 LEARNING_RATE = float(sys.argv[2])
 
 # Number of pairs with not same person
@@ -56,13 +56,14 @@ NUM_PHOTO_PAIRS_NOT_SAME = NUM_PHOTO_PAIRS_SAME
 NUM_PHOTO_PAIRS = NUM_PHOTO_PAIRS_SAME + NUM_PHOTO_PAIRS_NOT_SAME
 
 # Number of trainings
-NUM_EPOCHS = 15
+NUM_EPOCHS = 30
 
 SAVE_FILE_NAME = os.path.join(__location__, 'network.bin')
 
 PHOTOS_ROOT_DIR = "lfw/"
 
 CV_CASCADE = cv2.CascadeClassifier("cascade.xml")
+
 
 def _convert_to_black_and_white(im):
     return im.convert('L')
@@ -101,7 +102,7 @@ def _prepare_image(path):
         scaleFactor=1.4,
         minNeighbors=5,
         minSize=(30, 30),
-        flags = cv2.cv.CV_HAAR_SCALE_IMAGE
+        flags=cv2.cv.CV_HAAR_SCALE_IMAGE
     )
 
     im = Image.open(path)
@@ -130,11 +131,12 @@ def _load_network_from_file():
     logger.info("Loading network...")
     with open(SAVE_FILE_NAME, 'rb') as f:
         net = pickle.load(f)
-	logger.info("ConvertingToFastNetwork")
-	net = net.convertToFastNetwork()
+        logger.info("ConvertingToFastNetwork")
+        net = net.convertToFastNetwork()
     gc.collect()
     logger.info("Done loading")
     return net
+
 
 def _add_convolutional_connection(
         net,
@@ -174,35 +176,37 @@ def _add_convolutional_connection(
                             outSliceTo=target + 1
                         ))
 
+
 def _add_pool_connection(
-    net,
-    h1,
-    h2,
-    input_width,
-    input_height,
+        net,
+        h1,
+        h2,
+        input_width,
+        input_height,
 ):
     for x in xrange(input_width):
         for y in xrange(input_height):
             h1_pos = x + y * input_width
-            h2_pos = x/2 + (y/2) * (input_width / 2)
+            h2_pos = x / 2 + (y / 2) * (input_width / 2)
             net.addConnection(FullConnection(
                 h1,
                 h2,
-                inSliceFrom= h1_pos,
+                inSliceFrom=h1_pos,
                 inSliceTo=h1_pos + 1,
                 outSliceFrom=h2_pos,
                 outSliceTo=h2_pos + 1
             ))
 
+
 def _merge_connection(
-    net,
-    h1,
-    h2,
-    filter_size,
-    input_width,
-    input_height,
-    output_width,
-    output_height
+        net,
+        h1,
+        h2,
+        filter_size,
+        input_width,
+        input_height,
+        output_width,
+        output_height
 ):
     #print("input_width: %d, input_height: %d, output_width: %d, ouput_height: %d" % (input_width, input_height, output_width, output_height))
     for x in xrange(output_width):
@@ -223,11 +227,10 @@ def _merge_connection(
                         ))
 
 
-
 def _build_network():
     logger.info("Building network...")
 
-    net = _FeedForwardNetwork(bias=True)
+    net = FeedForwardNetwork()
     inp = LinearLayer(IMG_WIDTH * IMG_HEIGHT * 2)
     h1_image_width = IMG_WIDTH - FIRST_CONVOLUTION_FILTER + 1
     h1_image_height = IMG_HEIGHT - FIRST_CONVOLUTION_FILTER + 1
@@ -337,16 +340,17 @@ def _build_network():
 def _run_training(net, data_set):
     logger.info("Running training...")
     data_set_training, data_set_test = data_set.splitWithProportion(0.9)
-    rate=LEARNING_RATE
+    rate = LEARNING_RATE
     trainer = BackpropTrainer(net, data_set_training, learningrate=rate)
     for epoch in xrange(NUM_EPOCHS):
         logger.info("Calculating EPOCH %d", epoch)
         logger.info("Result on training set %f", trainer.train())
         if epoch % 10 == 0:
             logger.info("Result on test set %f", trainer.testOnData(data_set_test, verbose=True))
-	if epoch % 4 == 3:
-	    rate /= 10
-	    trainer = BackpropTrainer(net, data_set_training, learningrate=rate)
+        if epoch % 6 == 5:
+            rate /= 10
+            trainer = BackpropTrainer(net, data_set_training, learningrate=rate)
+
 
 def _add_images_to_dataset(path1, path2, data_set, value):
     input_image = get_input_image(path1, path2)
@@ -369,61 +373,60 @@ def _add_photos(data_set):
         if len(files) <= 2:
             if len(files) > 0:
                 pairs += 1
-	        logger.info("same:" + files[0] + " " + files[0])
+                logger.info("same:" + files[0] + " " + files[0])
                 _add_images_to_dataset(
                     os.path.join(subdir, files[0]),
                     os.path.join(subdir, files[0]),
                     data_set,
-                    [1,0]
+                    [1, 0]
                 )
-            
-                logger.info("other:"+ first_photos_from_dir[current_dir_num + 1] + " " + files[0])
+
+                logger.info("other:" + first_photos_from_dir[current_dir_num + 1] + " " + files[0])
                 _add_images_to_dataset(
                     first_photos_from_dir[current_dir_num + 1],
                     os.path.join(subdir, files[0]),
                     data_set,
-                    [0,1]
+                    [0, 1]
                 )
 
-	else:
+        else:
             num = 0
-            for i in xrange(min(len(files), 10) - 1):
-                for j in xrange(min(len(files), 10) - 1):
+            for i in xrange(min(len(files), 13) - 1):
+                for j in xrange(min(len(files), 13) - 1):
                     if i < j:
                         num = num + 1
                         pairs += 2
-                    
-       		        logger.info("same:" + files[i] + " " + files[j])
+
+                        logger.info("same:" + files[i] + " " + files[j])
                         _add_images_to_dataset(
                             os.path.join(subdir, files[i]),
                             os.path.join(subdir, files[j]),
                             data_set,
-                            [1,0]
+                            [1, 0]
                         )
 
-
-		        logger.info("same:" + files[j] + " " + files[i])
+                        logger.info("same:" + files[j] + " " + files[i])
                         _add_images_to_dataset(
                             os.path.join(subdir, files[j]),
                             os.path.join(subdir, files[i]),
                             data_set,
-                            [1,0]
+                            [1, 0]
                         )
 
-                        logger.info("other:"+ first_photos_from_dir[current_dir_num + i + j + 1] + " " + files[i])
+                        logger.info("other:" + first_photos_from_dir[current_dir_num + i + j + 1] + " " + files[i])
                         _add_images_to_dataset(
                             first_photos_from_dir[current_dir_num + i + j + 1],
                             os.path.join(subdir, files[i]),
                             data_set,
-                            [0,1]
+                            [0, 1]
                         )
 
-                        logger.info("other:"+files[j] + " " + first_photos_from_dir[current_dir_num + i + j + 2])
+                        logger.info("other:" + files[j] + " " + first_photos_from_dir[current_dir_num + i + j + 2])
                         _add_images_to_dataset(
                             os.path.join(subdir, files[j]),
                             first_photos_from_dir[current_dir_num + i + j + 2],
                             data_set,
-                            [0,1]
+                            [0, 1]
                         )
 
             if pairs >= NUM_PHOTO_PAIRS_SAME:
@@ -431,6 +434,7 @@ def _add_photos(data_set):
             if num > SAME_PERSON:
                 break
         logger.info("NUM: " + str(pairs))
+
 
 def _create_dataset():
     logger.info("Creating empty dataset...")
@@ -455,13 +459,15 @@ def _get_network():
         return _load_network_from_file()
     else:
         logger.info("No saved file present, generating...")
-    	return _generate_new_network()
+        return _generate_new_network()
 
 
 def get_input_image(path1, path2):
     first_image = _prepare_image(path1)
     second_image = _prepare_image(path2)
-    return numpy.concatenate((first_image, second_image), axis=0).flat
+    if first_image == second_image:
+        return None, True
+    return numpy.concatenate((first_image, second_image), axis=0).flat, False
 
 
 network = _get_network()

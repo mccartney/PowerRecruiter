@@ -6,6 +6,7 @@ fpm -s dir -t deb -n power-recruiter -v 0.9.2 \
     -d "python (>=2.7)" \
     -d "python-pip" \
     -d "python-opencv" \
+    -d "libjpeg-dev" \
     -d "python-dev" \
     -d "build-essential" \
     -d "python-virtualenv" \
