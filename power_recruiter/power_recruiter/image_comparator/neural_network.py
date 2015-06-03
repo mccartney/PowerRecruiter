@@ -15,10 +15,12 @@ from pybrain.tools.xml.networkwriter import NetworkWriter
 
 from pybrain.datasets import SupervisedDataSet
 from pybrain.supervised.trainers import BackpropTrainer
-from PIL import Image
+from PIL import Image, ImageChops
 import numpy
 import cv2
 import pickle
+import urllib
+import cStringIO
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -27,23 +29,24 @@ logger.setLevel(logging.INFO)
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-IMG_WIDTH = 54
-IMG_HEIGHT = 54
+IMG_WIDTH = 26
+IMG_HEIGHT = 26
+LFW_IMAGE_WIDTH = 250
 
 NUMBER_OF_IMAGES = 2
 
 # Convolutions should be odd numbers
-FIRST_CONVOLUTION_FILTER = 5
-SECOND_CONVOLUTION_FILTER = 7
-MERGE_FILTER = 5
+FIRST_CONVOLUTION_FILTER = 3
+SECOND_CONVOLUTION_FILTER = 3
+MERGE_FILTER = 1
 CONVOLUTION_MULTIPLIER = 2
 
 #usefull for huge datasets
-MAX_PHOTO_FROM_ONE_DIR = 0
+MAX_PHOTO_FROM_ONE_DIR = 20
 
 # Number of pairs with same person
-NUM_PHOTO_PAIRS_SAME = 10000
-LEARNING_RATE = 0.001
+NUM_PHOTO_PAIRS_SAME = 25000
+LEARNING_RATE = 0.01
 
 # Number of pairs with not same person
 NUM_PHOTO_PAIRS_NOT_SAME = NUM_PHOTO_PAIRS_SAME
@@ -52,13 +55,13 @@ NUM_PHOTO_PAIRS_NOT_SAME = NUM_PHOTO_PAIRS_SAME
 NUM_PHOTO_PAIRS = NUM_PHOTO_PAIRS_SAME + NUM_PHOTO_PAIRS_NOT_SAME
 
 # Number of trainings
-NUM_EPOCHS = 30
+NUM_EPOCHS = 45
 
 SAVE_FILE_NAME = os.path.join(__location__, 'network.bin')
 
 PHOTOS_ROOT_DIR = "lfw/"
 
-CV_CASCADE = cv2.CascadeClassifier("cascade.xml")
+CV_CASCADE = cv2.CascadeClassifier("power_recruiter/image_comparator/cascade.xml")
 
 
 def _convert_to_black_and_white(im):
@@ -90,18 +93,24 @@ def _crop_center(im, left=None, top=None, box_side=None):
 
 
 def _prepare_image(path):
-    image_cv = cv2.imread(path)
+    if "http" in path:
+        img = cStringIO.StringIO(urllib.urlopen(path).read())
+        img_array = numpy.asarray(bytearray(urllib.urlopen(path).read()), dtype=numpy.uint8)
+        image_cv = cv2.imdecode(img_array, 1)
+    else:
+        img = path
+        image_cv = cv2.imread(path)
     gray = cv2.cvtColor(image_cv, cv2.COLOR_BGR2GRAY)
 
     faces = CV_CASCADE.detectMultiScale(
         gray,
-        scaleFactor=1.4,
-        minNeighbors=5,
+        scaleFactor=1.5,
+        minNeighbors=1,
         minSize=(30, 30),
         flags=cv2.cv.CV_HAAR_SCALE_IMAGE
     )
 
-    im = Image.open(path)
+    im = Image.open(img)
     if len(faces) > 0:
         x, y, w, h = faces[0]
         im = _crop_center(im, x, y, min(w, h))
@@ -112,7 +121,7 @@ def _prepare_image(path):
     im = _convert_to_black_and_white(im)
     #im.show()
     #time.sleep(0.6)
-    return im.getdata()
+    return im
 
 
 def _save_network_to_file(net):
@@ -341,15 +350,15 @@ def _run_training(net, data_set):
     for epoch in xrange(NUM_EPOCHS):
         logger.info("Calculating EPOCH %d", epoch)
         logger.info("Result on training set %f", trainer.train())
-        if epoch % 10 == 0:
+        if epoch % 4 == 0:
             logger.info("Result on test set %f", trainer.testOnData(data_set_test, verbose=True))
-        if epoch % 6 == 5:
+        if epoch == 0 or epoch % 10 == 9:
             rate /= 10
             trainer = BackpropTrainer(net, data_set_training, learningrate=rate)
 
 
 def _add_images_to_dataset(path1, path2, data_set, value):
-    input_image = get_input_image(path1, path2)
+    input_image, result = get_input_image(path1, path2)
     data_set.addSample(input_image, value)
 
 
@@ -460,9 +469,13 @@ def _get_network():
 def get_input_image(path1, path2):
     first_image = _prepare_image(path1)
     second_image = _prepare_image(path2)
-    if first_image == second_image:
+    if ImageChops.difference(first_image, second_image).getbbox() is None:
         return None, True
-    return numpy.concatenate((first_image, second_image), axis=0).flat, False
+    return numpy.concatenate((first_image.getdata(), second_image.getdata()), axis=0).flat, False
 
 
-network = _get_network()
+class Network(object):
+    def __init__(self):
+        self.network = _get_network()
+
+network = Network()

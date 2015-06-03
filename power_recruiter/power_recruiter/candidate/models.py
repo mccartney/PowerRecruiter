@@ -1,7 +1,5 @@
 import datetime
 import random
-import urllib
-import cStringIO
 
 from django.utils import timezone
 from django.db.models import Manager, Model, CharField, ForeignKey, \
@@ -76,10 +74,8 @@ class Person(Model):
                 all_candidates_with_photo, 2)
             if not ResolvedConflict.conflict_was_resolved(
                     first_candidate, second_candidate):
-                first_candidate_photo = cStringIO.StringIO(
-                    urllib.urlopen(first_candidate.photo_url).read())
-                second_candidate_photo = cStringIO.StringIO(
-                    urllib.urlopen(second_candidate.photo_url).read())
+                first_candidate_photo = first_candidate.photo_url
+                second_candidate_photo = second_candidate.photo_url
                 if is_same_person(first_candidate_photo,
                                   second_candidate_photo):
                     return [first_candidate, second_candidate]
