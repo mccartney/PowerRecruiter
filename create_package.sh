@@ -23,8 +23,6 @@ fpm -s dir -t deb -n power-recruiter -v 1.0.0 \
     power_recruiter/power_recruiter/image_comparator/*.py \
     power_recruiter/power_recruiter/image_comparator/network.bin \
     power_recruiter/power_recruiter/*.py \
-    power_recruiter/power_recruiter/*.pyc \
-    power_recruiter/files \
     power_recruiter/*.sh \
     power_recruiter/*.py \
     requirements.txt bin power-recruiter.conf
