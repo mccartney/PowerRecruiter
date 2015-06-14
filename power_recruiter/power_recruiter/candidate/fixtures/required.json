@@ -2,7 +2,7 @@
     {"fields": {"state": 6, "message": "Co\u015b za d\u0142ugo nie ma spotkania", "days": 3}, "model": "basic_site.notification", "pk": 1},
 
     {"fields": {"first_name": "Krzysztof", "last_name": "Fudali", "caveats": "Good programmer!", "current_state_started": "2014-12-31T21:48:32.116Z", "state": 6, "photo_url": ""}, "model": "candidate.person", "pk": 1},
-    {"fields": {"first_name": "Kamila", "last_name": "Kruk", "caveats": "", "current_state_started": "2014-12-31T21:48:28.111Z", "state": 10, "photo_url": "http://cdn.niketalk.com/2/27/200x200px-ZC-279064c1_11032270-agressive-dog--english-bulldog-with-growling-agressive-expression-on-white-background.jpeg"}, "model": "candidate.person", "pk": 2},
+    {"fields": {"first_name": "Kamila", "last_name": "Kruk", "caveats": "", "current_state_started": "2014-12-31T21:48:28.111Z", "state": 10, "photo_url": ""}, "model": "candidate.person", "pk": 2},
     {"fields": {"first_name": "Jan", "last_name": "Kowalski", "caveats": "", "current_state_started": "2014-12-28T21:48:27.915Z", "state": 7, "photo_url": "http://www.anavif.com/upload/e/5c/e5c1ce3105634bd8.jpg"}, "model": "candidate.person", "pk": 3},
     {"fields": {"first_name": "Paulina", "last_name": "Kiepska", "caveats": "", "current_state_started": "2014-12-23T21:48:34.622Z", "state": 4, "photo_url": ""}, "model": "candidate.person", "pk": 4},
     {"fields": {"first_name": "Wojtek", "last_name": "Wawelski", "caveats": "", "current_state_started": "2015-01-03T21:48:29.158Z", "state": 10, "photo_url": ""}, "model": "candidate.person", "pk": 5},

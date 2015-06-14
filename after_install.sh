@@ -11,6 +11,8 @@ cp $APP_PATH/power-recruiter.conf /etc/init
 virtualenv $ENV_PATH
 
 cd $ENV_PATH
+cp /usr/lib/python2.7/dist-packages/cv* ./lib/python2.7/site-packages/
+
 . ./bin/activate
 
 pip install -r $REQ_PATH
