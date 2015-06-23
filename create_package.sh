@@ -16,6 +16,7 @@ fpm -s dir -t deb -n power-recruiter -v 1.0.0 \
     --prefix /opt/pr \
     --after-install after_install.sh \
     --after-upgrade after_upgrade.sh \
+    --before-remove before_remove.sh \
     -m "Filip Ochnik <filip.ochnik@gmail.com>" \
     power_recruiter/power_recruiter/candidate \
     power_recruiter/power_recruiter/basic_site \
