@@ -1,4 +1,3 @@
-<!--
 Power Recruiter - a browser-based FSM-centered database application profiled for IT recruiters
 Copyright (C) 2015 Krzysztof Fudali, Andrzej Jackowski, Cezary Kosko, Filip Ochnik
 
@@ -14,10 +13,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-
-<div class="footer">
-    <div class="container">
-        <p class="text-muted">Krzysztof Fudali, Andrzej Jackowski, Cezary Kosko, Filip Ochnik @ ZPP MIMUW 4 Syncron</p>
-    </div>
-</div>
