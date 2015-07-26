@@ -28,7 +28,6 @@ from django.shortcuts import get_object_or_404
 from power_recruiter.basic_site.workflow import get_next_nodes, \
     get_previous_nodes
 from power_recruiter.basic_site.models import Notification, State
-from power_recruiter.image_comparator.image_comparator import is_same_person
 
 
 class PersonManager(Manager):
@@ -84,21 +83,6 @@ class Person(Model):
                                 first_candidate, second_candidate):
                             return [first_candidate, second_candidate]
 
-        # Image base conflicts
-        try:
-            all_candidates_with_photo = cls.objects.filter(
-                photo_url__regex=r'.{3}.*')
-            first_candidate, second_candidate = random.sample(
-                all_candidates_with_photo, 2)
-            if not ResolvedConflict.conflict_was_resolved(
-                    first_candidate, second_candidate):
-                first_candidate_photo = first_candidate.photo_url
-                second_candidate_photo = second_candidate.photo_url
-                if is_same_person(first_candidate_photo,
-                                  second_candidate_photo):
-                    return [first_candidate, second_candidate]
-        except:
-            pass
         return []
 
     @classmethod
