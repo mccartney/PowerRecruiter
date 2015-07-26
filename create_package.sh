@@ -37,8 +37,6 @@ fpm -s dir -t deb -n power-recruiter -v 1.0.0 \
     power_recruiter/power_recruiter/candidate \
     power_recruiter/power_recruiter/basic_site \
     power_recruiter/power_recruiter/tests \
-    power_recruiter/power_recruiter/image_comparator/*.py \
-    power_recruiter/power_recruiter/image_comparator/network.bin \
     power_recruiter/power_recruiter/*.py \
     power_recruiter/*.sh \
     power_recruiter/*.py \
