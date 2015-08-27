@@ -46,7 +46,7 @@ function loadProfile(elem) {
 var contextMenu = require('sdk/context-menu');
 var linkedInMenuItem = contextMenu.Item({
   label: 'Load LinkedIn profile to PowerRecruiter',
-  context: contextMenu.URLContext(['https://www.linkedin.com/profile/*','https://www.linkedin.com/recruiter/profile/*']),
+  context: contextMenu.URLContext(['https://www.linkedin.com/profile/*','https://www.linkedin.com/recruiter/profile/*', 'https://www.linkedin.com/pub/*']),
   contentScript: 'self.on("click", function () {' +
                  '    self.postMessage([document.getElementsByClassName(\'full-name\')[0].innerHTML, document.getElementsByClassName(\'profile-picture\')[0] == undefined ? \'\' : document.getElementsByClassName(\'profile-picture\')[0].getElementsByTagName(\'img\')[0].src, document.URL]' +
                     ');' +
