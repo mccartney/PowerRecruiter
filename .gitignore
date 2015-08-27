@@ -5,3 +5,4 @@
 media
 reports/
 firefox-addon/*.xpi
+*.deb
