@@ -1,11 +1,11 @@
 {
   "name": "power-recruiter-addon",
   "title": "Power Recruiter add-on",
-  "id": "jid1-RYmdy6sjeffBmA",
+  "id": "jid1-RYmdy6sjeffBmA@jetpack",
   "description": "Export add-on for Power Recruiter",
   "author": "Krzysztof Fudali, Andrzej Jackowski, Cezary Kosko, Filip Ochnik",
   "license": "MPL 2.0",
-  "version": "0.9",
+  "version": "0.9.0",
   "preferences": [{
         "name": "serverAddr",
         "title": "Server Address",
