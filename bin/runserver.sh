@@ -24,4 +24,4 @@ cd $ENV_PATH
 . ./bin/activate
 
 cd $APP_ROOT
-./manage.py runserver 0.0.0.0:80
+./manage.py runserver 0.0.0.0:4080
